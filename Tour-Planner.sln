@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tour-Planner", "Tour-Planner\Tour-Planner.csproj", "{BCB8B582-5F16-4984-A7D8-5DF2FDAFB740}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCB8B582-5F16-4984-A7D8-5DF2FDAFB740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCB8B582-5F16-4984-A7D8-5DF2FDAFB740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCB8B582-5F16-4984-A7D8-5DF2FDAFB740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCB8B582-5F16-4984-A7D8-5DF2FDAFB740}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59C4934A-982A-477A-9AAF-632C6ACFBA8D}
+	EndGlobalSection
+EndGlobal
