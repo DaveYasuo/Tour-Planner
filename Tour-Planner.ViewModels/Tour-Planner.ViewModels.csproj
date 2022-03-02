@@ -1,16 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <RootNamespace>Tour_Planner</RootNamespace>
+    <RootNamespace>Tour_Planner.ViewModels</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
-    <Folder Include="Resources\" />
+    <Folder Include="Commands\" />
   </ItemGroup>
 
 </Project>
