@@ -13,4 +13,8 @@
     <Folder Include="Resources\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tour-Planner.Views\Tour-Planner.Views.csproj" />
+  </ItemGroup>
+
 </Project>

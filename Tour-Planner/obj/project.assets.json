@@ -1,11 +1,33 @@
 {
   "version": 3,
   "targets": {
-    "net5.0-windows7.0": {}
+    "net5.0-windows7.0": {
+      "Tour-Planner.Views/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/Tour-Planner.Views.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Tour-Planner.Views.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Tour-Planner.Views/1.0.0": {
+      "type": "project",
+      "path": "../Tour-Planner.Views/Tour-Planner.Views.csproj",
+      "msbuildProject": "../Tour-Planner.Views/Tour-Planner.Views.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net5.0-windows7.0": []
+    "net5.0-windows7.0": [
+      "Tour-Planner.Views >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Dage Zhu\\.nuget\\packages\\": {},
@@ -38,7 +60,11 @@
       "frameworks": {
         "net5.0-windows7.0": {
           "targetAlias": "net5.0-windows",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Dage Zhu\\source\\repos\\Tour-Planner\\Tour-Planner.Views\\Tour-Planner.Views.csproj": {
+              "projectPath": "C:\\Users\\Dage Zhu\\source\\repos\\Tour-Planner\\Tour-Planner.Views\\Tour-Planner.Views.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

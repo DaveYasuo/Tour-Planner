@@ -13,19 +13,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tour_Planner
+namespace Tour_Planner.Views.Controls
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for NavigationBar.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class NavigationBar : UserControl
     {
-        public MainWindow()
+        public NavigationBar()
         {
             InitializeComponent();
         }
 
-        private void NavigationBar_Loaded(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
 
         }

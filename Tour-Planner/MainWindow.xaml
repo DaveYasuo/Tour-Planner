@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tour_Planner"
+        xmlns:controls="clr-namespace:Tour_Planner.Views.Controls;assembly=Tour-Planner.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <controls:NavigationBar x:Name="NavigationBar" Loaded="NavigationBar_Loaded"></controls:NavigationBar>
     </Grid>
 </Window>
