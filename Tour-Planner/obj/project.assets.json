@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\le0_\\source\\repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj",
+      "projectUniqueName": "C:\\Users\\le0_\\Source\\Repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj",
       "projectName": "Tour-Planner",
-      "projectPath": "C:\\Users\\le0_\\source\\repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj",
+      "projectPath": "C:\\Users\\le0_\\Source\\Repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj",
       "packagesPath": "C:\\Users\\le0_\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\le0_\\source\\repos\\Tour-Planner\\Tour-Planner\\obj\\",
+      "outputPath": "C:\\Users\\le0_\\Source\\Repos\\Tour-Planner\\Tour-Planner\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\le0_\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -66,5 +66,13 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem beim Lesen der Cachedatei \"C:\\Users\\le0_\\Source\\Repos\\Tour-Planner\\Tour-Planner\\obj\\project.nuget.cache\": Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
