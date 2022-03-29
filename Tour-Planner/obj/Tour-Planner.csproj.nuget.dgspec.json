@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dage Zhu\\source\\repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj": {}
+    "C:\\Users\\le0_\\Source\\Repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dage Zhu\\source\\repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj": {
+    "C:\\Users\\le0_\\Source\\Repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dage Zhu\\source\\repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj",
+        "projectUniqueName": "C:\\Users\\le0_\\Source\\Repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj",
         "projectName": "Tour-Planner",
-        "projectPath": "C:\\Users\\Dage Zhu\\source\\repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj",
-        "packagesPath": "C:\\Users\\Dage Zhu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dage Zhu\\source\\repos\\Tour-Planner\\Tour-Planner\\obj\\",
+        "projectPath": "C:\\Users\\le0_\\Source\\Repos\\Tour-Planner\\Tour-Planner\\Tour-Planner.csproj",
+        "packagesPath": "C:\\Users\\le0_\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\le0_\\Source\\Repos\\Tour-Planner\\Tour-Planner\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Dage Zhu\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\le0_\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -61,7 +57,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
         }
       }
     }
