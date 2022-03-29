@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>Tour_Planner.Models</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DataControllers\" />
+    <Folder Include="DataProviders\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
+</Project>
