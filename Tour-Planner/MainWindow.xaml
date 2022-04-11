@@ -21,7 +21,8 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <controls:TourLists Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-
+            <controls:TourData Grid.Row="0" Grid.Column="1" Margin="5,27,-5,-26"/>
+            <controls:TourTitle Loaded="TourTitle_Loaded" Grid.Column="1" />
         </Grid>
     </Grid>
 </Window>

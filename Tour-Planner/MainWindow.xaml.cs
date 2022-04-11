@@ -29,5 +29,10 @@ namespace Tour_Planner
         {
 
         }
+
+        private void TourTitle_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
