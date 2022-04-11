@@ -24,10 +24,7 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1 ,0 , 1,1">
-                <controls:TourData Grid.Row="0" Grid.Column="1" Margin="5,27,-5,-26"/>
-                <controls:TourTitle Loaded="TourTitle_Loaded" Grid.Column="1" />
-            </Border>
+
             <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1 ,0 , 1,1">
                 <controls:TourLists  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </Border>
@@ -36,6 +33,16 @@
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderBrush="Black" BorderThickness="0, 0,1,1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <controls:TourTitle Grid.Row="0" Loaded="TourTitle_Loaded"/>
+                        <controls:TourData Grid.Row="1"/>
+                    </Grid>
+                </Border>
                 <Border Grid.Row="1" BorderBrush="Black" BorderThickness="0, 0,1,1">
                     <controls:TourLogs HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 </Border>
