@@ -8,7 +8,20 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <controls:NavigationBar x:Name="NavigationBar" Loaded="NavigationBar_Loaded"></controls:NavigationBar>
-        <controls:SearchBar x:Name="SearchBar" Loaded="Searchbar_Loaded" Margin="0,20,0,-20"></controls:SearchBar>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <controls:NavigationBar Grid.Row="0" x:Name="NavigationBar" Loaded="NavigationBar_Loaded"></controls:NavigationBar>
+        <controls:SearchBar Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <controls:TourLists Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+        </Grid>
     </Grid>
 </Window>

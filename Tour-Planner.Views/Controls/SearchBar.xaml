@@ -11,10 +11,23 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Button Grid.Row="1" Grid.Column="1" Content="Button" HorizontalAlignment="Left" Margin="317,35,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="SearchTermTextBox" Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+        </TextBox>
+        <TextBlock Grid.Column="0" IsHitTestVisible="False" Text="Enter Search Term Here" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="10,0,0,0" Foreground="DarkGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <Button Grid.Row="0" Grid.Column="1" Content="Button" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>
