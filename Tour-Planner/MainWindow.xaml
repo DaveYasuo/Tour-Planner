@@ -9,5 +9,6 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <controls:NavigationBar x:Name="NavigationBar" Loaded="NavigationBar_Loaded"></controls:NavigationBar>
+        <controls:SearchBar x:Name="SearchBar" Loaded="Searchbar_Loaded" Margin="0,20,0,-20"></controls:SearchBar>
     </Grid>
 </Window>
