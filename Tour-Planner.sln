@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tour-Planner", "Tour-Planner\Tour-Planner.csproj", "{BCB8B582-5F16-4984-A7D8-5DF2FDAFB740}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tour-Planner.Converters", "Tour-Planner.Converters\Tour-Planner.Converters.csproj", "{094FBEE2-7160-4BDD-896B-6EBB4059A3EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tour-Planner.Converters", "Tour-Planner.Converters\Tour-Planner.Converters.csproj", "{094FBEE2-7160-4BDD-896B-6EBB4059A3EE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tour-Planner.Extensions", "Tour-Planner.Extensions\Tour-Planner.Extensions.csproj", "{C774F304-B168-43A0-AFA1-4C6611480B3D}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Tour-Planner.Mocks", "Test.Tour-Planner.Mocks\Test.Tour-Planner.Mocks.csproj", "{515A20FA-3846-4F9A-AAEF-BACC988B0F3E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Tour-Planner.ViewModels", "Test.Tour-Planner.ViewModels\Test.Tour-Planner.ViewModels.csproj", "{4D1853BA-7D34-420E-A3C9-450407316971}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Rest-API", "Server.Rest-API\Server.Rest-API.csproj", "{D57DF091-80F4-4C85-8B8B-5EE7857628C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{4D1853BA-7D34-420E-A3C9-450407316971}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D1853BA-7D34-420E-A3C9-450407316971}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D1853BA-7D34-420E-A3C9-450407316971}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D57DF091-80F4-4C85-8B8B-5EE7857628C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D57DF091-80F4-4C85-8B8B-5EE7857628C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D57DF091-80F4-4C85-8B8B-5EE7857628C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D57DF091-80F4-4C85-8B8B-5EE7857628C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
