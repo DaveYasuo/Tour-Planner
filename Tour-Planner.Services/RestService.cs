@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -21,6 +22,7 @@ namespace Tour_Planner.Services
         public async void Test()
         {
             var responseString = await Client.GetStringAsync(Url);
+            Debug.WriteLine(responseString);
         }
     }
 }

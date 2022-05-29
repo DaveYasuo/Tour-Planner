@@ -1,25 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Npgsql;
+using Server.Rest_API.Common;
 
-namespace Server.Rest_API
+namespace Server.Rest_API.SqlServer
 {
-    public class Database
+    public class Postgres : IDatabase
     {
         private string _connString;
-
-        public Database()
-        {
-            _connString = "Host=host.docker.internal; Port=5432; Username=postgres; Password=tourplanner;";
-            CreateDatabaseIfNotExists();
-        }
-
-        public Database(string conString)
+        
+        public Postgres(string conString)
         {
             _connString = conString;
             CreateDatabaseIfNotExists();
