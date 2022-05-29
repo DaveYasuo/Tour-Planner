@@ -66,6 +66,10 @@ namespace Server.Rest_API
                     }
                 }
                 Console.WriteLine($"Received request for {request.Url}");
+
+                Console.WriteLine($"Received request for {request}");
+
+                // Handle this data
                 Console.WriteLine(documentContents);
 
                 // Obtain a response object.

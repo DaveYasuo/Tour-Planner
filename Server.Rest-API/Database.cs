@@ -1,24 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 
 namespace Server.Rest_API
 {
-    internal class DatabaseConnection
+    public class Database
     {
-        public DatabaseConnection()
+        private string _connString;
+
+        public Database()
         {
+            _connString = "Host=host.docker.internal; Port=5432; Username=postgres; Password=tourplanner;";
             CreateDatabaseIfNotExists();
         }
 
-        private string connString = "Host=host.docker.internal; Port=5432; Username=postgres; Password=tourplanner;";
-
-        private NpgsqlConnection Connection()
+        public Database(string conString)
         {
-            var conn = new NpgsqlConnection(connString);
+            _connString = conString;
+            CreateDatabaseIfNotExists();
+            Console.WriteLine(_connString);
+        }
+
+
+        public NpgsqlConnection Connection()
+        {
+            var conn = new NpgsqlConnection(_connString);
             conn.Open();
             return conn;
         }
@@ -33,7 +44,7 @@ namespace Server.Rest_API
                 if (dbExists)
                 {
                     // Add databases to connString
-                    connString += "Database=tourplanner;";
+                    _connString += "Database=tourplanner;";
                     return;
                 }
 
@@ -49,7 +60,7 @@ namespace Server.Rest_API
 
                 // Add databases to connString
                 conn.Close();
-                connString += "Database=tourplanner;";
+                _connString += "Database=tourplanner;";
                 conn = Connection();
                 // Create tables
                 using (var cmd = new NpgsqlCommand(@"

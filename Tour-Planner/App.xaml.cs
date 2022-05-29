@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Tour_Planner.Services;
 
 namespace Tour_Planner
 {
@@ -21,5 +22,10 @@ namespace Tour_Planner
          * The Images folder contains the images and icons that are displayed in the UI controls,
          * whereas the Resources folder normally contains any resource files, such as XML schemas or text or data files that are used by the application.
          */
+        public App()
+        {
+            // todo test
+            RestService rest = new RestService();
+        }
     }
 }
