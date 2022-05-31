@@ -37,8 +37,16 @@ namespace Server.Rest_API.Common
         // create database object with specific connection string
         private static IDatabase CreateDatabase(string connectionString)
         {
-            return new Postgres(connectionString);
-        }
+            string databaseClassName = Configuration.GetSection("DALSqlName").Value;
+            Type dbClass = Type.GetType(databaseClassName);
 
+            if (dbClass == null)
+            {
+                //logger.Log(LogLevel.Error, "Could not setup database:");
+                throw new InvalidOperationException("DB assembly not found");
+            }
+
+            return Activator.CreateInstance(dbClass, connectionString) as IDatabase;
+        }
     }
 }
