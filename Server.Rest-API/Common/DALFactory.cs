@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Configuration;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using Server.Rest_API.SqlServer;
 
 namespace Server.Rest_API.Common
 {
@@ -36,16 +37,7 @@ namespace Server.Rest_API.Common
         // create database object with specific connection string
         private static IDatabase CreateDatabase(string connectionString)
         {
-            string databaseClassName = Configuration.GetSection("DALSqlName").Value;
-            Type dbClass = Type.GetType(databaseClassName);
-
-            if (dbClass == null)
-            {
-                //logger.Log(LogLevel.Error, "Could not setup database:");
-                throw new InvalidOperationException("DB assembly not found");
-            }
-
-            return Activator.CreateInstance(dbClass, connectionString) as IDatabase;
+            return new Postgres(connectionString);
         }
 
     }
