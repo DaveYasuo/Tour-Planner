@@ -4,7 +4,7 @@ using System.Data;
 using Npgsql;
 using Server.Rest_API.Common;
 using Server.Rest_API.DAO;
-using Tour_Planner.Models.DataControllers;
+using Tour_Planner.Models;
 
 namespace Server.Rest_API.SqlServer
 {

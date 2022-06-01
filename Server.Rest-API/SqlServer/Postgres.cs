@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using log4net;
 using Npgsql;
 using Server.Rest_API.Common;
 
@@ -6,8 +8,9 @@ namespace Server.Rest_API.SqlServer
 {
     public class Postgres : IDatabase
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private string _connString;
-        
+
         public Postgres(string conString)
         {
             _connString = conString;
@@ -96,8 +99,7 @@ namespace Server.Rest_API.SqlServer
             }
             catch (Exception ex)
             {
-                //logger.Log(LogLevel.Error, "Could not setup database:");
-                //logger.Log(LogLevel.Error, ex.StackTrace);
+                Log.Fatal("Cannot create database:", ex);
                 Console.WriteLine(ex.Message);
                 throw new ApplicationException("Please check your database configuration & health status");
             }

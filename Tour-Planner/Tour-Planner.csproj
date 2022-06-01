@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Tour-Planner.Services\Tour-Planner.Services.csproj" />
     <ProjectReference Include="..\Tour-Planner.Views\Tour-Planner.Views.csproj" />
   </ItemGroup>

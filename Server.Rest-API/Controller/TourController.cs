@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text.Json;
 using Npgsql;
 using Server.Rest_API.SqlServer;
-using Tour_Planner.Models.DataControllers;
+using Tour_Planner.Models;
 
 namespace Server.Rest_API.Controller
 {
