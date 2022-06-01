@@ -22,6 +22,11 @@
             Id = 0;
         }
 
+        public Tour()
+        {
+
+        }
+
         public int Id { get; set; }
         public string Source { get; set; }
         public string Destination { get; set; }
