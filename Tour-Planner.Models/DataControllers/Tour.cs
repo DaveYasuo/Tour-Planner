@@ -8,7 +8,7 @@ namespace Tour_Planner.Models.DataControllers
 {
     public class Tour
     {
-        public Tour(int id, string source, string destination, string name, string distance, string description)
+        public Tour(int id, string source, string destination, string name, double distance, string description)
         {
             Id = id;
             Source = source;
@@ -18,7 +18,7 @@ namespace Tour_Planner.Models.DataControllers
             Description = description;
         }
 
-        public Tour(string source, string destination, string name, string distance, string description)
+        public Tour(string source, string destination, string name, double distance, string description)
         {
             Source = source;
             Destination = destination;
@@ -37,7 +37,7 @@ namespace Tour_Planner.Models.DataControllers
         public string Source { get; set; }
         public string Destination { get; set; }
         public string Name { get; set; }
-        public string Distance { get; set; }
+        public double Distance { get; set; }
         public string Description { get; set; }
         }
 }

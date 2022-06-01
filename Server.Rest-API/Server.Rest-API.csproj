@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Database\" />
+    <Folder Include="DAO\" />
   </ItemGroup>
 
 </Project>

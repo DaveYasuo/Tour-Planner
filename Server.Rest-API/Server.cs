@@ -4,6 +4,8 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using Server.Rest_API.Controller;
+using Server.Rest_API.SqlServer;
 
 namespace Server.Rest_API
 {
@@ -75,7 +77,9 @@ namespace Server.Rest_API
                 // Obtain a response object.
                 HttpListenerResponse response = context.Response;
                 // Construct a response.
-                string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
+                TourController sqlDao = new TourController();
+                string responseString = sqlDao.GetAllTours();
+                //string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                 // Get a response stream and write the response to it.
                 response.ContentLength64 = buffer.Length;

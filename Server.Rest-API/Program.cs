@@ -5,6 +5,8 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Server.Rest_API.Common;
+using Server.Rest_API.SqlServer;
 
 namespace Server.Rest_API
 {
@@ -12,13 +14,9 @@ namespace Server.Rest_API
     {
         static void Main(string[] args)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddUserSecrets<Program>()
-                .Build();
-            var conString = builder.GetConnectionString("DefaultDB");
-            Database connection = new Database(conString);
+         
+            //var conString = builder.GetConnectionString("DefaultDB");
+            //Postgres connection = new Postgres(conString);
             Server server = new Server();
             server.Start();
         }
