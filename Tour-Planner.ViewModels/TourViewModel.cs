@@ -17,7 +17,7 @@ namespace Tour_Planner.ViewModels
             {
                 if (inputTitle == value) return;
                 inputTitle = value;
-                RaisePropertyChangedEvent(nameof(inputTitle));
+                RaisePropertyChangedEvent(nameof(InputTitle));
                 Console.WriteLine(inputTitle);
             }
         }
