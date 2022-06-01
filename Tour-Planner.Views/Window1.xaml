@@ -1,0 +1,31 @@
+﻿<Window x:Class="Tour_Planner.Views.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:TourViewModel}"
+        mc:Ignorable="d"
+        Title="Window1" Height="450" Width="800"
+       >
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
+        </Border>
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1 ,0">
+        </Border>
+        <Button Content="Button" HorizontalAlignment="Center" Margin="0,285,0,0" Grid.Row="2" VerticalAlignment="Top" Click="Button_Click"/>
+        <TextBox x:Name="title" HorizontalAlignment="Left" Margin="157,48,0,0" Grid.Row="2" TextWrapping="Wrap" Text="{Binding InputTitle,
+                    UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" VerticalAlignment="Top" Width="120" TextChanged="title_TextChanged"/>
+        <TextBox x:Name="source" HorizontalAlignment="Left" Margin="210,101,0,0" Grid.Row="2" TextWrapping="Wrap" Text="{Binding InputSource,
+                    UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="destination" HorizontalAlignment="Left" Margin="261,159,0,0" Grid.Row="2" TextWrapping="Wrap" Text="{Binding InputDestination,
+                    UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="description" HorizontalAlignment="Left" Margin="270,215,0,0" Grid.Row="2" TextWrapping="Wrap" Text="{Binding InputDescription,
+                    UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" VerticalAlignment="Top" Width="120"/>
+    </Grid>
+</Window>

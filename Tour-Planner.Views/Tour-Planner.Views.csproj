@@ -11,4 +11,8 @@
     <Folder Include="Attached\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tour-Planner.ViewModels\Tour-Planner.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>
