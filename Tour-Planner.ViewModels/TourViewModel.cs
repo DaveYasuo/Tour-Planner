@@ -1,5 +1,5 @@
 ﻿using System;
-using Tour_Planner.Models.DataControllers;
+using Tour_Planner.Models;
 
 namespace Tour_Planner.ViewModels
 {
