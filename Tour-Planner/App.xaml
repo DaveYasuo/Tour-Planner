@@ -2,8 +2,15 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Tour_Planner"
+             xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels"
+             xmlns:views="clr-namespace:Tour_Planner.Views;assembly=Tour-Planner.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
+            <views:Home></views:Home>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:TourViewModel}">
+            <views:AddTourView></views:AddTourView>
+        </DataTemplate>
     </Application.Resources>
 </Application>

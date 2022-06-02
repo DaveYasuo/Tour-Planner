@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Tour_Planner.Views.Controls"
+             xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -20,7 +20,7 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Tours"/>
-                <Button Grid.Column="1" Content="+" ></Button>
+                <Button Grid.Column="1" Content="+" Command="{Binding UpdateViewCommand}" CommandParameter="AddTour"></Button>
                 <Button Grid.Column="2" Content="-" ></Button>
                 <Button Grid.Column="3" Content="[]" ></Button>
             </Grid>

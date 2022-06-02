@@ -14,28 +14,17 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Tour_Planner.ViewModels;
 
-
-namespace Tour_Planner
+namespace Tour_Planner.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaktionslogik für Home.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Home : UserControl
     {
-        public MainWindow()
+        public Home()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();  
-        }
-
-        private void NavigationBar_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void TourTitle_Loaded(object sender, RoutedEventArgs e)
-        {
-
+            DataContext = new HomeViewModel();
         }
     }
 }

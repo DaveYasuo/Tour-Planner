@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Windows.Input;
 using Tour_Planner.Models;
+using Tour_Planner.ViewModels;
+
+//AddTourViewModel
 
 namespace Tour_Planner.ViewModels
 {
@@ -10,6 +14,7 @@ namespace Tour_Planner.ViewModels
         private string inputSource;
         private string inputDestination;
 
+
         public string InputTitle
         {
             get => inputTitle;
@@ -18,7 +23,6 @@ namespace Tour_Planner.ViewModels
                 if (inputTitle == value) return;
                 inputTitle = value;
                 RaisePropertyChangedEvent(nameof(InputTitle));
-                Console.WriteLine(inputTitle);
             }
         }
 

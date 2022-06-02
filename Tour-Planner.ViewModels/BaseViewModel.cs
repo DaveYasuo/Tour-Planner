@@ -28,5 +28,10 @@ namespace Tour_Planner.ViewModels
                 throw new ArgumentException("Invalid property name: " + propertyName);
             }
         }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
