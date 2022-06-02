@@ -11,26 +11,23 @@ namespace Tour_Planner.ViewModels
     public class MainViewModel : BaseViewModel
     {
 
-        private BaseViewModel selectedViewModel;
+        private BaseViewModel _selectedViewModel;
 
         public BaseViewModel SelectedViewModel
         {
-            get { return selectedViewModel; }
-            set { 
-                selectedViewModel = value;
+            get => _selectedViewModel;
+            set
+            {
+                _selectedViewModel = value;
                 RaisePropertyChangedEvent(nameof(SelectedViewModel));
-                OnPropertyChanged(nameof(SelectedViewModel));
             }
         }
         public ICommand UpdateViewCommand { get; set; }
 
         public MainViewModel()
         {
-            if(selectedViewModel == null)
-            {
-                selectedViewModel = new HomeViewModel();
-            }
-            UpdateViewCommand =new UpdateViewCommand(this);
+            UpdateViewCommand = new UpdateViewCommand(this);
+            _selectedViewModel ??= new HomeViewModel();
         }
 
     }

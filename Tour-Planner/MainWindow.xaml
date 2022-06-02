@@ -3,8 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Tour_Planner"
-        xmlns:controls="clr-namespace:Tour_Planner.Views.Controls;assembly=Tour-Planner.Views"
         xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -14,6 +12,9 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ContentControl Content="{Binding SelectedViewModel}"></ContentControl>
+
+        <Button Grid.Row="0" Content="Home" Command="{Binding UpdateViewCommand}" CommandParameter="Home" />
+        <Button Grid.Row="1" Content="AddTour" Command="{Binding UpdateViewCommand}" CommandParameter="AddTour"/>
+        <ContentControl Grid.Row="2" Content="{Binding SelectedViewModel}"></ContentControl>
     </Grid>
 </Window>

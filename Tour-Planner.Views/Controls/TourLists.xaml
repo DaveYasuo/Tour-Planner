@@ -6,24 +6,24 @@
              xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Tours"/>
-                <Button Grid.Column="1" Content="+" Command="{Binding UpdateViewCommand}" CommandParameter="AddTour"></Button>
-                <Button Grid.Column="2" Content="-" ></Button>
-                <Button Grid.Column="3" Content="[]" ></Button>
-            </Grid>
-        </Border>
-    </Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Content="Tours"/>
+                    <Button Grid.Column="1" Content="+" Command="{Binding UpdateViewCommand}" CommandParameter="AddTour"></Button>
+                    <Button Grid.Column="2" Content="-" ></Button>
+                    <Button Grid.Column="3" Content="[]" ></Button>
+                </Grid>
+            </Border>
+        </Grid>
 </UserControl>

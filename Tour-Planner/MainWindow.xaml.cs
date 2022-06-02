@@ -27,15 +27,5 @@ namespace Tour_Planner
             InitializeComponent();
             DataContext = new MainViewModel();  
         }
-
-        private void NavigationBar_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void TourTitle_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

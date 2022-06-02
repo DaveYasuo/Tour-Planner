@@ -7,60 +7,59 @@ using Tour_Planner.ViewModels;
 
 namespace Tour_Planner.ViewModels
 {
-    public class TourViewModel:BaseViewModel
+    public class TourViewModel : BaseViewModel
     {
-        private string inputTitle;
-        private string inputDescription;
-        private string inputSource;
-        private string inputDestination;
+        private string _inputTitle;
+        private string _inputDescription;
+        private string _inputSource;
+        private string _inputDestination;
 
 
         public string InputTitle
         {
-            get => inputTitle;
+            get => _inputTitle;
             set
             {
-                if (inputTitle == value) return;
-                inputTitle = value;
+                if (_inputTitle == value) return;
+                _inputTitle = value;
                 RaisePropertyChangedEvent(nameof(InputTitle));
             }
         }
 
         public string InputDescription
         {
-            get => inputDescription;
+            get => _inputDescription;
             set
             {
-                if (inputDescription == value) return;
-                inputDescription = value;
-                //OnPropertyChanged();Changed();
+                _inputDescription = value;
+                RaisePropertyChangedEvent(nameof(InputTitle));
             }
         }
 
         public string InputSource
         {
-            get => inputSource;
+            get => _inputSource;
             set
             {
-                if (inputSource == value) return;
-                inputSource = value;
-                //OnPropertyChanged();Changed();
+                if (_inputSource == value) return;
+                _inputSource = value;
+                RaisePropertyChangedEvent(nameof(InputTitle));
             }
         }
 
         public string InputDestination
         {
-            get => inputDestination;
+            get => _inputDestination;
             set
             {
-                if (inputDestination == value) return;
-                inputDestination = value;
-                //OnPropertyChanged();Changed();
+                if (_inputDestination == value) return;
+                _inputDestination = value;
+                RaisePropertyChangedEvent(nameof(InputTitle));
             }
         }
 
 
-        Tour singleTour = new Tour();
+        //Tour singleTour = new Tour();
 
     }
 }

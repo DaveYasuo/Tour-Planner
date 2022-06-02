@@ -26,8 +26,8 @@ namespace Tour_Planner.Services
         public async void Test()
         {
             Log.Info("Sending request");
-            var responseString = await Client.GetStringAsync(Url);
-            Debug.WriteLine(responseString);
+            //var responseString = await Client.GetStringAsync(Url); todo
+            //Debug.WriteLine(responseString);
         }
     }
 }

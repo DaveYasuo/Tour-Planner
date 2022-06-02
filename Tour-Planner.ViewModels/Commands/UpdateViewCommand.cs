@@ -11,11 +11,11 @@ namespace Tour_Planner.ViewModels.Commands
     {
         public event EventHandler? CanExecuteChanged;
 
-        private MainViewModel viewModel;
+        private readonly MainViewModel _viewModel;
 
         public UpdateViewCommand(MainViewModel viewModel)
         {
-            this.viewModel = viewModel;
+            _viewModel = viewModel;
         }
 
         public bool CanExecute(object? parameter)
@@ -25,13 +25,15 @@ namespace Tour_Planner.ViewModels.Commands
 
         public void Execute(object? parameter)
         {
-            if (parameter?.ToString() == "Home" || parameter?.ToString() == null)
+            switch (parameter?.ToString())
             {
-                viewModel.SelectedViewModel = new HomeViewModel();
-            }
-            else if(parameter?.ToString() == "AddTour")
-            {
-                viewModel.SelectedViewModel = new TourViewModel();
+                case "Home":
+                case null:
+                    _viewModel.SelectedViewModel = new HomeViewModel();
+                    break;
+                case "AddTour":
+                    _viewModel.SelectedViewModel = new TourViewModel();
+                    break;
             }
         }
     }
