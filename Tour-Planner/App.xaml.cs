@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using System.Windows;
 using log4net;
 using Tour_Planner.Services;
+using Tour_Planner.Services.Interfaces;
+using Tour_Planner.ViewModels;
+using Tour_Planner.Views;
 
 namespace Tour_Planner
 {
@@ -28,9 +25,13 @@ namespace Tour_Planner
 
         public App()
         {
+            DependencyService.RegisterSingleton<IDialogService>(() => new DialogService(MainWindow!));
+            IDialogService dialogService = DependencyService.GetInstance<IDialogService>();
+            dialogService.Register<AddTourViewModel, AddTourDialogWindow>();
+
             // todo test
             Log.Info("Starting app and RestService");
-            RestService rest = new RestService();
+            RestService rest = new();
         }
     }
 }

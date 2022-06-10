@@ -62,10 +62,8 @@ namespace Server.Rest_API
                 string documentContents;
                 using (Stream receiveStream = request.InputStream)
                 {
-                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
-                    {
-                        documentContents = readStream.ReadToEnd();
-                    }
+                    using StreamReader readStream = new(receiveStream, Encoding.UTF8);
+                    documentContents = readStream.ReadToEnd();
                 }
                 Console.WriteLine($"Received request for {request.Url}");
 
@@ -77,7 +75,7 @@ namespace Server.Rest_API
                 // Obtain a response object.
                 HttpListenerResponse response = context.Response;
                 // Construct a response.
-                TourController sqlDao = new TourController();
+                TourController sqlDao = new();
                 string responseString = sqlDao.GetAllTours();
                 //string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);

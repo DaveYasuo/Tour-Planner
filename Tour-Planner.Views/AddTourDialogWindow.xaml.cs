@@ -11,28 +11,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Tour_Planner.ViewModels;
+using Tour_Planner.Services.Interfaces;
 
 namespace Tour_Planner.Views
 {
     /// <summary>
-    /// Interaktionslogik für Window1.xaml
+    /// Interaction logic for AddTourDialogWindow.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class AddTourDialogWindow : IDialog
     {
-        public Window1()
+        public AddTourDialogWindow()
         {
             InitializeComponent();
-            DataContext = new TourViewModel();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void title_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
         }
     }
 }
