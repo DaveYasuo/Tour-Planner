@@ -11,15 +11,5 @@ namespace Tour_Planner
         {
             InitializeComponent();
         }
-
-        private void NavigationBar_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void TourTitle_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

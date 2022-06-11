@@ -8,10 +8,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
-    <Window.DataContext>
-        <viewModels:HomeViewModel/>
-    </Window.DataContext>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -19,7 +15,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
-            <controls:NavigationBar  x:Name="NavigationBar" Loaded="NavigationBar_Loaded"/>
+            <controls:NavigationBar  x:Name="NavigationBar"/>
         </Border>
         <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1 ,0">
             <controls:SearchBar  HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
@@ -44,7 +40,7 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-                        <controls:TourTitle Grid.Row="0" Loaded="TourTitle_Loaded"/>
+                        <controls:TourTitle Grid.Row="0"/>
                         <controls:TourData Grid.Row="1"/>
                     </Grid>
                 </Border>

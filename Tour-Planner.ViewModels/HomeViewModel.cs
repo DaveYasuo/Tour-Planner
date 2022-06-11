@@ -13,16 +13,16 @@ namespace Tour_Planner.ViewModels
     public class HomeViewModel : BaseViewModel
     {
         private readonly IDialogService _dialogService;
-        public HomeViewModel()
+        public HomeViewModel(IDialogService dialogService)
         {
             DisplayMessageCommand = new RelayCommand(_ => DisplayMessage());
-            _dialogService = DependencyService.GetInstance<IDialogService>();
+            _dialogService = dialogService;
         }
 
         private void DisplayMessage()
         {
             var viewModel = new AddTourViewModel();
-            bool? result = _dialogService.ShowDialog(viewModel);
+            var result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
             {
