@@ -12,13 +12,13 @@
     <Grid>
         <Label Content="Add a new tour" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" FontSize="32"/>
         <Label Content="Tour Title" HorizontalAlignment="Left" Margin="126,76,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="240,76,0,0" TextWrapping="Wrap" Text="{Binding Title}" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="240,80,0,0" TextWrapping="Wrap" Text="{Binding Title}" VerticalAlignment="Top" Width="120"/>
         <Label Content="Origin" VerticalAlignment="Top" Margin="126,107,-126,0"/>
         <TextBox HorizontalAlignment="Left" Margin="240,111,0,0" TextWrapping="Wrap" Text="{Binding Origin}" VerticalAlignment="Top" Width="120"/>
         <Label Content="Destination" HorizontalAlignment="Left" Margin="126,138,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="240,146,0,0" TextWrapping="Wrap" Text="{Binding Destination}" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="240,142,0,0" TextWrapping="Wrap" Text="{Binding Destination}" VerticalAlignment="Top" Width="120"/>
         <Label Content="Tour Description" HorizontalAlignment="Left" Margin="126,169,0,0" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="240,179,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Description}"/>
+        <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Description}" Width="120" Margin="240,173,0,0" />
         <Button Content="Save" HorizontalAlignment="Left" Command="{Binding SaveCommand}" Margin="626,342,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.111,1.689"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Command="{Binding CancelCommand}" Margin="93,342,0,0" VerticalAlignment="Top"/>
     </Grid>

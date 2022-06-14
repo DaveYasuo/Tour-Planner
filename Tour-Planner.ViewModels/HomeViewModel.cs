@@ -22,7 +22,7 @@ namespace Tour_Planner.ViewModels
         private void DisplayMessage()
         {
             var viewModel = new AddTourViewModel();
-            var result = _dialogService.ShowDialog(viewModel);
+            bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
             {

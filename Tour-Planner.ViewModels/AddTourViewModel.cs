@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Input;
-using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
 
