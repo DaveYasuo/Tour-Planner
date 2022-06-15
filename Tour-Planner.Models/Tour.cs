@@ -2,24 +2,27 @@
 {
     public class Tour
     {
+        //Single Tour class Images will be stored externally and only the path of the image will be saved
         public Tour(int id, string source, string destination, string name, double distance, string description)
         {
-            Id = id;
-            Source = source;
-            Destination = destination;
-            Name = name;
-            Distance = distance;
-            Description = description;
+            _id = id;
+            _source = source;
+            _destination = destination;
+            _name = name;
+            _distance = distance;
+            _description = description;
+            //_picture = picture;
         }
 
         public Tour(string source, string destination, string name, double distance, string description)
         {
-            Source = source;
-            Destination = destination;
-            Name = name;
-            Distance = distance;
-            Description = description;
-            Id = 0;
+            _source = source;
+            _destination = destination;
+            _name = name;
+            _distance = distance;
+            _description = description;
+            _id = 0;
+            //_picture = picture;
         }
 
         public Tour()
@@ -27,11 +30,12 @@
 
         }
 
-        public int Id { get; set; }
-        public string Source { get; set; }
-        public string Destination { get; set; }
-        public string Name { get; set; }
-        public double Distance { get; set; }
-        public string Description { get; set; }
+        public int _id { get; set; }
+        public string _source { get; set; }
+        public string _destination { get; set; }
+        public string _name { get; set; }
+        public double _distance { get; set; }
+        public string _description { get; set; }
+        //public byte[] _picture { get; set; }
         }
 }
