@@ -22,22 +22,22 @@ namespace Tour_Planner.Services
         public void CreatePdf(Tour tour)
         {
             //const string LOREM_IPSUM_TEXT = "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-            string TARGET_PDF = "C:/Users/le0_/Source/Repos/DaveYasuo/Tour-Planner/Tour-Planner.ViewModels/PDFs/" + tour._name + ".pdf";
+            string TARGET_PDF = "C:/Users/le0_/Source/Repos/DaveYasuo/Tour-Planner/Tour-Planner.ViewModels/PDFs/" + tour.Title + ".pdf";
 
             PdfWriter writer = new PdfWriter(TARGET_PDF);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-            Paragraph loremIpsumHeader = new Paragraph("Tour Details of: " + tour._name)
+            Paragraph loremIpsumHeader = new Paragraph("Tour Details of: " + tour.Title)
                     .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                     .SetFontSize(14)
                     .SetBold()
                     .SetFontColor(ColorConstants.RED);
             document.Add(loremIpsumHeader);
-            document.Add(new Paragraph(tour._description));
-            document.Add(new Paragraph("Start: " + tour._source));
-            document.Add(new Paragraph("Destination: " + tour._destination));
-            document.Add(new Paragraph("Tour distance: " + tour._distance));
+            document.Add(new Paragraph(tour.Description));
+            document.Add(new Paragraph("Start: " + tour.Origin));
+            document.Add(new Paragraph("Destination: " + tour.Destination));
+            document.Add(new Paragraph("Tour distance: " + tour.Distance));
             /*
             Paragraph listHeader = new Paragraph("Lorem Ipsum ...")
                     .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD))
