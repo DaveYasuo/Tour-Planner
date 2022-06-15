@@ -25,14 +25,12 @@ namespace Tour_Planner
 
         public App()
         {
-            // todo test
-            Log.Info("Starting app and RestService");
-            RestService rest = new();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            DependencyService.RegisterSingleton<IRestService>(() => new RestService());
             IDialogService dialogService = new DialogService(MainWindow!);
             dialogService.Register<AddTourViewModel, AddTourDialogWindow>();
             var viewModel = new HomeViewModel(dialogService);

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Tour_Planner.Services;
+using Tour_Planner.Services.Interfaces;
 
 namespace Tour_Planner.ViewModels
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
+        public IRestService RestService = DependencyService.GetInstance<IRestService>();
+
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void RaisePropertyChangedEvent([CallerMemberName] string propertyName = "")

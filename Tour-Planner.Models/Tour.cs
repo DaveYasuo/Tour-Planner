@@ -2,24 +2,34 @@
 {
     public class Tour
     {
-        public Tour(int id, string source, string destination, string name, double distance, string description)
+        public Tour(int id, string title, string origin, string destination, double distance, string description)
         {
             Id = id;
-            Source = source;
+            Title = title;
+            Origin = origin;
             Destination = destination;
-            Name = name;
             Distance = distance;
             Description = description;
         }
 
-        public Tour(string source, string destination, string name, double distance, string description)
+        public Tour(string title, string origin, string destination, double distance, string description)
         {
-            Source = source;
+            Id = 0;
+            Title = title;
+            Origin = origin;
             Destination = destination;
-            Name = name;
             Distance = distance;
             Description = description;
+        }
+
+        public Tour(string title, string origin, string destination, string description)
+        {
             Id = 0;
+            Title = title;
+            Origin = origin;
+            Destination = destination;
+            Distance = 0;
+            Description = description;
         }
 
         public Tour()
@@ -28,10 +38,10 @@
         }
 
         public int Id { get; set; }
-        public string Source { get; set; }
+        public string Title { get; set; }
+        public string Origin { get; set; }
         public string Destination { get; set; }
-        public string Name { get; set; }
         public double Distance { get; set; }
         public string Description { get; set; }
-        }
+    }
 }

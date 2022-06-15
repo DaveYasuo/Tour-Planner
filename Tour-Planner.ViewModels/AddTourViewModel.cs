@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Input;
+using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
 
@@ -15,7 +17,14 @@ namespace Tour_Planner.ViewModels
 
         public AddTourViewModel()
         {
-            SaveCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true)));
+            SaveCommand = new RelayCommand(async _ =>
+            {
+
+                CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
+                Tour newTour = new(_title, _origin, _destination, _description);
+                var result = await RestService.AddTour(newTour);
+                Debug.WriteLine(result);
+            });
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             _description = PlaceHolder;
             _title = PlaceHolder;

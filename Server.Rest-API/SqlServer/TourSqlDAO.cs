@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using log4net;
+using System.Reflection;
 using Npgsql;
 using Server.Rest_API.Common;
 using Server.Rest_API.DAO;
@@ -11,6 +13,7 @@ namespace Server.Rest_API.SqlServer
     public class TourSqlDAO : ITourDAO
     {
         private readonly IDatabase _db;
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public TourSqlDAO()
         {
@@ -26,9 +29,32 @@ namespace Server.Rest_API.SqlServer
             throw new NotImplementedException();
         }
 
-        public Tour AddNewTour(Tour newTour)
+        public Tour AddNewTour(Tour tour)
         {
-            throw new NotImplementedException();
+            using var conn = Connection();
+            using var transaction = conn.BeginTransaction();
+            try
+            {
+                using (var cmd = new NpgsqlCommand("INSERT INTO public.tour (id, title, origin, destination, distance, description) VALUES (DEFAULT, @title, @origin, @destination, @distance, @description);", conn))
+                {
+                    cmd.Parameters.AddWithValue("title", tour.Title);
+                    cmd.Parameters.AddWithValue("origin", tour.Origin);
+                    cmd.Parameters.AddWithValue("destination", tour.Destination);
+                    cmd.Parameters.AddWithValue("distance", tour.Distance);
+                    cmd.Parameters.AddWithValue("description", tour.Description);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                    transaction.Commit();
+                    Log.Info($"Inserted tour {tour.Title}");
+                    return tour;
+                };
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                Log.Error($"Cannot insert tour {tour.Title}: " + ex.Message);
+                return null;
+            }
         }
 
         public IEnumerable<Tour> GetTours()
@@ -43,20 +69,20 @@ namespace Server.Rest_API.SqlServer
                 while (reader.Read())
                 {
                     tours.Add(new Tour(reader.SafeGet<int>("id"),
-                        reader.SafeGet<string>("source"),
+                        reader.SafeGet<string>("title"),
+                        reader.SafeGet<string>("origin"),
                         reader.SafeGet<string>("destination"),
-                        reader.SafeGet<string>("name"),
                         reader.SafeGet<double>("distance"),
                         reader.SafeGet<string>("description")));
                 }
                 conn.Close();
+                Log.Info("Get all tours");
                 return tours;
             }
             catch (Exception ex)
             {
-                //logger.Log(LogLevel.Error, ex.StackTrace);
-                Console.WriteLine(ex.Message);
-                throw new ApplicationException("Please check your database configuration & health status");
+                Log.Error($"Cannot get all tours: " + ex.Message);
+                return null;
             }
         }
     }

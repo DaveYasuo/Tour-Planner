@@ -15,52 +15,22 @@ namespace Server.Rest_API.SqlServer
         {
             _connString = conString;
             CreateDatabaseIfNotExists();
+            CreateTablesIfNotExists();
             Console.WriteLine(_connString);
         }
 
-
-        public NpgsqlConnection Connection()
-        {
-            var conn = new NpgsqlConnection(_connString);
-            conn.Open();
-            return conn;
-        }
-
-        private void CreateDatabaseIfNotExists()
+        private void CreateTablesIfNotExists()
         {
             try
             {
                 var conn = Connection();
-                using var cmdChek = new NpgsqlCommand("SELECT 1 FROM pg_database WHERE datname='tourplanner'", conn);
-                var dbExists = cmdChek.ExecuteScalar() != null;
-                if (dbExists)
-                {
-                    // Add databases to connString
-                    _connString += "Database=tourplanner;";
-                    return;
-                }
-
-                // Create databases
-                using (var cmd = new NpgsqlCommand(@"
-                    CREATE DATABASE tourplanner
-                        WITH OWNER = postgres
-                        ENCODING = 'UTF8'
-                ", conn))
-                {
-                    cmd.ExecuteNonQuery();
-                }
-
-                // Add databases to connString
-                conn.Close();
-                _connString += "Database=tourplanner;";
-                conn = Connection();
                 // Create tables
                 using (var cmd = new NpgsqlCommand(@"
                     Create TABLE IF NOT EXISTS tour(
                         id SERIAL,
-                        source VARCHAR(256) NOT NULL,
+                        title VARCHAR(256) NOT NULL,
+                        origin VARCHAR(256) NOT NULL,
                         destination VARCHAR(256) NOT NULL,
-                        name VARCHAR(256) NOT NULL,
                         distance DOUBLE PRECISION NOT NULL,
                         description TEXT NOT NULL,
                         PRIMARY KEY(id)
@@ -96,6 +66,50 @@ namespace Server.Rest_API.SqlServer
                 }
 
                 conn.Close();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal("Cannot create tables:", ex);
+                Console.WriteLine(ex.Message);
+                throw new ApplicationException("Please check your database configuration & health status");
+            }
+        }
+
+        public NpgsqlConnection Connection()
+        {
+            var conn = new NpgsqlConnection(_connString);
+            conn.Open();
+            return conn;
+        }
+
+        private void CreateDatabaseIfNotExists()
+        {
+            try
+            {
+                var conn = Connection();
+                using var cmdChek = new NpgsqlCommand("SELECT 1 FROM pg_database WHERE datname='tourplanner'", conn);
+                var dbExists = cmdChek.ExecuteScalar() != null;
+                if (dbExists)
+                {
+                    // Add databases to connString
+                    _connString += "Database=tourplanner;";
+                    return;
+                }
+
+                // Create databases
+                using (var cmd = new NpgsqlCommand(@"
+                    CREATE DATABASE tourplanner
+                        WITH OWNER = postgres
+                        ENCODING = 'UTF8'
+                ", conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+
+                // Add databases to connString
+                conn.Close();
+                _connString += "Database=tourplanner;";
+
             }
             catch (Exception ex)
             {
