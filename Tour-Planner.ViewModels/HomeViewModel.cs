@@ -19,7 +19,7 @@ namespace Tour_Planner.ViewModels
         public List<string> titles = new List<string>();
 
         public HomeViewModel (IDialogService dialogService)
-        {
+        {         
             result =  UpdateTours();
             foreach(Tour tour in result)
             {
