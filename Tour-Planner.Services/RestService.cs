@@ -42,17 +42,16 @@ namespace Tour_Planner.Services
         public async Task<bool> AddTour(Tour tour)
         {
             var result = await Client.PostAsync($"{BaseUrl}/Tour", new StringContent(JsonSerializer.Serialize(tour), Encoding.UTF8, "application/json"));
-            var result1 = await GetTour();
             return result.IsSuccessStatusCode;
         }
 
-        public async Task<List<Tour>> GetTour()
+        public async Task<List<Tour>?> GetTour()
         {
             try
             {
                 var result = await Client.GetStringAsync($"{BaseUrl}/Tour");
                 Console.WriteLine(result);
-                if (result is not null)
+                if (result is not null && result != "")
                 {
                     return JsonSerializer.Deserialize<List<Tour>>(result);
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -15,12 +16,17 @@ namespace Tour_Planner.ViewModels
     public class ListToursViewModel : BaseViewModel
     {
         TourReport tr = new TourReport();
-        private IList<string> _list = new List<string>();
         private readonly IDialogService _dialogService;
+        private ICommand? _listTours;
+        List<Tour> result = new List<Tour>();
+
+
+        // private constructor called by the async method
         public ListToursViewModel(IDialogService dialogService)
         {
+            ListTours = new ObservableCollection<string>();
             _dialogService = dialogService;
-            ShowTours = new RelayCommand(async _ => await PerformShowToursAsync());
+
             DisplayMessageCommand = new RelayCommand(_ => DisplayMessage());
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
         }
@@ -42,37 +48,36 @@ namespace Tour_Planner.ViewModels
 
         private void CreatePdf()
         {
-            Tour tour = new Tour(1, "Dages Reise ins Zauberland", "Wien", "Linz", 40, "Ich bin geil weil ich so weit Fahrrad fahren kann!", new TimeSpan(2, 14, 18), "ImagePath"
-);
-
+            Tour tour = new Tour(1, "Dages Reise ins Zauberland", "Wien", "Linz", 40, "Ich bin geil weil ich so weit Fahrrad fahren kann!", new TimeSpan(2, 14, 18), "ImagePath");
             tr.CreatePdf(tour);
         }
 
-        private async Task<List<string>> UpdateTours()
+        private async Task UpdateTours()
         {
-            List<Tour> result = await RestService.GetTour();
-            List<string> titles = new List<string>();
-            foreach (var item in result)
+            List<Tour>? tours = await RestService.GetTour();
+            if (tours is not null)
             {
-                titles.Add(item.Title);
+                result = tours;
+                foreach (var item in result)
+                {
+                    ListTours.Add(item.Title);
+                }
             }
-            RaisePropertyChangedEvent(nameof(ListTours));
-            return titles;
         }
 
 
         public ICommand DisplayMessageCommand { get; }
         public ICommand CreatePdfCommand { get; }
-        public ICommand ShowTours { get; }
-
-        private async Task PerformShowToursAsync()
+        public ICommand ShowTours
         {
-            _list = await UpdateTours();
+            get
+            {
+                if (_listTours != null) return _listTours;
+                _listTours = new RelayCommand(async _ => await UpdateTours());
+                return _listTours;
+            }
         }
 
-        public IList<string> ListTours
-        {
-            get => _list;
-        }
+        public ObservableCollection<string> ListTours { get; set; }
     }
 }
