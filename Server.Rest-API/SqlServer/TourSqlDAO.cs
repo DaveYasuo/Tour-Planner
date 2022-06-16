@@ -85,5 +85,30 @@ namespace Server.Rest_API.SqlServer
                 return null;
             }
         }
+
+        public List<string> getTourNames()
+        {
+            try
+            {
+                List<String> tourNames = new List<String>();
+                using var conn = Connection();
+                using var cmd = new NpgsqlCommand("SELECT title from public.tour;", conn);
+                cmd.Prepare();
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    tourNames.Add(reader.GetString(0));
+                }
+                conn.Close();
+                Log.Info("Get all tour names");
+                return tourNames;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Cannot get all tour names: " + ex.Message);
+                return null;
+            }
+
+        }
     }
 }

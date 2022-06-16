@@ -13,11 +13,22 @@ namespace Tour_Planner.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
+        TourReport tr = new TourReport();
         private readonly IDialogService _dialogService;
+        
         public HomeViewModel(IDialogService dialogService)
         {
+            List<Tour> result;
             DisplayMessageCommand = new RelayCommand(_ => DisplayMessage());
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
+            GetTourTitlesCommand = new RelayCommand(async _ =>
+            {
+                result = await RestService.GetTour();
+                foreach(var title in result)
+                {
+
+                }
+            });
             _dialogService = dialogService;
         }
 
@@ -38,12 +49,14 @@ namespace Tour_Planner.ViewModels
 
         private void CreatePdf()
         {
-            Tour tour = new Tour(1,"Wien","Linz","Dages Reise ins Zauberland",40,"Ich bin geil weil ich so weit Fahrrad fahren kann!");
-            TourReport tr = new TourReport();
+            Tour tour = new Tour(1,"Ayaya","Linz","Dages Reise ins Zauberland",40,"Ich bin geil weil ich so weit Fahrrad fahren kann!");
+
             tr.CreatePdf(tour);
         }
 
+
         public ICommand DisplayMessageCommand { get; }
         public ICommand CreatePdfCommand { get; }
+        public ICommand GetTourTitlesCommand { get; }
     }
 }

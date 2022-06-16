@@ -22,7 +22,7 @@ namespace Tour_Planner.Services
         public void CreatePdf(Tour tour)
         {
             //const string LOREM_IPSUM_TEXT = "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-            string TARGET_PDF = "C:/Users/le0_/Source/Repos/DaveYasuo/Tour-Planner/Tour-Planner.ViewModels/PDFs/" + tour.Title + ".pdf";
+            string TARGET_PDF = "./../../../../Tour-Planner.ViewModels/PDFs/" + tour.Title + ".pdf";
 
             PdfWriter writer = new PdfWriter(TARGET_PDF);
             PdfDocument pdf = new PdfDocument(writer);

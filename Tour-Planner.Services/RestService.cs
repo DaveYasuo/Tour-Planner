@@ -44,5 +44,17 @@ namespace Tour_Planner.Services
             var result = await Client.PostAsync($"{BaseUrl}/Tour", new StringContent(JsonSerializer.Serialize(tour), Encoding.UTF8, "application/json"));
             return result.IsSuccessStatusCode;
         }
+
+        public async Task <List<Tour>> GetTour()
+        {
+            var result = await Client.GetAsync($"{BaseUrl}/Tour");
+            if(result.IsSuccessStatusCode)
+            {
+                var stream = await result.Content.ReadAsStreamAsync();
+                List<Tour> tourResults = await JsonSerializer.DeserializeAsync<List<Tour>>(stream);
+                return tourResults;
+            }
+            return null;
+        }
     }
 }
