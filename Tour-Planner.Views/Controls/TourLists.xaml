@@ -29,7 +29,7 @@
         </Border>
         <Border Grid.Row="1">
             <Grid>
-                <ListBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding result}" Name ="TourList">
+                <ListBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding titles}" Name ="TourList">
                 </ListBox>
             </Grid>
         </Border>
