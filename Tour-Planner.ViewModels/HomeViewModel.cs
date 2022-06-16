@@ -12,19 +12,22 @@ namespace Tour_Planner.ViewModels
     {
         TourReport tr = new TourReport();
         private readonly IDialogService _dialogService;
-        
-        public HomeViewModel(IDialogService dialogService)
+        public List<Tour> result = new List<Tour> ();
+        public List<string> titles = new List<string>();
+
+        public HomeViewModel (IDialogService dialogService)
         {
-            List<Tour> result;
+            result =  UpdateTours();
+            foreach(Tour tour in result)
+            {
+                titles.Add (tour.Title);
+            }
+
             DisplayMessageCommand = new RelayCommand(_ => DisplayMessage());
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
             GetTourTitlesCommand = new RelayCommand(async _ =>
             {
                 result = await RestService.GetTour();
-                foreach(var title in result)
-                {
-
-                }
             });
             _dialogService = dialogService;
         }
@@ -50,6 +53,11 @@ namespace Tour_Planner.ViewModels
 );
 
             tr.CreatePdf(tour);
+        }
+
+        private List<Tour> UpdateTours()
+        {
+            return RestService.GetTour().Result;
         }
 
 
