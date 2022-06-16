@@ -33,7 +33,7 @@ namespace Tour_Planner.ViewModels
                            foreach (var item in testableProperty)
                            {
 
-                               if (GetErrorForProperty(nameof(item)) is not null)
+                               if (GetErrorForProperty(nameof(item)) is not "")
                                {
                                    MessageBox.Show("Please fill out the form before submitting");
                                    return;

@@ -55,6 +55,7 @@ namespace Server.Rest_API.SqlServer
             {
                 transaction.Rollback();
                 Log.Error($"Cannot insert tour {tour.Title}: " + ex.Message);
+                Console.WriteLine($"Cannot insert tour {tour.Title}: " + ex.Message);
                 return null;
             }
         }

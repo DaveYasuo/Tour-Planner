@@ -75,7 +75,7 @@ namespace Server.Rest_API
                 // Obtain a response object.
                 HttpListenerResponse response = context.Response;
 
-                if (urlParams is not null)
+                if (urlParams is not null && urlParams.Item1.Count != 0)
                 {
                     IController controller = handler.GetController(urlParams.Item1[0]);
                     if (controller is not null)
@@ -85,6 +85,7 @@ namespace Server.Rest_API
 
                         if (responseString is not null)
                         {
+                            Console.WriteLine(responseString);
                             byte[] buffer = Encoding.UTF8.GetBytes(responseString);
                             // Get a response stream and write the response to it.
                             response.ContentLength64 = buffer.Length;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+using Tour_Planner.Converters;
 
 namespace Tour_Planner.Models
 {
@@ -38,7 +40,7 @@ namespace Tour_Planner.Models
             Distance = default;
             Description = description;
             Duration = default;
-            ImagePath = default;
+            ImagePath = "";
         }
 
         public Tour()
@@ -46,13 +48,14 @@ namespace Tour_Planner.Models
 
         }
 
-        public int Id { get; }
-        public string Title { get; }
-        public string Origin { get; }
-        public string Destination { get; }
-        public double Distance { get; }
-        public string Description { get; }
-        public TimeSpan Duration { get; }
-        public string ImagePath { get; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Origin { get; set; }
+        public string Destination { get; set; }
+        public double Distance { get; set; }
+        public string Description { get; set; }
+        [JsonConverter(typeof(TimeSpanConverter))]
+        public TimeSpan Duration { get; set; }
+        public string ImagePath { get; set; }
     }
 }

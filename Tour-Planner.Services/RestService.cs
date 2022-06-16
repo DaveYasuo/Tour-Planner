@@ -22,39 +22,61 @@ namespace Tour_Planner.Services
         private static readonly HttpClient Client = new();
         public RestService()
         {
-            Test();
+            //Test();
         }
 
-        public async void Test()
-        {
-            Log.Info("Sending request");
-            try
-            {
-                var responseString = await Client.GetStringAsync(BaseUrl);
-                Debug.WriteLine(responseString);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
-        }
+        //public async void Test()
+        //{
+        //    Log.Info("Sending request");
+        //    try
+        //    {
+        //        var responseString = await Client.GetStringAsync(BaseUrl);
+        //        Debug.WriteLine(responseString);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine(e.Message);
+        //    }
+        //}
 
         public async Task<bool> AddTour(Tour tour)
         {
             var result = await Client.PostAsync($"{BaseUrl}/Tour", new StringContent(JsonSerializer.Serialize(tour), Encoding.UTF8, "application/json"));
+            var result1 = await GetTour();
             return result.IsSuccessStatusCode;
         }
 
-        public async Task <List<Tour>> GetTour()
+        public async Task<List<Tour>> GetTour()
         {
-            var result = await Client.GetAsync($"{BaseUrl}/Tour");
-            if(result.IsSuccessStatusCode)
+            try
             {
-                var stream = await result.Content.ReadAsStreamAsync();
-                List<Tour> tourResults = await JsonSerializer.DeserializeAsync<List<Tour>>(stream);
-                return tourResults;
+                var result = await Client.GetStringAsync($"{BaseUrl}/Tour");
+                Console.WriteLine(result);
+                if (result is not null)
+                {
+                    return JsonSerializer.Deserialize<List<Tour>>(result);
+                }
+                return null;
             }
-            return null;
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+
+            //if(result.IsSuccessStatusCode)
+            //{
+            //    var stream = await result.Content.ReadAsStreamAsync();
+            //    List<Tour> tourResults = await JsonSerializer.DeserializeAsync<List<Tour>>(stream);
+            //    return tourResults;
+            //}
+            //return new List<Tour>()
+            //{
+            //    new Tour(1,"title","from","to",40,"descr",new TimeSpan(1,2,3),""),
+            //    new Tour(2,"title","from","to",40,"descr",new TimeSpan(1,2,3),""),
+            //    new Tour(3,"title","from","to",40,"descr",new TimeSpan(1,2,3),""),
+            //    new Tour(4,"title","from","to",40,"descr",new TimeSpan(1,2,3),"")
+            //};
         }
     }
 }

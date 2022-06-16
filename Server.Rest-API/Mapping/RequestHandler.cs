@@ -35,7 +35,7 @@ namespace Server.Rest_API.Mapping
             rawUrl = rawUrl[check.Length..];
             List<string> urlParam = rawUrl.Split('/', StringSplitOptions.RemoveEmptyEntries).ToList();
             Dictionary<string, string> param = null;
-            if (urlParam.Last().Contains('?'))
+            if (urlParam.Count != 0 && urlParam.Last().Contains('?'))
             { //http://qer.qwer/api/Tour?key=value&key1=value1
                 param = new Dictionary<string, string>();
                 var entries = urlParam.Last().Split('&');
