@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Tour-Planner.Converters\Tour-Planner.Converters.csproj" />
+    <ProjectReference Include="..\Tour-Planner.DataModels\Tour-Planner.DataModels.csproj" />
     <ProjectReference Include="..\Tour-Planner.ViewModels\Tour-Planner.ViewModels.csproj" />
   </ItemGroup>
 

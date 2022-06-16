@@ -33,6 +33,8 @@ namespace Server.Rest_API.SqlServer
                         destination VARCHAR(256) NOT NULL,
                         distance DOUBLE PRECISION NOT NULL,
                         description TEXT NOT NULL,
+                        duration INTERVAL NOT NULL,
+                        imagepath VARCHAR(256) NOT NULL,
                         PRIMARY KEY(id)
                     )
                 ", conn))
@@ -52,8 +54,6 @@ namespace Server.Rest_API.SqlServer
                         report TEXT NOT NULL,
                         avgspeed DOUBLE PRECISION NOT NULL,
                         maxspeed DOUBLE PRECISION NOT NULL,
-                        heightdifference DOUBLE PRECISION NOT NULL,
-                        stops INTEGER NOT NULL,
                         PRIMARY KEY(id),
                         CONSTRAINT fk_tour
                             FOREIGN KEY(tour) 

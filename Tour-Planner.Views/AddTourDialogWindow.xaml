@@ -3,34 +3,41 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels"
+        xmlns:viewModels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" d:DataContext="{d:DesignInstance Type=viewModels:AddTourViewModel}"
         mc:Ignorable="d"
-        Title="New Tour" Height="450" Width="800">
-    <Window.DataContext>
-        <viewModels:AddTourViewModel/>
-    </Window.DataContext>
+        Title="New Tour" Height="450" Width="800"
+        xmlns:Converters="clr-namespace:Tour_Planner.Converters;assembly=Tour-Planner.Converters" 
+        xmlns:src="clr-namespace:Tour_Planner.DataModels.Collections;assembly=Tour-Planner.DataModels">
+
     <Window.Resources>
         <ControlTemplate x:Key="ValidationTemplate">
-            <Border BorderBrush="Red"
-            BorderThickness="1">
-                <Grid Background="Transparent"
-              ToolTip="{Binding Path=/ErrorContent}">
-                    <AdornedElementPlaceholder />
-                </Grid>
-            </Border>
+
+            <StackPanel Orientation="Horizontal">
+                <Border BorderBrush="Red" BorderThickness="1">
+                    <Grid Background="Transparent" ToolTip="{Binding Path=/ErrorContent}">
+                        <AdornedElementPlaceholder />
+                    </Grid>
+                </Border>
+                <Ellipse Fill="Red" Width="10" Height="10" ToolTip="{Binding Path=/ErrorContent}" Margin="5"></Ellipse>
+            </StackPanel>
         </ControlTemplate>
+        <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <src:RouteTypes x:Key="myRouteTypes"/>
     </Window.Resources>
     <Grid>
         <Label Content="Add a new tour" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" FontSize="32"/>
         <Label Content="Tour Title" HorizontalAlignment="Left" Margin="126,76,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="240,80,0,0" TextWrapping="Wrap"  Text="{Binding Title, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="240,80,0,0" TextWrapping="Wrap"  Text="{Binding Title, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" VerticalAlignment="Top" Width="120"/>
         <Label Content="Origin" VerticalAlignment="Top" Margin="126,107,-126,0"/>
-        <TextBox HorizontalAlignment="Left" Margin="240,111,0,0" TextWrapping="Wrap"  Text="{Binding Origin,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Destination" HorizontalAlignment="Left" Margin="126,138,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="240,142,0,0" TextWrapping="Wrap"  Text="{Binding Destination, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Tour Description" HorizontalAlignment="Left" Margin="126,169,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Width="120" Margin="240,173,0,0" />
+        <TextBox HorizontalAlignment="Left" Margin="240,111,0,0" TextWrapping="Wrap"  Text="{Binding Origin,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Destination" HorizontalAlignment="Left" Margin="457,107,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Margin="571,111,0,0" TextWrapping="Wrap"  Text="{Binding Destination, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Tour Description" HorizontalAlignment="Left" Margin="126,142,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding Description}" Width="451" Margin="240,146,0,0" />
         <Button Content="Save" HorizontalAlignment="Left" Command="{Binding SaveCommand}" Margin="626,342,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.111,1.689"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Command="{Binding CancelCommand}" Margin="93,342,0,0" VerticalAlignment="Top"/>
+        <Label Content="Route type" HorizontalAlignment="Left" Margin="456,76,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="CBRouteType" HorizontalAlignment="Left" Margin="571,78,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myRouteTypes}" SelectedItem="{Binding SelectedItem}"/>
+        <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBRouteType, Converter={StaticResource NullToVisibilityConverter}}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="578,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
     </Grid>
 </Window>

@@ -35,13 +35,15 @@ namespace Server.Rest_API.SqlServer
             using var transaction = conn.BeginTransaction();
             try
             {
-                using (var cmd = new NpgsqlCommand("INSERT INTO public.tour (id, title, origin, destination, distance, description) VALUES (DEFAULT, @title, @origin, @destination, @distance, @description);", conn))
+                using (var cmd = new NpgsqlCommand("INSERT INTO public.tour (id, title, origin, destination, distance, description, duration, imagepath) VALUES (DEFAULT, @title, @origin, @destination, @distance, @description, @duration, @imagepath);", conn))
                 {
                     cmd.Parameters.AddWithValue("title", tour.Title);
                     cmd.Parameters.AddWithValue("origin", tour.Origin);
                     cmd.Parameters.AddWithValue("destination", tour.Destination);
                     cmd.Parameters.AddWithValue("distance", tour.Distance);
                     cmd.Parameters.AddWithValue("description", tour.Description);
+                    cmd.Parameters.AddWithValue("duration", tour.Duration);
+                    cmd.Parameters.AddWithValue("imagepath", tour.ImagePath);
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
                     transaction.Commit();
@@ -73,7 +75,9 @@ namespace Server.Rest_API.SqlServer
                         reader.SafeGet<string>("origin"),
                         reader.SafeGet<string>("destination"),
                         reader.SafeGet<double>("distance"),
-                        reader.SafeGet<string>("description")));
+                        reader.SafeGet<string>("description"),
+                        reader.SafeGet<TimeSpan>("duration"),
+                        reader.SafeGet<string>("imagepath")));
                 }
                 conn.Close();
                 Log.Info("Get all tours");

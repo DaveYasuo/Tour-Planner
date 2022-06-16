@@ -22,15 +22,17 @@ namespace Server.Rest_API.Controller
 
             string result = "";
             switch (httpMethod)
-            {
+            { 
                 case "get":
                     {
+                        // api/tour
                         if (urlParams.Item1.Count is 1)
                         {
                             result = Get();
                         }
                         else
                         {
+                            // api/tour/test
                             result = Get(urlParams);
                         };
                         break;
