@@ -17,6 +17,7 @@ namespace Tour_Planner.ViewModels
         private string _origin;
         private string _destination;
         private string _description;
+        private string _selectedItem;
         public string Error { get; set; } = "";
         //public string Error => throw new NotImplementedException();s
 
@@ -26,26 +27,27 @@ namespace Tour_Planner.ViewModels
         bool descriptionHasBeenTouched = false;
         public AddTourViewModel()
         {
- SaveCommand = new RelayCommand(async _ =>
-            {
-                if (!string.IsNullOrEmpty(Error) || string.IsNullOrEmpty(_title) || string.IsNullOrEmpty(_origin) || string.IsNullOrEmpty(_destination) || _title.Trim().Length == 0 || _origin.Trim().Length == 0 || _destination.Trim().Length == 0 || _destination.Trim().Length == 0 || string.IsNullOrEmpty(_description) == false && _description.Trim().Length == 0)
-                {
-                    MessageBox.Show("There are still errors, cannot save");
-                }
-                else
-                {
-                    CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                    Tour newTour = new(_title, _origin, _destination, _description);
-                    var result = await RestService.AddTour(newTour);
-                    Debug.WriteLine(result);
-                }
+            SaveCommand = new RelayCommand(async _ =>
+                       {
+                           if (!string.IsNullOrEmpty(Error) || string.IsNullOrEmpty(_title) || string.IsNullOrEmpty(_origin) || string.IsNullOrEmpty(_destination) || _title.Trim().Length == 0 || _origin.Trim().Length == 0 || _destination.Trim().Length == 0 || _destination.Trim().Length == 0 || string.IsNullOrEmpty(_description) == false && _description.Trim().Length == 0)
+                           {
+                               MessageBox.Show("There are still errors, cannot save");
+                           }
+                           else
+                           {
+                               CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
+                               Tour newTour = new(_title, _origin, _destination, _description);
+                               var result = await RestService.AddTour(newTour);
+                               Debug.WriteLine(result);
+                           }
 
-            });
+                       });
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             _description = PlaceHolder;
             _title = PlaceHolder;
             _origin = PlaceHolder;
             _destination = PlaceHolder;
+            _selectedItem = PlaceHolder;
         }
 
         public string Title
@@ -96,10 +98,21 @@ namespace Tour_Planner.ViewModels
                 return GetErrorForProperty(propertyName);
             }
         }
-        
+
+        public string SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                if (_selectedItem == value) return;
+                _selectedItem = value;
+                RaisePropertyChangedEvent();
+            }
+        }
+
         private string GetErrorForProperty(string propertyName)
         {
-           
+
             Error = "";
             switch (propertyName)
             {
@@ -109,7 +122,7 @@ namespace Tour_Planner.ViewModels
                         Error = "Title can not be empty!";
                         return Error;
                     }
-                    else if(titleHasBeenTouched == true && _title.Trim().Length == 0)
+                    else if (titleHasBeenTouched == true && _title.Trim().Length == 0)
                     {
                         Error = "Title can not be empty!";
                         return Error;
@@ -124,8 +137,8 @@ namespace Tour_Planner.ViewModels
                     }
                     else if (_origin.Trim().Length == 0 && originHasBeenTouched == true)
                     {
-                            Error = "Origin can not be empty!";
-                            return Error;
+                        Error = "Origin can not be empty!";
+                        return Error;
                     }
                     originHasBeenTouched = true;
                     break;
@@ -145,7 +158,7 @@ namespace Tour_Planner.ViewModels
                 case "Description":
                     if (_description.Trim().Length == 0 && descriptionHasBeenTouched == true)
                     {
-                        if(string.IsNullOrEmpty(_description) && descriptionHasBeenTouched == true)
+                        if (string.IsNullOrEmpty(_description) && descriptionHasBeenTouched == true)
                         {
                             Error = "";
                         }

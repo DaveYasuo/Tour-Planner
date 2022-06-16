@@ -1,6 +1,6 @@
 using System;
 
-namespace Converters
+namespace Tour_Planner.Converters
 {
     public class Class1
     {
