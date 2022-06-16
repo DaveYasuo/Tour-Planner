@@ -38,7 +38,7 @@ namespace Tour_Planner.ViewModels
 
         private void CreatePdf()
         {
-            Tour tour = new Tour(1,"Wien","Linz","Dages Reise ins Zauberland",40,"Ich bin geil weil ich so weit Fahrrad fahren kann!");
+            Tour tour = new Tour(1, "Dages Reise ins Zauberland", "Wien", "Linz", 40, "Ich bin geil weil ich so weit Fahrrad fahren kann!", new TimeSpan(2, 14, 18), "ImagePath");
             TourReport tr = new TourReport();
             tr.CreatePdf(tour);
         }

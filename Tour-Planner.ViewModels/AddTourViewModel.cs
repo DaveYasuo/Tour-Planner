@@ -36,7 +36,7 @@ namespace Tour_Planner.ViewModels
                            else
                            {
                                CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                               Tour newTour = new(_title, _origin, _destination, _description);
+                               Tour newTour = new(_title, _origin, _destination, _description); // todo
                                var result = await RestService.AddTour(newTour);
                                Debug.WriteLine(result);
                            }

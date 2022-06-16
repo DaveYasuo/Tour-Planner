@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tour_Planner.DataModels.Enums;
 
 namespace Tour_Planner.DataModels.Collections
 {
@@ -11,10 +12,10 @@ namespace Tour_Planner.DataModels.Collections
     {
         public RouteTypes()
         {
-            Add("fastest");
-            Add("shortest");
-            Add("pedestrian");
-            Add("bicycle");
+            foreach (string routeType in Enum.GetNames(typeof(RouteType)))
+            {
+                Add(routeType);
+            }
         }
     }
 }

@@ -88,7 +88,7 @@ namespace Server.Rest_API
                             byte[] buffer = Encoding.UTF8.GetBytes(responseString);
                             // Get a response stream and write the response to it.
                             response.ContentLength64 = buffer.Length;
-                            System.IO.Stream output = response.OutputStream;
+                            Stream output = response.OutputStream;
                             output.Write(buffer, 0, buffer.Length);
                             // You must close the output stream.
                             output.Close();
@@ -100,7 +100,7 @@ namespace Server.Rest_API
                 byte[] buffer1 = Encoding.UTF8.GetBytes("");
                 // Get a response stream and write the response to it.
                 response.ContentLength64 = buffer1.Length;
-                System.IO.Stream output1 = response.OutputStream;
+                Stream output1 = response.OutputStream;
                 output1.Write(buffer1, 0, buffer1.Length);
                 // You must close the output stream.
                 output1.Close();

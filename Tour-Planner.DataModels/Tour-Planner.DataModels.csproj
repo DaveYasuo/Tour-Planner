@@ -10,7 +10,6 @@
   <ItemGroup>
     <Folder Include="Collections\" />
     <Folder Include="Delegates\" />
-    <Folder Include="Enums\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>
 
