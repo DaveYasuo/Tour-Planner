@@ -28,7 +28,6 @@ namespace Tour_Planner.ViewModels
             ShowTours = new RelayCommand(async (_) => await UpdateTours());
             DisplayMessageCommand = new RelayCommand(_ => DisplayMessage());
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
-            PerformShowToursAsync();
 
         }
 
