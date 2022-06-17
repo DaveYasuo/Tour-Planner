@@ -21,6 +21,7 @@ namespace Tour_Planner.ViewModels
         private readonly IDialogService _dialogService;
         List<Tour> result = new List<Tour>();
         Tour selectedTour  = new Tour();
+        private string _searchBarContent;
         public ListToursViewModel(IDialogService dialogService)
         {
             ListTours = new ObservableCollection<string>();
@@ -132,6 +133,30 @@ namespace Tour_Planner.ViewModels
                 MessageBox.Show("Please select a Tour to delete!");
             }
 
+        }
+
+        private void FilterByText()
+        {
+            ListTours.Clear();
+            /*foreach(Tour tour in result)
+            {
+                if (tour.Title.Contains(_searchBarContent) || tour.Description.Contains(_searchBarContent) || tour.Origin.Contains(_searchBarContent) || tour.Destination.Contains(_searchBarContent) || tour.RouteType.ToString().Contains(_searchBarContent) || tour.Distance.ToString().Contains(_searchBarContent) || tour.Duration.ToString().Contains(_searchBarContent))
+                {
+                    ListTours.Add(tour.Title);
+                }
+            }*/
+        }
+        public string SearchBarContent
+        {
+            get => _searchBarContent;
+            set
+            {
+                if (_searchBarContent == value) return;
+                _searchBarContent = value;
+                //FilterByText();
+                RaisePropertyChangedEvent();
+                // var currentViewModel = new ListToursViewModel();
+            }
         }
         public ICommand DisplayMessageCommand { get; }
         public ICommand CreatePdfCommand { get; }
