@@ -25,6 +25,8 @@ namespace Tour_Planner.ViewModels
                 throw new ArgumentException("Invalid property name: " + propertyName);
             }
         }
+
+
         #endregion
     }
 }

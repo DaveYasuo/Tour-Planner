@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Tour_Planner.Services;
+using Tour_Planner.Services.Interfaces;
+using Tour_Planner.ViewModels;
 
 namespace Tour_Planner.Views.Controls
 {
@@ -23,6 +26,8 @@ namespace Tour_Planner.Views.Controls
         public TourData()
         {
             InitializeComponent();
+            DataContext = new ListToursViewModel(DependencyService.GetInstance<IDialogService>());
+
         }
     }
 }
