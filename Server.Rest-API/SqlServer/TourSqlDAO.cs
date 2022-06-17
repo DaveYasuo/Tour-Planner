@@ -7,6 +7,7 @@ using Npgsql;
 using Server.Rest_API.Common;
 using Server.Rest_API.DAO;
 using Tour_Planner.Models;
+using Tour_Planner.DataModels.Enums;
 
 namespace Server.Rest_API.SqlServer
 {
@@ -35,7 +36,7 @@ namespace Server.Rest_API.SqlServer
             using var transaction = conn.BeginTransaction();
             try
             {
-                using (var cmd = new NpgsqlCommand("INSERT INTO public.tour (id, title, origin, destination, distance, description, duration, imagepath) VALUES (DEFAULT, @title, @origin, @destination, @distance, @description, @duration, @imagepath);", conn))
+                using (var cmd = new NpgsqlCommand("INSERT INTO public.tour (id, title, origin, destination, distance, description, duration, imagepath, type) VALUES (DEFAULT, @title, @origin, @destination, @distance, @description, @duration, @imagepath, @type);", conn))
                 {
                     cmd.Parameters.AddWithValue("title", tour.Title);
                     cmd.Parameters.AddWithValue("origin", tour.Origin);
@@ -44,6 +45,7 @@ namespace Server.Rest_API.SqlServer
                     cmd.Parameters.AddWithValue("description", tour.Description);
                     cmd.Parameters.AddWithValue("duration", tour.Duration);
                     cmd.Parameters.AddWithValue("imagepath", tour.ImagePath);
+                    cmd.Parameters.AddWithValue("type", tour.RouteType);
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
                     transaction.Commit();
@@ -66,7 +68,7 @@ namespace Server.Rest_API.SqlServer
             {
                 var tours = new List<Tour>();
                 using var conn = Connection();
-                using var cmd = new NpgsqlCommand("SELECT * from public.tour;", conn);
+                using var cmd = new NpgsqlCommand("SELECT id, title, origin, destination, distance, description, duration, imagepath, type from public.tour;", conn);
                 cmd.Prepare();
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -78,7 +80,8 @@ namespace Server.Rest_API.SqlServer
                         reader.SafeGet<double>("distance"),
                         reader.SafeGet<string>("description"),
                         reader.SafeGet<TimeSpan>("duration"),
-                        reader.SafeGet<string>("imagepath")));
+                        reader.SafeGet<string>("imagepath"),
+                        reader.SafeGet<RouteType>("type")));
                 }
                 conn.Close();
                 Log.Info("Get all tours");

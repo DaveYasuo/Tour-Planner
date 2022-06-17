@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Models;
 using Tour_Planner.Services;
 using Tour_Planner.Services.Interfaces;
@@ -17,16 +18,14 @@ namespace Tour_Planner.ViewModels
     {
         TourReport tr = new TourReport();
         private readonly IDialogService _dialogService;
-        private ICommand? _listTours;
         List<Tour> result = new List<Tour>();
 
 
-        // private constructor called by the async method
         public ListToursViewModel(IDialogService dialogService)
         {
             ListTours = new ObservableCollection<string>();
             _dialogService = dialogService;
-
+            ShowTours = new RelayCommand(async (_) => await UpdateTours());
             DisplayMessageCommand = new RelayCommand(_ => DisplayMessage());
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
         }
@@ -38,7 +37,7 @@ namespace Tour_Planner.ViewModels
             if (!result.HasValue) return;
             if (result.Value)
             {
-                // accepted
+                _ = UpdateTours();
             }
             else
             {
@@ -48,7 +47,7 @@ namespace Tour_Planner.ViewModels
 
         private void CreatePdf()
         {
-            Tour tour = new Tour(1, "Dages Reise ins Zauberland", "Wien", "Linz", 40, "Ich bin geil weil ich so weit Fahrrad fahren kann!", new TimeSpan(2, 14, 18), "ImagePath");
+            Tour tour = new Tour(1, "Dages Reise ins Zauberland", "Wien", "Linz", 40, "Ich bin geil weil ich so weit Fahrrad fahren kann!", new TimeSpan(2, 14, 18), "ImagePath", RouteType.pedestrian);
             tr.CreatePdf(tour);
         }
 
@@ -57,6 +56,7 @@ namespace Tour_Planner.ViewModels
             List<Tour>? tours = await RestService.GetTour();
             if (tours is not null)
             {
+                ListTours.Clear();
                 result = tours;
                 foreach (var item in result)
                 {
@@ -68,15 +68,7 @@ namespace Tour_Planner.ViewModels
 
         public ICommand DisplayMessageCommand { get; }
         public ICommand CreatePdfCommand { get; }
-        public ICommand ShowTours
-        {
-            get
-            {
-                if (_listTours != null) return _listTours;
-                _listTours = new RelayCommand(async _ => await UpdateTours());
-                return _listTours;
-            }
-        }
+        public ICommand ShowTours { get; }
 
         public ObservableCollection<string> ListTours { get; set; }
     }

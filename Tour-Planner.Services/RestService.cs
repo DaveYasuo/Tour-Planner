@@ -50,7 +50,6 @@ namespace Tour_Planner.Services
             try
             {
                 var result = await Client.GetStringAsync($"{BaseUrl}/Tour");
-                Console.WriteLine(result);
                 if (result is not null && result != "")
                 {
                     return JsonSerializer.Deserialize<List<Tour>>(result);

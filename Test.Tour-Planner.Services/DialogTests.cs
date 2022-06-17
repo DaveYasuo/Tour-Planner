@@ -9,19 +9,19 @@ namespace Test.Tour_Planner.Services
     {
         private Mock<IDialogService> _mock;
         private HomeViewModel _viewModel;
-        [SetUp]
-        public void Setup()
-        {
-            _mock = new Mock<IDialogService>();
-            _viewModel = new HomeViewModel(_mock.Object);
-        }
+        //[SetUp]
+        //public void Setup()
+        //{
+        //    _mock = new Mock<IDialogService>();
+        //    _viewModel = new HomeViewModel(_mock.Object);
+        //}
 
-        [Test]
-        public void DisplayMessageCommand_ShowsMessageDialog()
-        {
-            _mock.Setup(service => service.ShowDialog(It.IsAny<AddTourViewModel>())).Verifiable();
-            _viewModel.DisplayMessageCommand.Execute(null);
-            _mock.Verify();
-        }
+        //[Test]
+        //public void DisplayMessageCommand_ShowsMessageDialog()
+        //{
+        //    _mock.Setup(service => service.ShowDialog(It.IsAny<AddTourViewModel>())).Verifiable();
+        //    _viewModel.DisplayMessageCommand.Execute(null);
+        //    _mock.Verify();
+        //}
     }
 }

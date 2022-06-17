@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 using Tour_Planner.Converters;
+using Tour_Planner.DataModels.Enums;
 
 namespace Tour_Planner.Models
 {
     public class Tour
     {
         // Single Tour class Images will be stored externally and only the path of the image will be saved
-        public Tour(int id, string title, string origin, string destination, double distance, string description, TimeSpan duration, string imagePath)
+        public Tour(int id, string title, string origin, string destination, double distance, string description, TimeSpan duration, string imagePath, RouteType routeType)
         {
             Id = id;
             Title = title;
@@ -17,9 +18,10 @@ namespace Tour_Planner.Models
             Description = description;
             Duration = duration;
             ImagePath = imagePath;
+            RouteType = routeType;
         }
 
-        public Tour(string title, string origin, string destination, double distance, string description, TimeSpan duration, string imagePath)
+        public Tour(string title, string origin, string destination, double distance, string description, TimeSpan duration, string imagePath, RouteType routeType)
         {
             Id = default;
             Title = title;
@@ -29,9 +31,10 @@ namespace Tour_Planner.Models
             Description = description;
             Duration = duration;
             ImagePath = imagePath;
+            RouteType = routeType;
         }
 
-        public Tour(string title, string origin, string destination, string description)
+        public Tour(string title, string origin, string destination, string description, RouteType routeType)
         {
             Id = default;
             Title = title;
@@ -41,6 +44,7 @@ namespace Tour_Planner.Models
             Description = description;
             Duration = default;
             ImagePath = "";
+            RouteType = routeType;
         }
 
         public Tour()
@@ -57,5 +61,6 @@ namespace Tour_Planner.Models
         [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan Duration { get; set; }
         public string ImagePath { get; set; }
+        public RouteType RouteType { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Reflection;
 using log4net;
 using Npgsql;
 using Server.Rest_API.Common;
+using Tour_Planner.DataModels.Enums;
 
 namespace Server.Rest_API.SqlServer
 {
@@ -10,12 +11,11 @@ namespace Server.Rest_API.SqlServer
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private string _connString;
-
         public Postgres(string conString)
         {
             _connString = conString;
             CreateDatabaseIfNotExists();
-            CreateTablesIfNotExists();
+            NpgsqlConnection.GlobalTypeMapper.MapEnum<RouteType>("routetype");
             Console.WriteLine(_connString);
         }
 
@@ -24,6 +24,20 @@ namespace Server.Rest_API.SqlServer
             try
             {
                 var conn = Connection();
+                // Create Enum if not exists (drop it if exists and recreate)
+                using (var cmd = new NpgsqlCommand(@"
+                    DROP TYPE IF EXISTS routetype;
+                    CREATE TYPE routetype AS  ENUM(
+                        'fastest',
+                        'shortest',
+                        'pedestrian',
+                        'bicycle'
+                    )
+                ", conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+
                 // Create tables
                 using (var cmd = new NpgsqlCommand(@"
                     Create TABLE IF NOT EXISTS tour(
@@ -35,6 +49,7 @@ namespace Server.Rest_API.SqlServer
                         description TEXT NOT NULL,
                         duration INTERVAL NOT NULL,
                         imagepath VARCHAR(256) NOT NULL,
+                        type routetype NOT NULL,
                         PRIMARY KEY(id)
                     )
                 ", conn))
@@ -47,7 +62,7 @@ namespace Server.Rest_API.SqlServer
                         id SERIAL,
                         tour INTEGER NOT NULL,
                         date DATE NOT NULL,
-                        type VARCHAR(256) NOT NULL,
+                        type routetype NOT NULL,
                         duration INTERVAL NOT NULL,
                         distance DOUBLE PRECISION NOT NULL,
                         rating VARCHAR(256) NOT NULL,
@@ -109,7 +124,8 @@ namespace Server.Rest_API.SqlServer
                 // Add databases to connString
                 conn.Close();
                 _connString += "Database=tourplanner;";
-
+                // Create tables
+                CreateTablesIfNotExists();
             }
             catch (Exception ex)
             {
