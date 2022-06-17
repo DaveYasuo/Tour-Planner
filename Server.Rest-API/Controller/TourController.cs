@@ -31,6 +31,11 @@ namespace Server.Rest_API.Controller
             return tourSqlDao.AddNewTour(tour);
         }
 
+        private void DeleteATour(int id )
+        {
+            tourSqlDao.DeleteTour(id);
+        }
+
         public string Get()
         {
             try
@@ -64,9 +69,9 @@ namespace Server.Rest_API.Controller
             throw new NotImplementedException();
         }
 
-        public void Delete(object id)
+        public void Delete(int id)
         {
-            throw new NotImplementedException();
+            DeleteATour(id);
         }
     }
 }

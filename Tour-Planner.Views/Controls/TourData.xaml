@@ -15,7 +15,7 @@
             <TabControl>
                 <TabItem Header="Route">Random Route</TabItem>
                 <TabItem Header="Description">
-                    <TextBlock Text="{Binding Description, Mode=TwoWay}"/>
+                    <TextBlock Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </TabItem>
             </TabControl>
         </Grid>

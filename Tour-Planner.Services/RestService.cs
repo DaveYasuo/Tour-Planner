@@ -76,5 +76,11 @@ namespace Tour_Planner.Services
             //    new Tour(4,"title","from","to",40,"descr",new TimeSpan(1,2,3),"")
             //};
         }
+
+        public async Task<bool> DeleteTour(int id)
+        {
+            var result = await Client.DeleteAsync($"{BaseUrl}/Tour/"+id);
+            return result.IsSuccessStatusCode;
+        }
     }
 }

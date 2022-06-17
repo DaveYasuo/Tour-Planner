@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Models;
@@ -33,6 +34,7 @@ namespace Tour_Planner.ViewModels
             ShowTours = new RelayCommand(async (_) => await UpdateTours());
             DisplayAddTourCommand = new RelayCommand(_ => DisplayAddTour());
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
+            DeleteTourCommand = new RelayCommand(_ => DeleteTour());
             _selectedTour = null;
         }
 
@@ -86,13 +88,80 @@ namespace Tour_Planner.ViewModels
                 AllTours = tours;
                 foreach (var item in AllTours)
                 {
-                    ListTours.Add(item);
+                    ListTours.Add(item.Title);
                 }
             }
         }
-        public ICommand DisplayAddTourCommand { get; }
+
+        private String _description;
+        public String Description
+        {
+            get => _description;
+            set
+            {
+                _description = value;
+                RaisePropertyChangedEvent(); 
+            }
+        }
+
+        public Tour SingleTour
+        {
+            get
+            {
+                Description = selectedTour.Description;
+                return selectedTour;
+            }
+        }
+        
+        private Tour GetTourFromTitle(string title)
+        {
+            foreach(Tour tour in result)
+            {
+                if(tour.Title == title)
+                {
+                    return tour;
+                }
+            }
+            return null!;
+        }
+        private String _selectedTour;
+        public String SelectedTour
+        {
+            get { return _selectedTour; }
+            set
+            {
+                if (_selectedTour != value && value != null)
+                {
+                    _selectedTour = value;
+                    selectedTour = GetTourFromTitle(_selectedTour);
+                    Description = selectedTour.Description;
+                    RaisePropertyChangedEvent(nameof(SelectedTour));
+                    RaisePropertyChangedEvent(nameof(Description));
+                }
+            }
+        }
+        private async Task DeleteTour()
+        {
+            if (selectedTour.Title != null && selectedTour.Description != null && selectedTour.Origin != null && selectedTour.Destination != null)
+            {
+                bool result = await RestService.DeleteTour(selectedTour.Id);
+                if (result)
+                {
+                    await UpdateTours();
+                    selectedTour = new Tour();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a Tour to delete!");
+            }
+
+        }
+
+        public ICommand DisplayMessageCommand { get; }
         public ICommand CreatePdfCommand { get; }
         public ICommand ShowTours { get; }
+        public ICommand DeleteTourCommand { get; }
 
     }
 }
