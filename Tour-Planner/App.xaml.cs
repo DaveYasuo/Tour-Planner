@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 using log4net;
 using Tour_Planner.Services;
@@ -25,11 +26,6 @@ namespace Tour_Planner
 
         public App()
         {
-            DependencyService.RegisterSingleton<IRestService>(() => new RestService());
-            DependencyService.RegisterSingleton<IDialogService>(() => new DialogService(MainWindow));
-            DependencyService.RegisterSingleton<HomeViewModel>();
-            DependencyService.RegisterSingleton<ListToursViewModel>();
-            DependencyService.GetInstance<IDialogService>().Register<AddTourViewModel, AddTourDialogWindow>();
         }
     }
 }

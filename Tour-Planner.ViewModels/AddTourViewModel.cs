@@ -19,6 +19,8 @@ namespace Tour_Planner.ViewModels
         private string _destination;
         private string _description;
         private string _selectedItem;
+        private IRestService service;
+
         public string Error { get; set; } = "";
 
         bool titleHasBeenTouched = false;
@@ -26,8 +28,9 @@ namespace Tour_Planner.ViewModels
         bool destinationHasBeenTouched = false;
         bool descriptionHasBeenTouched = false;
         bool selectedItemHasBeenTouched = false;
-        public AddTourViewModel()
+        public AddTourViewModel(IRestService service)
         {
+            this.service = service;
             SaveCommand = new RelayCommand(async _ =>
                        {
                            List<string> testableProperty = new List<string>() { nameof(Title), nameof(Origin), nameof(Destination), nameof(Description), nameof(SelectedItem) };
@@ -48,7 +51,7 @@ namespace Tour_Planner.ViewModels
                            CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
                            Enum.TryParse(_selectedItem, out RouteType routeType);
                            Tour newTour = new(_title, _origin, _destination, _description, routeType); // todo
-                           var result = await RestService.AddTour(newTour);
+                           var result = await service.AddTour(newTour);
                            Debug.WriteLine(result);
 
                        });
@@ -181,6 +184,8 @@ namespace Tour_Planner.ViewModels
 
 
         public event EventHandler<DialogCloseRequestedEventArgs>? CloseRequested;
+
+
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
     }

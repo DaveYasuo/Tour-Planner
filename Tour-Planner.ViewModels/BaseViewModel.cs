@@ -8,8 +8,6 @@ namespace Tour_Planner.ViewModels
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
-        public static IRestService RestService = DependencyService.GetInstance<IRestService>();
-
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void RaisePropertyChangedEvent([CallerMemberName] string propertyName = "")
@@ -25,8 +23,6 @@ namespace Tour_Planner.ViewModels
                 throw new ArgumentException("Invalid property name: " + propertyName);
             }
         }
-
-
         #endregion
     }
 }

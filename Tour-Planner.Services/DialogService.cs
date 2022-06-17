@@ -7,11 +7,10 @@ namespace Tour_Planner.Services
 {
     public class DialogService : IDialogService
     {
-        private readonly Window _owner;
 
-        public DialogService(Window owner)
+        public DialogService()
         {
-            _owner = owner;
+            //_owner = owner;
             Mappings = new Dictionary<Type, Type>();
         }
 
@@ -47,7 +46,6 @@ namespace Tour_Planner.Services
 
             viewModel.CloseRequested += Handler;
             dialog.DataContext = viewModel;
-            dialog.Owner = _owner;
             return dialog.ShowDialog();
         }
     }
