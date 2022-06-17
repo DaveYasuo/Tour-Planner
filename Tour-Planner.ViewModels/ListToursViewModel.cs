@@ -109,7 +109,7 @@ namespace Tour_Planner.ViewModels
                     selectedTour = GetTourFromTitle(_selectedTour);
                     Description = selectedTour.Description;
                     RaisePropertyChangedEvent(nameof(SelectedTour));
-                    RaisePropertyChangedEvent(nameof(FullTour));
+                    RaisePropertyChangedEvent(nameof(Description));
                 }
             }
         }
