@@ -5,19 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Tour_Planner.Models;
 using Tour_Planner.Services;
+using Tour_Planner.Services.Interfaces;
 
 namespace Tour_Planner.ViewModels
 {
-    public class TourDataViewModel :BaseViewModel
+    public class TourDataViewModel : BaseViewModel
     {
-        List<Tour> result;
-        public TourDataViewModel()
+        List<Tour>? result;
+        private IRestService service;
+
+        public TourDataViewModel(IRestService service)
         {
+            this.service = service;
             GetTours();
         }
         public async void GetTours()
         {
-            var result =  await RestService.GetTour();
+            result = await service.GetTour();
         }
 
     }

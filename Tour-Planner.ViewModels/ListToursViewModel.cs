@@ -17,25 +17,51 @@ namespace Tour_Planner.ViewModels
 {
     public class ListToursViewModel : BaseViewModel
     {
-        TourReport tr = new TourReport();
-        private readonly IDialogService _dialogService;
-        List<Tour> result = new List<Tour>();
-        Tour selectedTour  = new Tour();
+        public ObservableCollection<Tour> ListTours { get; set; }
+
+        private readonly IRestService service;
+        private string _description;
+        private Tour? _selectedTour;
         private string _searchBarContent;
-        public ListToursViewModel(IDialogService dialogService)
+        private readonly IDialogService _dialogService;
+        List<Tour> AllTours = new();
+        public ListToursViewModel(IDialogService dialogService, IRestService service)
         {
-            ListTours = new ObservableCollection<string>();
+            this.service = service;
+            _description = "hi";
+            ListTours = new ObservableCollection<Tour>();
             _dialogService = dialogService;
             ShowTours = new RelayCommand(async (_) => await UpdateTours());
-            DisplayMessageCommand = new RelayCommand(_ => DisplayMessage());
+            DisplayAddTourCommand = new RelayCommand(_ => DisplayAddTour());
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
             DeleteTourCommand = new RelayCommand(_ => DeleteTour());
-
+            _selectedTour = null;
         }
 
-        private void DisplayMessage()
+
+        public string Description
         {
-            var viewModel = new AddTourViewModel();
+            get => _description;
+            set
+            {
+                _description = value;
+                RaisePropertyChangedEvent();
+            }
+        }
+        public Tour? SelectedTour
+        {
+            get => _selectedTour;
+            set
+            {
+                if (_selectedTour == value) return;
+                _selectedTour = value;
+                RaisePropertyChangedEvent();
+            }
+        }
+
+        private void DisplayAddTour()
+        {
+            var viewModel = new AddTourViewModel(service);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
@@ -47,90 +73,39 @@ namespace Tour_Planner.ViewModels
                 // cancelled
             }
         }
-
         private void CreatePdf()
         {
+            TourReport tr = new TourReport();
             Tour tour = new Tour(1, "Dages Reise ins Zauberland", "Wien", "Linz", 40, "Ich bin geil weil ich so weit Fahrrad fahren kann!", new TimeSpan(2, 14, 18), "ImagePath", RouteType.pedestrian);
             tr.CreatePdf(tour);
         }
-
         private async Task UpdateTours()
         {
-            List<Tour>? tours = await RestService.GetTour();
+            List<Tour>? tours = await service.GetTour();
             if (tours is not null)
             {
                 ListTours.Clear();
-                result = tours;
-                foreach (var item in result)
+                AllTours = tours;
+                foreach (var item in AllTours)
                 {
-                    ListTours.Add(item.Title);
+                    ListTours.Add(item);
                 }
             }
         }
-
-        private String _description;
-        public String Description
-        {
-            get => _description;
-            set
-            {
-                _description = value;
-                RaisePropertyChangedEvent();
-               // var currentViewModel = new ListToursViewModel();
-            }
-        }
-
-        public Tour SingleTour
-        {
-            get
-            {
-                Description = selectedTour.Description;
-                return selectedTour;
-            }
-        }
-        
-        private Tour GetTourFromTitle(string title)
-        {
-            foreach(Tour tour in result)
-            {
-                if(tour.Title == title)
-                {
-                    return tour;
-                }
-            }
-            return null!;
-        }
-        private String _selectedTour;
-        public String SelectedTour
-        {
-            get { return _selectedTour; }
-            set
-            {
-                if (_selectedTour != value && value != null)
-                {
-                    _selectedTour = value;
-                    selectedTour = GetTourFromTitle(_selectedTour);
-                    Description = selectedTour.Description;
-                    RaisePropertyChangedEvent(nameof(SelectedTour));
-                    RaisePropertyChangedEvent(nameof(Description));
-                }
-            }
-        }
-
         private async Task DeleteTour()
         {
-            if(selectedTour.Title != null && selectedTour.Description != null && selectedTour.Origin != null && selectedTour.Destination != null)
+            if (SelectedTour is null)
             {
-                bool result = await RestService.DeleteTour(selectedTour.Id);
-                if (result)
-                {
-                    await UpdateTours();
-                    selectedTour = new Tour();
-                }
+                MessageBox.Show("Please select a Tour to delete!");
             }
             else
             {
-                MessageBox.Show("Please select a Tour to delete!");
+                bool result = await service.DeleteTour(SelectedTour.Id);
+                if (result)
+                {
+                    await UpdateTours();
+                    SelectedTour = null;
+                }
             }
 
         }
@@ -158,11 +133,10 @@ namespace Tour_Planner.ViewModels
                 // var currentViewModel = new ListToursViewModel();
             }
         }
-        public ICommand DisplayMessageCommand { get; }
+        public ICommand DisplayAddTourCommand { get; }
         public ICommand CreatePdfCommand { get; }
         public ICommand ShowTours { get; }
         public ICommand DeleteTourCommand { get; }
 
-        public ObservableCollection<string> ListTours { get; set; }
     }
 }

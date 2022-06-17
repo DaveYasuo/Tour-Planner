@@ -8,7 +8,6 @@ namespace Tour_Planner.Services.Interfaces
     {
         object DataContext { get; set; }
         bool? DialogResult { get; set; }
-        Window Owner { get; set; }
         void Close();
         bool? ShowDialog();
     }

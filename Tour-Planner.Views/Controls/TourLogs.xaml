@@ -122,6 +122,5 @@
                 </Table>
             </FlowDocument>
         </FlowDocumentReader>
-        <local:TourLists HorizontalAlignment="Left" Margin="1001,334,0,0" Grid.Row="1" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>
