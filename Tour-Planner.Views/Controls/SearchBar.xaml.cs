@@ -26,7 +26,6 @@ namespace Tour_Planner.Views.Controls
         public SearchBar()
         {
             InitializeComponent();
-            DataContext = new ListToursViewModel(DependencyService.GetInstance<IDialogService>());
         }
     }
 }

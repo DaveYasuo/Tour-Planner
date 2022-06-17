@@ -113,22 +113,22 @@ namespace Tour_Planner.ViewModels
         private void FilterByText()
         {
             ListTours.Clear();
-            /*foreach(Tour tour in result)
+            foreach(Tour tour in AllTours)
             {
                 if (tour.Title.Contains(_searchBarContent) || tour.Description.Contains(_searchBarContent) || tour.Origin.Contains(_searchBarContent) || tour.Destination.Contains(_searchBarContent) || tour.RouteType.ToString().Contains(_searchBarContent) || tour.Distance.ToString().Contains(_searchBarContent) || tour.Duration.ToString().Contains(_searchBarContent))
                 {
-                    ListTours.Add(tour.Title);
+                    ListTours.Add(tour);
                 }
-            }*/
+            }
         }
         public string SearchBarContent
         {
             get => _searchBarContent;
             set
-            {
+           {
                 if (_searchBarContent == value) return;
                 _searchBarContent = value;
-                //FilterByText();
+                FilterByText();
                 RaisePropertyChangedEvent();
                 // var currentViewModel = new ListToursViewModel();
             }
