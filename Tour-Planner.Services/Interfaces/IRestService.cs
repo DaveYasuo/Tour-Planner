@@ -8,5 +8,6 @@ namespace Tour_Planner.Services.Interfaces
     {
         Task<bool> AddTour(Tour tour);
         Task<List<Tour>?> GetTour();
+        Task<bool> DeleteTour(int id);
     }
 }

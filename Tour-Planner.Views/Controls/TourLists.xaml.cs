@@ -30,7 +30,7 @@ namespace Tour_Planner.Views.Controls
             if (firstLoadCalled == false)
             {
                 InitializeComponent();
-                DataContext = DependencyService.GetInstance<ListToursViewModel>();
+               DataContext = DependencyService.GetInstance<ListToursViewModel>();
             }
             firstLoadCalled = true;
         }

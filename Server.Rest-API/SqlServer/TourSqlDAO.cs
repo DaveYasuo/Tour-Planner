@@ -118,5 +118,29 @@ namespace Server.Rest_API.SqlServer
             }
 
         }
+
+        public void DeleteTour(int id)
+        {
+            using var conn = Connection();
+            using var transaction = conn.BeginTransaction();
+
+            try
+            {
+                using (var cmd = new NpgsqlCommand("DELETE from public.tour WHERE id = @id;", conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                    transaction.Commit();
+                    Log.Info($"Deleted tour with Id: {id}");
+                    return;
+                };
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Cannot delete tour: " + ex.Message);
+                return;
+            }
+        }
     }
 }

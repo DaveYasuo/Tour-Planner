@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Models;
@@ -22,12 +23,12 @@ namespace Tour_Planner.ViewModels
         Tour selectedTour  = new Tour();
         public ListToursViewModel(IDialogService dialogService)
         {
-            _description = "hi";
             ListTours = new ObservableCollection<string>();
             _dialogService = dialogService;
             ShowTours = new RelayCommand(async (_) => await UpdateTours());
             DisplayMessageCommand = new RelayCommand(_ => DisplayMessage());
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
+            DeleteTourCommand = new RelayCommand(_ => DeleteTour());
 
         }
 
@@ -73,7 +74,8 @@ namespace Tour_Planner.ViewModels
             set
             {
                 _description = value;
-                RaisePropertyChangedEvent(); 
+                RaisePropertyChangedEvent();
+               // var currentViewModel = new ListToursViewModel();
             }
         }
 
@@ -114,9 +116,27 @@ namespace Tour_Planner.ViewModels
             }
         }
 
+        private async Task DeleteTour()
+        {
+            if(selectedTour.Title != null && selectedTour.Description != null && selectedTour.Origin != null && selectedTour.Destination != null)
+            {
+                bool result = await RestService.DeleteTour(selectedTour.Id);
+                if (result)
+                {
+                    await UpdateTours();
+                    selectedTour = new Tour();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a Tour to delete!");
+            }
+
+        }
         public ICommand DisplayMessageCommand { get; }
         public ICommand CreatePdfCommand { get; }
         public ICommand ShowTours { get; }
+        public ICommand DeleteTourCommand { get; }
 
         public ObservableCollection<string> ListTours { get; set; }
     }
