@@ -22,22 +22,9 @@ namespace Tour_Planner.Services
         private static readonly HttpClient Client = new();
         public RestService()
         {
-            //Test();
         }
 
-        //public async void Test()
-        //{
-        //    Log.Info("Sending request");
-        //    try
-        //    {
-        //        var responseString = await Client.GetStringAsync(BaseUrl);
-        //        Debug.WriteLine(responseString);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine(e.Message);
-        //    }
-        //}
+
 
         public async Task<bool> AddTour(Tour tour)
         {
@@ -61,25 +48,11 @@ namespace Tour_Planner.Services
                 Console.WriteLine(ex.Message);
                 return null;
             }
-
-            //if(result.IsSuccessStatusCode)
-            //{
-            //    var stream = await result.Content.ReadAsStreamAsync();
-            //    List<Tour> tourResults = await JsonSerializer.DeserializeAsync<List<Tour>>(stream);
-            //    return tourResults;
-            //}
-            //return new List<Tour>()
-            //{
-            //    new Tour(1,"title","from","to",40,"descr",new TimeSpan(1,2,3),""),
-            //    new Tour(2,"title","from","to",40,"descr",new TimeSpan(1,2,3),""),
-            //    new Tour(3,"title","from","to",40,"descr",new TimeSpan(1,2,3),""),
-            //    new Tour(4,"title","from","to",40,"descr",new TimeSpan(1,2,3),"")
-            //};
         }
 
         public async Task<bool> DeleteTour(int id)
         {
-            var result = await Client.DeleteAsync($"{BaseUrl}/Tour/"+id);
+            var result = await Client.DeleteAsync($"{BaseUrl}/Tour/" + id);
             return result.IsSuccessStatusCode;
         }
     }
