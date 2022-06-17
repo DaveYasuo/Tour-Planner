@@ -32,7 +32,7 @@
         <Button Content="Save" HorizontalAlignment="Left" Command="{Binding SaveCommand}" Margin="626,342,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.111,1.689"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Command="{Binding CancelCommand}" Margin="93,342,0,0" VerticalAlignment="Top"/>
         <Label Content="Route type" HorizontalAlignment="Left" Margin="456,76,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="CBRouteType" HorizontalAlignment="Left" Margin="571,78,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myRouteTypes}" SelectedItem="{Binding SelectedItem}"/>
+        <ComboBox x:Name="CBRouteType" HorizontalAlignment="Left" Margin="571,78,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myRouteTypes}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
         <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBRouteType, Converter={StaticResource NullToVisibilityConverter}}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="578,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
     </Grid>
 </Window>

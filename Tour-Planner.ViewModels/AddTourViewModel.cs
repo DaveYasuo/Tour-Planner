@@ -7,40 +7,47 @@ using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
 using System.Collections.Generic;
+using Tour_Planner.DataModels.Enums;
 
 namespace Tour_Planner.ViewModels
 {
     public class AddTourViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
-        private const string PlaceHolder = "";
+        private const string PlaceHolder = null;
         private string _title;
         private string _origin;
         private string _destination;
         private string _description;
         private string _selectedItem;
         public string Error { get; set; } = "";
-        //public string Error => throw new NotImplementedException();s
 
         bool titleHasBeenTouched = false;
         bool originHasBeenTouched = false;
         bool destinationHasBeenTouched = false;
         bool descriptionHasBeenTouched = false;
+        bool selectedItemHasBeenTouched = false;
         public AddTourViewModel()
         {
             SaveCommand = new RelayCommand(async _ =>
                        {
-                           List<string> testableProperty = new List<string>() { Title, Origin, Destination, Description };
+                           List<string> testableProperty = new List<string>() { nameof(Title), nameof(Origin), nameof(Destination), nameof(Description), nameof(SelectedItem) };
+                           bool hasError = false;
                            foreach (var item in testableProperty)
                            {
 
-                               if (GetErrorForProperty(nameof(item)) is not "")
+                               if (GetErrorForProperty(item, true) is not "")
                                {
-                                   MessageBox.Show("Please fill out the form before submitting");
-                                   return;
+                                   hasError = true;
                                }
                            }
+                           if (hasError)
+                           {
+                               MessageBox.Show("Please fill out the form before submitting");
+                               return;
+                           }
                            CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                           Tour newTour = new(_title, _origin, _destination, _description); // todo
+                           Enum.TryParse(_selectedItem, out RouteType routeType);
+                           Tour newTour = new(_title, _origin, _destination, _description, routeType); // todo
                            var result = await RestService.AddTour(newTour);
                            Debug.WriteLine(result);
 
@@ -94,11 +101,12 @@ namespace Tour_Planner.ViewModels
             }
         }
 
+
         public string this[string propertyName]
         {
             get
             {
-                return GetErrorForProperty(propertyName);
+                return GetErrorForProperty(propertyName, false);
             }
         }
 
@@ -113,68 +121,61 @@ namespace Tour_Planner.ViewModels
             }
         }
 
-        private string GetErrorForProperty(string propertyName)
+        private string GetErrorForProperty(string propertyName, bool onSubmit)
         {
 
             Error = "";
             switch (propertyName)
             {
                 case "Title":
-                    if (string.IsNullOrEmpty(_title) && titleHasBeenTouched)
+                    if ((string.IsNullOrEmpty(_title) || _title.Trim().Length == 0) && (titleHasBeenTouched || onSubmit))
                     {
-                        Error = "Title can not be empty!";
-                        return Error;
-                    }
-                    else if (titleHasBeenTouched == true && _title.Trim().Length == 0)
-                    {
-                        Error = "Title can not be empty!";
+                        Title = "";
+                        Error = "Title cannot be empty!";
                         return Error;
                     }
                     titleHasBeenTouched = true;
                     break;
                 case "Origin":
-                    if (string.IsNullOrEmpty(_origin) && originHasBeenTouched)
+                    if ((string.IsNullOrEmpty(_origin) || _origin.Trim().Length == 0) && (originHasBeenTouched || onSubmit))
                     {
-                        Error = "Origin can not be empty!";
-                        return Error;
-                    }
-                    else if (_origin.Trim().Length == 0 && originHasBeenTouched)
-                    {
-                        Error = "Origin can not be empty!";
+                        Origin = "";
+                        Error = "Origin cannot be empty!";
                         return Error;
                     }
                     originHasBeenTouched = true;
                     break;
                 case "Destination":
-                    if (string.IsNullOrEmpty(_destination) && destinationHasBeenTouched)
+                    if ((string.IsNullOrEmpty(_destination) || _destination.Trim().Length == 0) && (destinationHasBeenTouched || onSubmit))
                     {
-                        Error = "Destination can not be empty!";
-                        return Error;
-                    }
-                    else if (_destination.Trim().Length == 0 && destinationHasBeenTouched)
-                    {
-                        Error = "Destination can not be empty!";
+                        Destination = "";
+                        Error = "Destination cannot be empty!";
                         return Error;
                     }
                     destinationHasBeenTouched = true;
                     break;
                 case "Description":
-                    if (_description.Trim().Length == 0 && descriptionHasBeenTouched)
+                    if (!string.IsNullOrEmpty(_description) && _description.Trim().Length == 0 && descriptionHasBeenTouched)
                     {
-                        if (string.IsNullOrEmpty(_description) && descriptionHasBeenTouched)
-                        {
-                            Error = "";
-                        }
-                        else
-                        {
-                            Error = "Description can not be only spaces!";
-                            return Error;
-                        }
+                        Error = "Description cannot be only spaces!";
+                        return Error;
                     }
                     descriptionHasBeenTouched = true;
                     break;
+                case "SelectedItem":
+                    if (string.IsNullOrEmpty(_selectedItem) && (selectedItemHasBeenTouched || onSubmit))
+                    {
+                        SelectedItem = "";
+                        Error = "Route Type cannot be empty!";
+                    }
+                    else
+                    {
+                        selectedItemHasBeenTouched = true;
+                        return Error;
+                    }
+                    break;
             }
-            return string.Empty;
+            return Error;
         }
 
 

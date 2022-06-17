@@ -25,17 +25,11 @@ namespace Tour_Planner
 
         public App()
         {
-        }
-
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
             DependencyService.RegisterSingleton<IRestService>(() => new RestService());
             DependencyService.RegisterSingleton<IDialogService>(() => new DialogService(MainWindow));
             DependencyService.RegisterSingleton<HomeViewModel>();
+            DependencyService.RegisterSingleton<ListToursViewModel>();
             DependencyService.GetInstance<IDialogService>().Register<AddTourViewModel, AddTourDialogWindow>();
-            var view = new MainWindow { DataContext = DependencyService.GetInstance<HomeViewModel>() };
-            view.ShowDialog();
         }
     }
 }

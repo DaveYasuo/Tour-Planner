@@ -23,10 +23,16 @@ namespace Tour_Planner.Views.Controls
     /// </summary>
     public partial class TourLists : UserControl
     {
+        private static bool firstLoadCalled = false;
+
         public TourLists()
         {
-            InitializeComponent();
-            DataContext = new ListToursViewModel(DependencyService.GetInstance<IDialogService>());
+            if (firstLoadCalled == false)
+            {
+                InitializeComponent();
+                DataContext = DependencyService.GetInstance<ListToursViewModel>();
+            }
+            firstLoadCalled = true;
         }
     }
 }
