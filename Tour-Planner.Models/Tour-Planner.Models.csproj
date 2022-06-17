@@ -13,4 +13,8 @@
     <Folder Include="DataControllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tour-Planner.Extensions\Tour-Planner.Extensions.csproj" />
+  </ItemGroup>
+
 </Project>

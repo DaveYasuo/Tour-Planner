@@ -11,13 +11,8 @@
 
     <Window.Resources>
         <ControlTemplate x:Key="ValidationTemplate">
-
             <StackPanel Orientation="Horizontal">
-                <Border BorderBrush="Red" BorderThickness="1">
-                    <Grid Background="Transparent" ToolTip="{Binding Path=/ErrorContent}">
-                        <AdornedElementPlaceholder />
-                    </Grid>
-                </Border>
+                <AdornedElementPlaceholder />
                 <Ellipse Fill="Red" Width="10" Height="10" ToolTip="{Binding Path=/ErrorContent}" Margin="5"></Ellipse>
             </StackPanel>
         </ControlTemplate>
@@ -33,7 +28,7 @@
         <Label Content="Destination" HorizontalAlignment="Left" Margin="457,107,0,0" VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left" Margin="571,111,0,0" TextWrapping="Wrap"  Text="{Binding Destination, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" VerticalAlignment="Top" Width="120"/>
         <Label Content="Tour Description" HorizontalAlignment="Left" Margin="126,142,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding Description}" Width="451" Margin="240,146,0,0" />
+        <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" Width="451" Margin="240,146,0,0" />
         <Button Content="Save" HorizontalAlignment="Left" Command="{Binding SaveCommand}" Margin="626,342,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.111,1.689"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Command="{Binding CancelCommand}" Margin="93,342,0,0" VerticalAlignment="Top"/>
         <Label Content="Route type" HorizontalAlignment="Left" Margin="456,76,0,0" VerticalAlignment="Top"/>

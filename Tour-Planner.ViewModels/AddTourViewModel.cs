@@ -6,7 +6,7 @@ using System.Windows.Input;
 using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
-
+using System.Collections.Generic;
 
 namespace Tour_Planner.ViewModels
 {
@@ -29,17 +29,20 @@ namespace Tour_Planner.ViewModels
         {
             SaveCommand = new RelayCommand(async _ =>
                        {
-                           if (!string.IsNullOrEmpty(Error) || string.IsNullOrEmpty(_title) || string.IsNullOrEmpty(_origin) || string.IsNullOrEmpty(_destination) || _title.Trim().Length == 0 || _origin.Trim().Length == 0 || _destination.Trim().Length == 0 || _destination.Trim().Length == 0 || string.IsNullOrEmpty(_description) == false && _description.Trim().Length == 0)
+                           List<string> testableProperty = new List<string>() { Title, Origin, Destination, Description };
+                           foreach (var item in testableProperty)
                            {
-                               MessageBox.Show("There are still errors, cannot save");
+
+                               if (GetErrorForProperty(nameof(item)) is not "")
+                               {
+                                   MessageBox.Show("Please fill out the form before submitting");
+                                   return;
+                               }
                            }
-                           else
-                           {
-                               CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                               Tour newTour = new(_title, _origin, _destination, _description); // todo
-                               var result = await RestService.AddTour(newTour);
-                               Debug.WriteLine(result);
-                           }
+                           CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
+                           Tour newTour = new(_title, _origin, _destination, _description); // todo
+                           var result = await RestService.AddTour(newTour);
+                           Debug.WriteLine(result);
 
                        });
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
@@ -117,7 +120,7 @@ namespace Tour_Planner.ViewModels
             switch (propertyName)
             {
                 case "Title":
-                    if (string.IsNullOrEmpty(_title) && titleHasBeenTouched == true)
+                    if (string.IsNullOrEmpty(_title) && titleHasBeenTouched)
                     {
                         Error = "Title can not be empty!";
                         return Error;
@@ -130,12 +133,12 @@ namespace Tour_Planner.ViewModels
                     titleHasBeenTouched = true;
                     break;
                 case "Origin":
-                    if (string.IsNullOrEmpty(_origin) && originHasBeenTouched == true)
+                    if (string.IsNullOrEmpty(_origin) && originHasBeenTouched)
                     {
                         Error = "Origin can not be empty!";
                         return Error;
                     }
-                    else if (_origin.Trim().Length == 0 && originHasBeenTouched == true)
+                    else if (_origin.Trim().Length == 0 && originHasBeenTouched)
                     {
                         Error = "Origin can not be empty!";
                         return Error;
@@ -143,12 +146,12 @@ namespace Tour_Planner.ViewModels
                     originHasBeenTouched = true;
                     break;
                 case "Destination":
-                    if (string.IsNullOrEmpty(_destination) && destinationHasBeenTouched == true)
+                    if (string.IsNullOrEmpty(_destination) && destinationHasBeenTouched)
                     {
                         Error = "Destination can not be empty!";
                         return Error;
                     }
-                    else if (_destination.Trim().Length == 0 && destinationHasBeenTouched == true)
+                    else if (_destination.Trim().Length == 0 && destinationHasBeenTouched)
                     {
                         Error = "Destination can not be empty!";
                         return Error;
@@ -156,9 +159,9 @@ namespace Tour_Planner.ViewModels
                     destinationHasBeenTouched = true;
                     break;
                 case "Description":
-                    if (_description.Trim().Length == 0 && descriptionHasBeenTouched == true)
+                    if (_description.Trim().Length == 0 && descriptionHasBeenTouched)
                     {
-                        if (string.IsNullOrEmpty(_description) && descriptionHasBeenTouched == true)
+                        if (string.IsNullOrEmpty(_description) && descriptionHasBeenTouched)
                         {
                             Error = "";
                         }
@@ -179,9 +182,5 @@ namespace Tour_Planner.ViewModels
         public event EventHandler<DialogCloseRequestedEventArgs>? CloseRequested;
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
-
-
-
-        //string IDataErrorInfo.this[string columnName] => throw new NotImplementedException();
     }
 }

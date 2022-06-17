@@ -32,10 +32,9 @@ namespace Tour_Planner
             base.OnStartup(e);
             DependencyService.RegisterSingleton<IRestService>(() => new RestService());
             DependencyService.RegisterSingleton<IDialogService>(() => new DialogService(MainWindow));
-            IDialogService dialogService = DependencyService.GetInstance<IDialogService>();
-            dialogService.Register<AddTourViewModel, AddTourDialogWindow>();
-            var viewModel = new HomeViewModel(dialogService);
-            var view = new MainWindow { DataContext = viewModel };
+            DependencyService.RegisterSingleton<HomeViewModel>();
+            DependencyService.GetInstance<IDialogService>().Register<AddTourViewModel, AddTourDialogWindow>();
+            var view = new MainWindow { DataContext = DependencyService.GetInstance<HomeViewModel>() };
             view.ShowDialog();
         }
     }

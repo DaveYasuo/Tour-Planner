@@ -26,7 +26,7 @@ namespace Tour_Planner.Views.Controls
         public TourLists()
         {
             InitializeComponent();
-            DataContext = new HomeViewModel(DependencyService.GetInstance<IDialogService>());
+            DataContext = new ListToursViewModel(DependencyService.GetInstance<IDialogService>());
         }
     }
 }
