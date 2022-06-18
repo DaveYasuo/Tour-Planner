@@ -35,7 +35,11 @@ namespace Server.Rest_API.Controller
 
         private void DeleteATour(int id)
         {
-            tourSqlDao.DeleteTour(id);
+           tourSqlDao.DeleteTour(id);
+        }
+        private void UpdateTour(Tour tour)
+        {
+            tourSqlDao.UpdateTour(tour);
         }
 
         public string Get()
@@ -72,9 +76,10 @@ namespace Server.Rest_API.Controller
             throw new NotImplementedException();
         }
 
-        public void Put(object id)
+        public void Patch(string body)
         {
-            throw new NotImplementedException();
+            Tour tour = JsonSerializer.Deserialize<Tour>(body);
+            UpdateTour(tour);
         }
 
         public void Delete(object id)

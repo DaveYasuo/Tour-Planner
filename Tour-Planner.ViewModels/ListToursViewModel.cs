@@ -32,6 +32,7 @@ namespace Tour_Planner.ViewModels
 
         List<Tour> AllTours = new();
 
+
         public ListToursViewModel(IDialogService dialogService, IRestService service, IMediator mediator)
         {
             this.mediator = mediator;
@@ -47,16 +48,17 @@ namespace Tour_Planner.ViewModels
                 if (SelectedTour is null) return;
                 DisplayAddTourLog();
             });
-            DisplayAddTourLogCommand = new RelayCommand(_ =>
+            DisplayEditTourCommand = new RelayCommand(_ =>
             {
                 if (SelectedTour is null) return;
-                DisplayAddTourLog();
+                DisplayEditTour();
             });
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
             DeleteTourCommand = new RelayCommand(async _ => await DeleteTour());
             _selectedTour = null;
             _searchBarContent = "";
             mediator.Subscribe(DisplayAddTour, ViewModelMessage.AddTour);
+            mediator.Subscribe(DisplayEditTour, ViewModelMessage.EditTour);
             mediator.Subscribe(RefreshTour, ViewModelMessage.UpdateTourList);
         }
 
@@ -120,6 +122,21 @@ namespace Tour_Planner.ViewModels
             {
             }
         }
+        private void DisplayEditTour(object? obj = null)
+        {
+            if (_selectedTour == null) return;
+            var viewModel = new EditTourViewModel(service,mediator,_selectedTour);
+            bool? result = _dialogService.ShowDialog(viewModel);
+            if (!result.HasValue) return;
+            if (result.Value)
+            {
+                _ = UpdateTours();
+            }
+            else
+            {
+                // cancelled
+            }
+        }
         private void CreatePdf()
         {
             TourReport tr = new TourReport();
@@ -164,22 +181,61 @@ namespace Tour_Planner.ViewModels
             }
 
         }
-        private void FilterByText()
+        private async Task FilterByText()
         {
             ListTours.Clear();
+            List<TourLog>? tourLogs = await service.GetTourLogs();
+            string smallSearchBarContent = _searchBarContent.ToLower();
+            bool hasString = false;
             foreach (Tour tour in AllTours)
             {
-                if (tour.Title.ToLower().Contains(_searchBarContent) ||
-                    tour.Description.ToLower().Contains(_searchBarContent) ||
-                    tour.Origin.ToLower().Contains(_searchBarContent) ||
-                    tour.Destination.ToLower().Contains(_searchBarContent) ||
-                    tour.RouteType.ToString().Contains(_searchBarContent) ||
-                    tour.Distance.ToString().Contains(_searchBarContent) ||
-                    tour.Duration.ToString().Contains(_searchBarContent))
+                if (tourLogs != null) 
+                {
+                    List<TourLog> tourLogsToTour = FindTourLogsToTour(tour, tourLogs); 
+                    hasString = SearchAllLogs(tourLogsToTour);
+                }
+                if (tour.Title.ToLower().Contains(smallSearchBarContent) ||
+                    tour.Description.ToLower().Contains(smallSearchBarContent) ||
+                    tour.Origin.ToLower().Contains(smallSearchBarContent) ||
+                    tour.Destination.ToLower().Contains(smallSearchBarContent) ||
+                    tour.RouteType.ToString().Contains(smallSearchBarContent) ||
+                    tour.Distance.ToString().Contains(smallSearchBarContent) ||
+                    tour.Duration.ToString().Contains(smallSearchBarContent) ||
+                    hasString)
                 {
                     ListTours.Add(tour);
                 }
             }
+        }
+
+        private List<TourLog> FindTourLogsToTour(Tour tour, List<TourLog> tourLogs)
+        {
+            string smallSearchBarContent = _searchBarContent.ToLower();
+            List<TourLog> tourLogsToTour = new();
+            foreach (TourLog tourLog in tourLogs)
+            {
+                if(tourLog.TourId == tour.Id)
+                {
+                    tourLogsToTour.Add(tourLog);
+                }
+            }
+            return tourLogsToTour;
+        }
+        private bool SearchAllLogs( List<TourLog> tourLogs)
+        {
+            string smallSearchBarContent = _searchBarContent.ToLower();
+            foreach (TourLog tourlog in tourLogs)
+            {
+                if (tourlog.TotalTime.ToString().ToLower().Contains(smallSearchBarContent) ||
+                    tourlog.Rating.ToString().ToLower().Contains(smallSearchBarContent)||
+                    tourlog.Difficulty.ToString().ToLower().Contains(smallSearchBarContent)||
+                    tourlog.DateTime.ToString().ToLower().Contains(smallSearchBarContent)||
+                    tourlog.Comment.ToLower().Contains(smallSearchBarContent))
+                {
+                    return true;
+                };
+            }
+            return false;
         }
         public BitmapImage GetBitmapImage(string location)
         {
@@ -210,7 +266,7 @@ namespace Tour_Planner.ViewModels
         }
         private void EditTour()
         {
-            var viewModel = new EditTourViewModel(service, SelectedTour!);
+            var viewModel = new EditTourViewModel(service, mediator,SelectedTour!);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
@@ -222,13 +278,14 @@ namespace Tour_Planner.ViewModels
                 // cancelled
             }
         }
+        
 
         public ICommand DisplayAddTourCommand { get; }
         public ICommand CreatePdfCommand { get; }
         public ICommand ShowTours { get; }
         public ICommand DeleteTourCommand { get; }
         public ICommand DisplayAddTourLogCommand { get; }
-        public ICommand EditTourCommand { get; }
+        public ICommand DisplayEditTourCommand { get; }
 
 
     }

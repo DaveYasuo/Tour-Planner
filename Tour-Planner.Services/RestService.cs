@@ -74,5 +74,29 @@ namespace Tour_Planner.Services
             var result = await Client.PostAsync($"{BaseUrl}/TourLog", new StringContent(JsonSerializer.Serialize(tourLog), Encoding.UTF8, "application/json"));
             return result.IsSuccessStatusCode;
         }
+
+        public async Task<bool> UpdateTour(Tour tour)
+        {
+            var result = await Client.PatchAsync($"{BaseUrl}/Tour", new StringContent(JsonSerializer.Serialize(tour),Encoding.UTF8,"application/json"));
+            return result.IsSuccessStatusCode;
+        }
+
+        public async Task<List<TourLog>?> GetTourLogs()
+        {
+            try
+            {
+                var result = await Client.GetStringAsync($"{BaseUrl}/TourLog");
+                if (result is not null && result != "")
+                {
+                    return JsonSerializer.Deserialize<List<TourLog>>(result);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
     }
 }
