@@ -55,5 +55,11 @@ namespace Tour_Planner.Services
             var result = await Client.DeleteAsync($"{BaseUrl}/Tour/" + id);
             return result.IsSuccessStatusCode;
         }
+
+        public async Task<bool> AddTourLog(TourLog tourLog)
+        {
+            var result = await Client.PostAsync($"{BaseUrl}/TourLog", new StringContent(JsonSerializer.Serialize(tourLog), Encoding.UTF8, "application/json"));
+            return result.IsSuccessStatusCode;
+        }
     }
 }

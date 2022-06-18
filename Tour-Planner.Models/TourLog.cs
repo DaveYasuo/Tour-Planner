@@ -7,7 +7,7 @@ using Tour_Planner.DataModels.Enums;
 
 namespace Tour_Planner.Models
 {
-    internal class TourLog
+    public class TourLog
     {
         public TourLog( int tourId, DateTime dateAndTime,TimeSpan totalTime, Rating rating, Difficulty difficulty,string comment)
         {
