@@ -1,0 +1,50 @@
+﻿<Window x:Class="Tour_Planner.Views.AddTourLogDialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewModels:AddTourLogViewModel}"
+        mc:Ignorable="d"
+        Title="New Tour" Height="450" Width="800"
+        xmlns:Converters="clr-namespace:Tour_Planner.Converters;assembly=Tour-Planner.Converters" 
+        xmlns:src="clr-namespace:Tour_Planner.DataModels.Collections;assembly=Tour-Planner.DataModels"
+        xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+        >
+
+    <Window.Resources>
+        <ControlTemplate x:Key="ValidationTemplate">
+            <StackPanel Orientation="Horizontal">
+                <AdornedElementPlaceholder />
+                <Ellipse Fill="Red" Width="10" Height="10" ToolTip="{Binding Path=/ErrorContent}" Margin="5"></Ellipse>
+            </StackPanel>
+        </ControlTemplate>
+        <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <src:RouteTypes x:Key="myRouteTypes"/>
+        <src:DifficultyTypes x:Key="myDifficultyTypes"/>
+        <src:RatingTypes x:Key="myRatingTypes"/>
+    </Window.Resources>
+    <Grid>
+        <Label Content="Add a new tourlog" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" FontSize="32"/>
+        
+        <Label Content="Difficulty" HorizontalAlignment="Left" Margin="126,76,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="CBDifficultyType" HorizontalAlignment="Left" Margin="240,78,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myDifficultyTypes}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBDifficultyType, Converter={StaticResource NullToVisibilityConverter}}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="247,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
+
+        <Label Content="Total time" VerticalAlignment="Top" Margin="126,107,-126,0"/>
+        <wpfTool:TimeSpanUpDown Value="{Binding TotalTime,ValidatesOnDataErrors=True}" HorizontalAlignment="Left" Margin="240,111,0,279" Minimum="00:00:00:00" Width="120"></wpfTool:TimeSpanUpDown>
+        
+        <Label Content="Date" HorizontalAlignment="Left" Margin="457,107,0,0" VerticalAlignment="Top"/>
+        <wpfTool:DateTimePicker Value="{Binding DateAndTime,ValidatesOnDataErrors=True}" HorizontalAlignment="Left" Margin="521,111,0,279" Width="220"></wpfTool:DateTimePicker>
+        
+        <Label Content="Comment" HorizontalAlignment="Left" Margin="126,142,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" Width="451" Margin="240,146,0,0" />
+        
+        <Button Content="Save" HorizontalAlignment="Left" Command="{Binding SaveCommand}" Margin="626,342,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.111,1.689"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" Command="{Binding CancelCommand}" Margin="93,342,0,0" VerticalAlignment="Top"/>
+        
+        <Label Content="Rating" HorizontalAlignment="Left" Margin="456,76,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="CBRatingType" HorizontalAlignment="Left" Margin="571,78,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myRatingTypes}" SelectedItem="{Binding SelectedRating, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBRatingType, Converter={StaticResource NullToVisibilityConverter}}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="578,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
+    </Grid>
+</Window>
