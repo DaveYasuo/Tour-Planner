@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Tour_Planner.DataModels.Enums
 {
-    public enum RatingType
+    public enum Difficulty
     {
-        very_good,
-        good,
+        easy,
         medium,
-        bad,
-        very_bad
+        hard
     }
 }

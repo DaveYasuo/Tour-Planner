@@ -8,13 +8,13 @@ using Tour_Planner.DataModels.Enums;
 
 namespace Tour_Planner.DataModels.Collections
 {
-    public class RatingTypes : ObservableCollection<string>
+    public class RatingTypes : ObservableCollection<Rating>
     {
         public RatingTypes()
         {
-            foreach (string ratingType in Enum.GetNames(typeof(RatingType)))
+            foreach (Rating rating in Enum.GetValues(typeof(Rating)))
             {
-                Add(ratingType);
+                Add(rating);
             }
         }
     }

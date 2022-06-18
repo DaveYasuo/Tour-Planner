@@ -6,7 +6,8 @@
         mc:Ignorable="d"
         Title="New Tour" Height="450" Width="800"
         xmlns:src="clr-namespace:Tour_Planner.DataModels.Collections;assembly=Tour-Planner.DataModels" 
-        xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:AddTourLogViewModel}">
+        xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:AddTourViewModel}">
 
     <Window.Resources>
         <ControlTemplate x:Key="ValidationTemplate">
@@ -17,7 +18,7 @@
         </ControlTemplate>
         <src:RouteTypes x:Key="myRouteTypes"/>
     </Window.Resources>
-    
+
     <Grid>
         <Label Content="Add a new tour" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" FontSize="32"/>
         <Label Content="Tour Title" HorizontalAlignment="Left" Margin="126,76,0,0" VerticalAlignment="Top"/>
@@ -31,7 +32,14 @@
         <Button Content="Save" HorizontalAlignment="Left" Command="{Binding SaveCommand}" Margin="626,342,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.111,1.689"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Command="{Binding CancelCommand}" Margin="93,342,0,0" VerticalAlignment="Top"/>
         <Label Content="Route type" HorizontalAlignment="Left" Margin="456,76,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="CBRouteType" HorizontalAlignment="Left" Margin="571,78,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myRouteTypes}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        <ComboBox x:Name="CBRouteType" HorizontalAlignment="Left" Margin="571,78,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myRouteTypes}" SelectedItem="{Binding SelectedRouteType, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <ContentPresenter
+                Content="{Binding Converter={StaticResource DefaultEnumToStringConverter}}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
         <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBRouteType, Converter={StaticResource NullToVisibilityConverter}}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="578,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
     </Grid>
 </Window>

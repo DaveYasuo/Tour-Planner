@@ -7,7 +7,6 @@
         d:DataContext="{d:DesignInstance Type=viewModels:AddTourLogViewModel}"
         mc:Ignorable="d"
         Title="New Tour" Height="450" Width="800"
-        xmlns:Converters="clr-namespace:Tour_Planner.Converters;assembly=Tour-Planner.Converters" 
         xmlns:src="clr-namespace:Tour_Planner.DataModels.Collections;assembly=Tour-Planner.DataModels"
         xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         >
@@ -15,36 +14,49 @@
     <Window.Resources>
         <ControlTemplate x:Key="ValidationTemplate">
             <StackPanel Orientation="Horizontal">
-                <AdornedElementPlaceholder />
                 <Ellipse Fill="Red" Width="10" Height="10" ToolTip="{Binding Path=/ErrorContent}" Margin="5"></Ellipse>
+                <AdornedElementPlaceholder />
             </StackPanel>
         </ControlTemplate>
-        <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <src:RouteTypes x:Key="myRouteTypes"/>
         <src:DifficultyTypes x:Key="myDifficultyTypes"/>
         <src:RatingTypes x:Key="myRatingTypes"/>
     </Window.Resources>
     <Grid>
-        <Label Content="Add a new tourlog" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" FontSize="32"/>
-        
-        <Label Content="Difficulty" HorizontalAlignment="Left" Margin="126,76,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="CBDifficultyType" HorizontalAlignment="Left" Margin="240,78,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myDifficultyTypes}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-        <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBDifficultyType, Converter={StaticResource NullToVisibilityConverter}}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="247,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
+        <Label Content="Add a new tourlog" HorizontalAlignment="Left" Margin="51,13,0,0" VerticalAlignment="Top" FontSize="32"/>
 
-        <Label Content="Total time" VerticalAlignment="Top" Margin="126,107,-126,0"/>
-        <wpfTool:TimeSpanUpDown Value="{Binding TotalTime,ValidatesOnDataErrors=True}" HorizontalAlignment="Left" Margin="240,111,0,279" Minimum="00:00:00:00" Width="120"></wpfTool:TimeSpanUpDown>
-        
-        <Label Content="Date" HorizontalAlignment="Left" Margin="457,107,0,0" VerticalAlignment="Top"/>
-        <wpfTool:DateTimePicker Value="{Binding DateAndTime,ValidatesOnDataErrors=True}" HorizontalAlignment="Left" Margin="521,111,0,279" Width="220"></wpfTool:DateTimePicker>
-        
-        <Label Content="Comment" HorizontalAlignment="Left" Margin="126,142,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" Width="451" Margin="240,146,0,0" />
-        
+        <Label Content="Difficulty" HorizontalAlignment="Left" Margin="51,79,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="CBDifficultyType" HorizontalAlignment="Left" Margin="165,81,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myDifficultyTypes}" SelectedItem="{Binding SelectedDifficulty, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <ContentPresenter
+                Content="{Binding Converter={StaticResource DefaultEnumToStringConverter}}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBDifficultyType, Converter={StaticResource NullToVisibilityConverter}}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="172,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
+
+        <Label Content="Total time" VerticalAlignment="Top" Margin="51,110,-51,0"/>
+        <wpfTool:TimeSpanUpDown Value="{Binding TotalTime,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" HorizontalAlignment="Left" Margin="165,114,0,276" Minimum="00:00:00:00" Width="120"></wpfTool:TimeSpanUpDown>
+
+        <Label Content="Date" HorizontalAlignment="Center" Margin="0,110,0,0" VerticalAlignment="Top"/>
+        <wpfTool:DateTimePicker Value="{Binding DateAndTime,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" HorizontalAlignment="Left" Margin="496,114,0,276" Width="220"></wpfTool:DateTimePicker>
+
+        <Label Content="Comment" HorizontalAlignment="Left" Margin="51,145,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" Width="451" Margin="165,149,0,0" />
+
         <Button Content="Save" HorizontalAlignment="Left" Command="{Binding SaveCommand}" Margin="626,342,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.111,1.689"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Command="{Binding CancelCommand}" Margin="93,342,0,0" VerticalAlignment="Top"/>
-        
-        <Label Content="Rating" HorizontalAlignment="Left" Margin="456,76,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="CBRatingType" HorizontalAlignment="Left" Margin="571,78,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myRatingTypes}" SelectedItem="{Binding SelectedRating, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-        <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBRatingType, Converter={StaticResource NullToVisibilityConverter}}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="578,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
+
+        <Label Content="Rating" HorizontalAlignment="Left" Margin="381,79,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="CBRatingType" HorizontalAlignment="Left" Margin="496,81,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myRatingTypes}" SelectedItem="{Binding SelectedRating, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <ContentPresenter
+                Content="{Binding Converter={StaticResource DefaultEnumToStringConverter}}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBRatingType, Converter={StaticResource NullToVisibilityConverter}}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="503,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
     </Grid>
 </Window>

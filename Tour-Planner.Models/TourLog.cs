@@ -9,7 +9,7 @@ namespace Tour_Planner.Models
 {
     internal class TourLog
     {
-        public TourLog( int tourId, DateTime dateAndTime,TimeSpan totalTime, RatingType rating, DifficultyType difficulty,string comment)
+        public TourLog( int tourId, DateTime dateAndTime,TimeSpan totalTime, Rating rating, Difficulty difficulty,string comment)
         {
             Id = default;
             TourId = tourId;
@@ -23,8 +23,8 @@ namespace Tour_Planner.Models
         public int TourId { get; set; }
         public DateTime DateAndTime { get; set; }//Default aus User perspektive wenn er angeben will wann er war is relevanter
         public TimeSpan TotalTime { get; set; }
-        public RatingType Rating { get; set; }
-        public DifficultyType Difficulty { get; set; }
+        public Rating Rating { get; set; }
+        public Difficulty Difficulty { get; set; }
         public string Comment { get; set; }
 
     }

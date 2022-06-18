@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
@@ -16,8 +14,8 @@ namespace Tour_Planner.ViewModels
     public class AddTourLogViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
         private IRestService service;
-        private string _selectedItem;
-        private string _ratingItem;
+        private Difficulty? _selectedDifficulty;
+        private Rating? _ratingItem;
         private string _comment;
         private TimeSpan _totalTime;
         private DateTime _dateAndTime = DateTime.Now;
@@ -30,15 +28,17 @@ namespace Tour_Planner.ViewModels
         bool dateAndTimeHasBeenTouched = false;
         bool commentHasBeenTouched = false;
         bool selectedItemHasBeenTouched = false;
-        bool totalTimeRaiseProperty = true;
         public AddTourLogViewModel(IRestService service, IMediator mediator)
         {
+            _selectedDifficulty = null;
+            _ratingItem = null;
+            _comment = "";
             this.service = service;
             this.mediator = mediator;
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             SaveCommand = new RelayCommand(async _ =>
             {
-                List<string> testableProperty = new List<string>() { nameof(SelectedItem), nameof(SelectedRating), nameof(Comment), nameof(TotalTime), nameof(DateAndTime) };
+                List<string> testableProperty = new List<string>() { nameof(SelectedDifficulty), nameof(SelectedRating), nameof(Comment), nameof(TotalTime), nameof(DateAndTime) };
                 bool hasError = false;
                 foreach (var item in testableProperty)
                 {
@@ -76,18 +76,17 @@ namespace Tour_Planner.ViewModels
                 return GetErrorForProperty(propertyName, false);
             }
         }
-        public string SelectedItem
+        public Difficulty? SelectedDifficulty
         {
-            get => _selectedItem;
+            get => _selectedDifficulty;
             set
             {
-                if (_selectedItem == value) return;
-                _selectedItem = value;
+                if (_selectedDifficulty == value) return;
+                _selectedDifficulty = value;
                 RaisePropertyChangedEvent();
             }
         }
-
-        public string SelectedRating
+        public Rating? SelectedRating
         {
             get => _ratingItem;
             set
@@ -137,9 +136,12 @@ namespace Tour_Planner.ViewModels
             switch (propertyName)
             {
                 case "SelectedRating":
-                    if ((string.IsNullOrEmpty(_ratingItem) || _ratingItem.Trim().Length == 0) && (selectedRatingHasBeenTouched || onSubmit))
+                    if (_ratingItem == null && (selectedRatingHasBeenTouched || onSubmit))
                     {
-                        SelectedRating = "";
+                        if (onSubmit)
+                        {
+                            RaisePropertyChangedEvent(nameof(SelectedRating));
+                        }
                         Error = "Rating cannot be empty!";
                         return Error;
                     }
@@ -148,10 +150,9 @@ namespace Tour_Planner.ViewModels
                 case "TotalTime":
                     if (TotalTime == TimeSpan.Zero && (totalTimeHasBeenTouched || onSubmit))
                     {
-                        if (totalTimeRaiseProperty && onSubmit)
+                        if (onSubmit)
                         {
                             RaisePropertyChangedEvent(nameof(TotalTime));
-                            totalTimeRaiseProperty = false;
                         }
                         Error = "Total time cannot be zero!";
                         return Error;
@@ -175,18 +176,17 @@ namespace Tour_Planner.ViewModels
                     }
                     commentHasBeenTouched = true;
                     break;
-                case "SelectedItem":
-                    if (string.IsNullOrEmpty(_selectedItem) && (selectedItemHasBeenTouched || onSubmit))
+                case "SelectedDifficulty":
+                    if (_selectedDifficulty == null && (selectedItemHasBeenTouched || onSubmit))
                     {
-                        SelectedItem = "";
+                        if (onSubmit)
+                        {
+                            RaisePropertyChangedEvent(nameof(SelectedDifficulty));
+                        }
                         Error = "Difficulty cannot be empty!";
                     }
-                    else
-                    {
-                        selectedItemHasBeenTouched = true;
-                        return Error;
-                    }
-                    break;
+                    selectedItemHasBeenTouched = true;
+                    return Error;
             }
             return Error;
         }
@@ -197,6 +197,6 @@ namespace Tour_Planner.ViewModels
         public ICommand CancelCommand { get; }
 
 
-        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
+        public event EventHandler<DialogCloseRequestedEventArgs>? CloseRequested;
     }
 }

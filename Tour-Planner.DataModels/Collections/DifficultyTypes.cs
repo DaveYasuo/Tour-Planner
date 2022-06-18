@@ -8,11 +8,11 @@ using Tour_Planner.DataModels.Enums;
 
 namespace Tour_Planner.DataModels.Collections
 {
-    public class DifficultyTypes :ObservableCollection<string>
+    public class DifficultyTypes : ObservableCollection<Difficulty>
     {
         public DifficultyTypes()
         {
-            foreach (string difficultyType in Enum.GetNames(typeof(DifficultyType)))
+            foreach (Difficulty difficultyType in Enum.GetValues(typeof(Difficulty)))
             {
                 Add(difficultyType);
             }

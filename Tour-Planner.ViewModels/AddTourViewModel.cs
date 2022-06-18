@@ -18,7 +18,7 @@ namespace Tour_Planner.ViewModels
         private string _origin;
         private string _destination;
         private string _description;
-        private string _selectedItem;
+        private RouteType? _routeType;
         private readonly IRestService service;
 
         public string Error { get; set; } = "";
@@ -33,7 +33,7 @@ namespace Tour_Planner.ViewModels
             this.service = service;
             SaveCommand = new RelayCommand(async _ =>
                        {
-                           List<string> testableProperty = new List<string>() { nameof(Title), nameof(Origin), nameof(Destination), nameof(Description), nameof(SelectedItem) };
+                           List<string> testableProperty = new List<string>() { nameof(Title), nameof(Origin), nameof(Destination), nameof(Description), nameof(SelectedRouteType) };
                            bool hasError = false;
                            foreach (var item in testableProperty)
                            {
@@ -49,8 +49,7 @@ namespace Tour_Planner.ViewModels
                                return;
                            }
                            CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                           Enum.TryParse(_selectedItem, out RouteType routeType);
-                           Tour newTour = new(_title, _origin, _destination, _description, routeType); // todo
+                           Tour newTour = new(_title, _origin, _destination, _description, (RouteType)_routeType!); // todo
                            var result = await service.AddTour(newTour);
                            Debug.WriteLine(result);
 
@@ -60,7 +59,7 @@ namespace Tour_Planner.ViewModels
             _title = PlaceHolder;
             _origin = PlaceHolder;
             _destination = PlaceHolder;
-            _selectedItem = PlaceHolder;
+            _routeType = null;
         }
 
         public string Title
@@ -113,13 +112,13 @@ namespace Tour_Planner.ViewModels
             }
         }
 
-        public string SelectedItem
+        public RouteType? SelectedRouteType
         {
-            get => _selectedItem;
+            get => _routeType;
             set
             {
-                if (_selectedItem == value) return;
-                _selectedItem = value;
+                if (_routeType == value) return;
+                _routeType = value;
                 RaisePropertyChangedEvent();
             }
         }
@@ -165,18 +164,17 @@ namespace Tour_Planner.ViewModels
                     }
                     descriptionHasBeenTouched = true;
                     break;
-                case "SelectedItem":
-                    if (string.IsNullOrEmpty(_selectedItem) && (selectedItemHasBeenTouched || onSubmit))
+                case "SelectedRouteType":
+                    if (_routeType == null && (selectedItemHasBeenTouched || onSubmit))
                     {
-                        SelectedItem = "";
+                        if (onSubmit)
+                        {
+                            RaisePropertyChangedEvent(nameof(SelectedRouteType));
+                        }
                         Error = "Route Type cannot be empty!";
                     }
-                    else
-                    {
-                        selectedItemHasBeenTouched = true;
-                        return Error;
-                    }
-                    break;
+                    selectedItemHasBeenTouched = true;
+                    return Error;
             }
             return Error;
         }
