@@ -47,6 +47,11 @@ namespace Tour_Planner.ViewModels
                 if (SelectedTour is null) return;
                 DisplayAddTourLog();
             });
+            DisplayAddTourLogCommand = new RelayCommand(_ =>
+            {
+                if (SelectedTour is null) return;
+                DisplayAddTourLog();
+            });
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
             DeleteTourCommand = new RelayCommand(async _ => await DeleteTour());
             _selectedTour = null;
@@ -192,11 +197,28 @@ namespace Tour_Planner.ViewModels
                 // cancelled
             }
         }
+
+        private void EditTour()
+        {
+            var viewModel = new EditTourViewModel(service, SelectedTour!);
+            bool? result = _dialogService.ShowDialog(viewModel);
+            if (!result.HasValue) return;
+            if (result.Value)
+            {
+                //_ = UpdateTourLogs();
+            }
+            else
+            {
+                // cancelled
+            }
+        }
+
         public ICommand DisplayAddTourCommand { get; }
         public ICommand CreatePdfCommand { get; }
         public ICommand ShowTours { get; }
         public ICommand DeleteTourCommand { get; }
         public ICommand DisplayAddTourLogCommand { get; }
+        public ICommand EditTourCommand { get; }
 
 
     }

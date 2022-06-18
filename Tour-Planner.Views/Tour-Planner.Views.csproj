@@ -26,6 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="EditTourDialogWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
     <Page Update="AddTourLogDialogWindow.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
