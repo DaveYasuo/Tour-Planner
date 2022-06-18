@@ -30,10 +30,10 @@ namespace Server.Rest_API.SqlServer
             using var transaction = conn.BeginTransaction();
             try
             {
-                using (var cmd = new NpgsqlCommand("INSERT INTO public.tour (id, tourid, date_and_time, total_time, rating, difficulty, comment) VALUES (DEFAULT, @id, @tourid, @date_and_time, @total_time, @rating, @difficulty, @comment);", conn))
+                using (var cmd = new NpgsqlCommand("INSERT INTO public.tour (id, tour, dateTime, total_time, rating, difficulty, comment) VALUES (DEFAULT, @id, @tour, @dateTime, @total_time, @rating, @difficulty, @comment);", conn))
                 {
-                    cmd.Parameters.AddWithValue("tourid", tourLog.TourId);
-                    cmd.Parameters.AddWithValue("date_and_time", tourLog.DateAndTime);
+                    cmd.Parameters.AddWithValue("tour", tourLog.TourId);
+                    cmd.Parameters.AddWithValue("dateTime", tourLog.DateAndTime);
                     cmd.Parameters.AddWithValue("total_time", tourLog.TotalTime);
                     cmd.Parameters.AddWithValue("rating", tourLog.Rating);
                     cmd.Parameters.AddWithValue("difficulty", tourLog.Difficulty);

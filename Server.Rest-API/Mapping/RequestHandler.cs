@@ -10,9 +10,11 @@ namespace Server.Rest_API.Mapping
     public class RequestHandler : IRequestHandler
     {
         readonly IController tourController;
+        readonly IController tourLogController;
         public RequestHandler()
         {
             tourController = new TourController();
+            tourLogController = new TourLogController();
         }
 
         public IController GetController(string controller)
@@ -22,7 +24,7 @@ namespace Server.Rest_API.Mapping
             return endPoint switch
             {
                 EndPoint.Tour => tourController,
-                EndPoint.TourLog => null,
+                EndPoint.TourLog => tourLogController,
                 _ => null
             };
         }

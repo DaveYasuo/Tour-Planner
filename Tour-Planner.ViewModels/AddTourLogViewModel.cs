@@ -58,8 +58,8 @@ namespace Tour_Planner.ViewModels
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
                 Enum.TryParse(_selectedItem, out DifficultyType difficultyType);
                 Enum.TryParse(_ratingItem, out RatingType ratingType);
-                TourLog newTour = new(1, _dateAndTime, _totalTime, ratingType, difficultyType,_comment); // Muss noch id holen
-                var result = await service.AddTour(newTour);
+                TourLog newTour = new(tour.Id, _dateAndTime, _totalTime, ratingType, difficultyType,_comment); // Muss noch id holen
+                var result = await service.AddTourLog(newTour);
                 //Debug.WriteLine(result);
 
             });
