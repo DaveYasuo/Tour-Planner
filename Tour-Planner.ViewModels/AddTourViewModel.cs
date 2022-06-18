@@ -8,6 +8,7 @@ using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
 using System.Collections.Generic;
 using Tour_Planner.DataModels.Enums;
+using Tour_Planner.Extensions;
 
 namespace Tour_Planner.ViewModels
 {
@@ -28,7 +29,7 @@ namespace Tour_Planner.ViewModels
         bool destinationHasBeenTouched = false;
         bool descriptionHasBeenTouched = false;
         bool selectedItemHasBeenTouched = false;
-        public AddTourViewModel(IRestService service)
+        public AddTourViewModel(IRestService service, IMediator mediator)
         {
             this.service = service;
             SaveCommand = new RelayCommand(async _ =>
@@ -45,14 +46,21 @@ namespace Tour_Planner.ViewModels
                            }
                            if (hasError)
                            {
-                               MessageBox.Show("Please fill out the form before submitting");
+                               MessageBox.Show("Please fill out the form before submitting", "Error");
                                return;
                            }
                            CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
                            Tour newTour = new(_title, _origin, _destination, _description, (RouteType)_routeType!); // todo
                            var result = await service.AddTour(newTour);
-                           Debug.WriteLine(result);
-
+                           if (result == null)
+                           {
+                               mediator.Publish(ViewModelMessage.UpdateTourList, false);
+                               MessageBox.Show($"Cannot find a route for {newTour.Title} from {newTour.Origin} to {newTour.Destination}.", "Check your inputs");
+                           }
+                           else
+                           {
+                               mediator.Publish(ViewModelMessage.UpdateTourList, true);
+                           }
                        });
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             _description = PlaceHolder;

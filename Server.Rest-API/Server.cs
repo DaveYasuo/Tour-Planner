@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using log4net;
 using Server.Rest_API.Controller;
 using Server.Rest_API.Mapping;
 using Server.Rest_API.SqlServer;
@@ -15,6 +19,9 @@ namespace Server.Rest_API
         private bool _listening;
         private readonly HttpListener _listener;
         private readonly IRequestHandler handler;
+        private CancellationTokenSource _tokenSource;
+        private readonly ConcurrentDictionary<string, Task> _tasks = new();
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public Server()
         {
@@ -36,9 +43,9 @@ namespace Server.Rest_API
             handler = new RequestHandler();
         }
 
-        public void Start()
+        public async Task StartAsync()
         {
-            //netsh http add urlacl url = http://+:80/MyUri user=DOMAIN\user
+            _tokenSource = new CancellationTokenSource();
             if (_listening) return;
             _listening = true;
             _listener.Start();
@@ -49,68 +56,97 @@ namespace Server.Rest_API
                 Stop();
                 Environment.Exit(0);
             };
-            ServerHandler();
+            await ServerHandler();
         }
 
-        private void ServerHandler()
+        private async Task ServerHandler()
         {
             while (_listening)
             {
-                // Note: The GetContext method blocks while waiting for a request.
-                HttpListenerContext context = _listener.GetContext();
-
-                HttpListenerRequest request = context.Request;
-
-                string documentContents;
-                using (Stream receiveStream = request.InputStream)
+                try
                 {
-                    using StreamReader readStream = new(receiveStream, Encoding.UTF8);
-                    documentContents = readStream.ReadToEnd();
-                }
-                Console.WriteLine($"Received request for {request.Url}");
-                Console.WriteLine($"Received request for {request.HttpMethod}"); // post
-                Console.WriteLine($"Received request for {request.RawUrl}"); //api/Tour
-
-                Tuple<List<string>, Dictionary<string, string>> urlParams = handler.ParseUrl(request.RawUrl);
-                // Obtain a response object.
-                HttpListenerResponse response = context.Response;
-
-                if (urlParams is not null && urlParams.Item1.Count != 0)
-                {
-                    IController controller = handler.GetController(urlParams.Item1[0]);
-                    if (controller is not null)
+                    var token = _tokenSource.Token;
+                    var id = Guid.NewGuid().ToString();
+                    var context = await _listener.GetContextAsync();
+                    var task = Task.Run(() => ProcessRequestAsync(context), token);
+                    _ = task.ContinueWith(t =>
                     {
-
-                        string responseString = controller.Handle(request.HttpMethod, urlParams, documentContents);
-
-                        if (responseString is not null)
-                        {
-                            Console.WriteLine(responseString);
-                            byte[] buffer = Encoding.UTF8.GetBytes(responseString);
-                            // Get a response stream and write the response to it.
-                            response.ContentLength64 = buffer.Length;
-                            Stream output = response.OutputStream;
-                            output.Write(buffer, 0, buffer.Length);
-                            // You must close the output stream.
-                            output.Close();
-                            continue;
-                        }
-                    }
+                        if (t == null) return;
+                        _tasks.TryRemove(id, out t);
+                    }, token);
                 }
-                response.StatusCode = (int)HttpStatusCode.Forbidden;
-                byte[] buffer1 = Encoding.UTF8.GetBytes("");
-                // Get a response stream and write the response to it.
-                response.ContentLength64 = buffer1.Length;
-                Stream output1 = response.OutputStream;
-                output1.Write(buffer1, 0, buffer1.Length);
-                // You must close the output stream.
-                output1.Close();
+                catch (Exception)
+                {
+
+                }
             }
+        }
+
+        private async Task ProcessRequestAsync(HttpListenerContext context)
+        {
+
+            HttpListenerRequest request = context.Request;
+
+            string documentContents;
+            using (Stream receiveStream = request.InputStream)
+            {
+                using StreamReader readStream = new(receiveStream, Encoding.UTF8);
+                documentContents = readStream.ReadToEnd();
+            }
+            Console.WriteLine($"Received request for {request.Url}");
+            Console.WriteLine($"Received request for {request.HttpMethod}"); // post
+            Console.WriteLine($"Received request for {request.RawUrl}"); //api/Tour
+
+            Tuple<List<string>, Dictionary<string, string>> urlParams = handler.ParseUrl(request.RawUrl);
+            // Obtain a response object.
+            HttpListenerResponse response = context.Response;
+            string responseString = null;
+            if (urlParams is not null && urlParams.Item1.Count != 0)
+            {
+                IController controller = handler.GetController(urlParams.Item1[0]);
+                if (controller is not null) responseString = await controller.Handle(request.HttpMethod, urlParams, documentContents);
+            }
+            // Get a response stream and write the response to it.
+            Stream output = response.OutputStream;
+            byte[] buffer;
+            if (responseString is null)
+            {
+                response.StatusCode = (int)HttpStatusCode.BadRequest;
+                buffer = Encoding.UTF8.GetBytes("");
+            }
+            else
+            {
+                buffer = Encoding.UTF8.GetBytes(responseString);
+            }
+            response.ContentLength64 = buffer.Length;
+            output.Write(buffer, 0, buffer.Length);
+            // You must close the output stream.
+            output.Close();
         }
 
         public void Stop()
         {
+            if (_listening == false) return;
+            // Stop listening
             _listening = false;
+            // Cleanup tasks
+            _tokenSource.Cancel();
+            foreach (var task in _tasks.Values)
+            {
+                if (task.IsCompleted) continue;
+                try
+                {
+                    Log.Info(task.Wait(500) ? "Task completed" : "Task failed.");
+                }
+                catch (Exception e)
+                {
+                    // Prevent TaskCanceledException
+                    Log.Warn("Waiting for Tasks to finish" + e.Message);
+                }
+            }
+
+            _tokenSource.Dispose();
+            _tasks.Clear();
             _listener.Stop();
         }
     }

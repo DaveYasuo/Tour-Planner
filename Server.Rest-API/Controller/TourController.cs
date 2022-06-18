@@ -4,8 +4,10 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading.Tasks;
 using log4net;
 using Npgsql;
+using Server.Rest_API.API;
 using Server.Rest_API.Common;
 using Server.Rest_API.SqlServer;
 using Tour_Planner.Models;
@@ -31,7 +33,7 @@ namespace Server.Rest_API.Controller
             return tourSqlDao.AddNewTour(tour);
         }
 
-        private void DeleteATour(int id )
+        private void DeleteATour(int id)
         {
            tourSqlDao.DeleteTour(id);
         }
@@ -55,10 +57,16 @@ namespace Server.Rest_API.Controller
             }
         }
 
-        public string Post(string body)
+        public async Task<string> Post(string body)
         {
             Tour tour = JsonSerializer.Deserialize<Tour>(body);
-            mapQuest.GetRoute(tour);
+            MapQuestResponse response = await mapQuest.GetRoute(tour);
+            if (response == null) return null;
+            tour.Distance = response.Distance;
+            tour.Duration = response.Time;
+            string result = await mapQuest.GetRouteImagePath(response.BoundingBox, response.SessionId);
+            if (result == null) return null;
+            tour.ImagePath = result;
             return JsonSerializer.Serialize(AddTour(tour));
         }
 
@@ -74,9 +82,9 @@ namespace Server.Rest_API.Controller
             UpdateTour(tour);
         }
 
-        public void Delete(int id)
+        public void Delete(object id)
         {
-            DeleteATour(id);
+            DeleteATour((int)id);
         }
     }
 }

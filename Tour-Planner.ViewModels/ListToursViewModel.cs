@@ -59,7 +59,9 @@ namespace Tour_Planner.ViewModels
             _searchBarContent = "";
             mediator.Subscribe(DisplayAddTour, ViewModelMessage.AddTour);
             mediator.Subscribe(DisplayEditTour, ViewModelMessage.EditTour);
+            mediator.Subscribe(RefreshTour, ViewModelMessage.UpdateTourList);
         }
+
 
         public Tour? SelectedTour
         {
@@ -94,18 +96,30 @@ namespace Tour_Planner.ViewModels
             }
         }
 
-        private void DisplayAddTour(object? obj = null)
+        private void RefreshTour(object? obj)
         {
-            var viewModel = new AddTourViewModel(service);
-            bool? result = _dialogService.ShowDialog(viewModel);
-            if (!result.HasValue) return;
-            if (result.Value)
+            bool isSuccess = (bool)obj!;
+            if (isSuccess)
             {
                 _ = UpdateTours();
             }
             else
             {
-                // cancelled
+                LoadingImage = loadedImage.Item2;
+            }
+        }
+        private void DisplayAddTour(object? obj = null)
+        {
+            var viewModel = new AddTourViewModel(service, mediator);
+            bool? result = _dialogService.ShowDialog(viewModel);
+            if (!result.HasValue) return;
+            if (result.Value)
+            {
+                LoadingImage = loadedImage.Item2;
+                LoadingImage = loadedImage.Item1;
+            }
+            else
+            {
             }
         }
         private void DisplayEditTour(object? obj = null)
@@ -146,12 +160,10 @@ namespace Tour_Planner.ViewModels
             await Task.Delay(1000);
             LoadingImage = loadedImage.Item2;
         }
-
         private void UpdateTourLogs()
         {
 
         }
-
         private async Task DeleteTour()
         {
             if (SelectedTour is null)
@@ -238,7 +250,6 @@ namespace Tour_Planner.ViewModels
             }
             return new BitmapImage();
         }
-
         private void DisplayAddTourLog()
         {
             var viewModel = new AddTourLogViewModel(service, mediator, SelectedTour!);
@@ -253,8 +264,21 @@ namespace Tour_Planner.ViewModels
                 // cancelled
             }
         }
-
-
+        private void EditTour()
+        {
+            var viewModel = new EditTourViewModel(service, SelectedTour!);
+            bool? result = _dialogService.ShowDialog(viewModel);
+            if (!result.HasValue) return;
+            if (result.Value)
+            {
+                //_ = UpdateTourLogs();
+            }
+            else
+            {
+                // cancelled
+            }
+        }
+        }
 
         public ICommand DisplayAddTourCommand { get; }
         public ICommand CreatePdfCommand { get; }

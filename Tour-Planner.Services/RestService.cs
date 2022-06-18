@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -26,26 +27,38 @@ namespace Tour_Planner.Services
 
 
 
-        public async Task<bool> AddTour(Tour tour)
+        public async Task<Tour?> AddTour(Tour tour)
         {
-            var result = await Client.PostAsync($"{BaseUrl}/Tour", new StringContent(JsonSerializer.Serialize(tour), Encoding.UTF8, "application/json"));
-            return result.IsSuccessStatusCode;
+            try
+            {
+                var httpResponseMessage = await Client.PostAsync($"{BaseUrl}/Tour", new StringContent(JsonSerializer.Serialize(tour), Encoding.UTF8, "application/json"));
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    string result = await httpResponseMessage.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<Tour>(result);
+                }
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public async Task<List<Tour>?> GetTour()
         {
             try
             {
-                var result = await Client.GetStringAsync($"{BaseUrl}/Tour");
-                if (result is not null && result != "")
+                var result = await Client.GetFromJsonAsync<List<Tour>>($"{BaseUrl}/Tour");
+                if (result is not null)
                 {
-                    return JsonSerializer.Deserialize<List<Tour>>(result);
+                    return result;
                 }
                 return null;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Warn("Cannot get all tours from Server " + ex.Message);
                 return null;
             }
         }
