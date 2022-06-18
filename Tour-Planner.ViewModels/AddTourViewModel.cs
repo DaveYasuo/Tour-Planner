@@ -19,7 +19,7 @@ namespace Tour_Planner.ViewModels
         private string _destination;
         private string _description;
         private string _selectedItem;
-        private IRestService service;
+        private readonly IRestService service;
 
         public string Error { get; set; } = "";
 

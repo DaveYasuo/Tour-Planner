@@ -8,7 +8,7 @@ namespace Test.Tour_Planner.Services
     public class DialogTests
     {
         private Mock<IDialogService> _mock;
-        private HomeViewModel _viewModel;
+        //private HomeViewModel _viewModel;
         //[SetUp]
         //public void Setup()
         //{

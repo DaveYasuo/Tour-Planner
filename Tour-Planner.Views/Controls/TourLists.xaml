@@ -5,10 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels"
+             xmlns:gif="http://wpfanimatedgif.codeplex.com"
              d:DataContext="{d:DesignInstance Type=viewmodels:ListToursViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              DataContext="{Binding ListToursViewModel, Source={StaticResource Container}}">
+    
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Button.BorderBrush" Value="SlateGray"/>
+            <Setter Property="Button.BorderThickness" Value="1"/>
+        </Style>
+    </UserControl.Resources>
     
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -17,21 +26,26 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Tours"/>
-                <Button Command="{Binding DisplayAddTourCommand}" Grid.Column="1" Content="+" ></Button>
-                <Button Command ="{Binding DeleteTourCommand}" Grid.Column="2" Content="-" ></Button>
-                <Button Grid.Column="3" Content="[]" Command ="{Binding ShowTours}"></Button>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height = "*" />
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0" Content="Tours" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Command="{Binding DisplayAddTourCommand}" Grid.Column="1" Content="+" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                <Button Command ="{Binding DeleteTourCommand}" Grid.Column="2" Content="-" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
+                <Button Grid.Column="3" Command ="{Binding ShowTours}" >
+                    <Image gif:ImageBehavior.AnimatedSource="{Binding LoadingImage}" gif:ImageBehavior.RepeatBehavior="2x"></Image>
+                </Button>
             </Grid>
 
         </Border>
