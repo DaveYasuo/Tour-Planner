@@ -25,16 +25,18 @@ namespace Tour_Planner
             services.AddSingleton<TourDataViewModel>();
             services.AddSingleton<ListToursViewModel>();
             services.AddSingleton<NavigationViewModel>();
+            services.AddSingleton<TourLogsViewModel>();
 
             serviceProvider = services.BuildServiceProvider();
             serviceProvider.GetService<IDialogService>()!.Register<AddTourViewModel, AddTourDialogWindow>();
             serviceProvider.GetService<IDialogService>()!.Register<AddTourLogViewModel, AddTourLogDialogWindow>();        
-            serviceProvider.GetService<IDialogService>()!.Register<EditTourViewModel, EditTourDialogWindow>();        
+            serviceProvider.GetService<IDialogService>()!.Register<EditTourViewModel, EditTourDialogWindow>(); 
         }
 
         public ListToursViewModel ListToursViewModel => serviceProvider.GetService<ListToursViewModel>()!;
         //public HomeViewModel HomeViewModel => serviceProvider.GetService<HomeViewModel>()!;
         public TourDataViewModel TourDataViewModel => serviceProvider.GetService<TourDataViewModel>()!;
         public NavigationViewModel NavigationViewModel => serviceProvider.GetService<NavigationViewModel>()!;
+        public TourLogsViewModel TourLogsViewModel => serviceProvider.GetService<TourLogsViewModel>()!;
     }
 }

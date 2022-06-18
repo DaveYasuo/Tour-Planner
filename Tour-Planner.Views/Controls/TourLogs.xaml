@@ -22,7 +22,9 @@
             <Label Grid.Column="0" Content="Logs:" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
             <Button  Grid.Column="1" Command="{Binding DisplayAddTourLogCommand}" Content="+" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
         </Grid>
-        <FlowDocumentReader Grid.Row="1" UseLayoutRounding="True" SnapsToDevicePixels="True" HorizontalAlignment="Stretch" >
+        <DataGrid Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+
+        <!--<FlowDocumentReader Grid.Row="1" UseLayoutRounding="True" SnapsToDevicePixels="True" HorizontalAlignment="Stretch" >
             <FlowDocumentReader.Resources>
                 <Style TargetType="TableCell">
                     <Setter Property="TextAlignment" Value="Left"></Setter>
@@ -124,6 +126,6 @@
                     </TableRowGroup>
                 </Table>
             </FlowDocument>
-        </FlowDocumentReader>
+        </FlowDocumentReader>-->
     </Grid>
 </UserControl>
