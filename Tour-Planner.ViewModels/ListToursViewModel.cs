@@ -64,9 +64,9 @@ namespace Tour_Planner.ViewModels
             get => _selectedTour;
             set
             {
-                mediator.Publish(ViewModelMessage.SelectTour, SelectedTour);
                 if (_selectedTour == value) return;
                 _selectedTour = value;
+                mediator.Publish(ViewModelMessage.SelectTour, SelectedTour);
                 RaisePropertyChangedEvent();
             }
         }
