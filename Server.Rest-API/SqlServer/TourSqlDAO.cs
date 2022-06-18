@@ -118,6 +118,33 @@ namespace Server.Rest_API.SqlServer
             }
         }
 
+        public Tour UpdateTour(Tour tour)
+        {
+            using var conn = Connection();
+            using var transaction = conn.BeginTransaction();
+            try
+            {
+                using (var cmd = new NpgsqlCommand("UPDATE public.tour SET Title=@title, Description=@description WHERE Id=@id;", conn))
+                {
+                    cmd.Parameters.AddWithValue("@title", tour.Title);
+                    cmd.Parameters.AddWithValue("@description", tour.Description);
+                    cmd.Parameters.AddWithValue("@id", tour.Id);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                    transaction.Commit();
+                    Log.Info($"Updated tour {tour.Title}");
+                    return tour;
+                };
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                Log.Error($"Cannot insert tour {tour.Title}: " + ex.Message);
+                Console.WriteLine($"Cannot insert tour {tour.Title}: " + ex.Message);
+                return null;
+            }
+        }
+
 
     }
 }

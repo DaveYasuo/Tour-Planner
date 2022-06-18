@@ -53,5 +53,35 @@ namespace Server.Rest_API.SqlServer
                 return null;
             }
         }
+
+        public IEnumerable<TourLog> GetAllTourLogs()
+        {
+            try
+            {
+                var tourLogs = new List<TourLog>();
+                using var conn = Connection();
+                using var cmd = new NpgsqlCommand("SELECT id, tour, date_time, total_time, rating, difficulty, comment from public.tourlog;", conn);
+                cmd.Prepare();
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    tourLogs.Add(new TourLog(reader.SafeGet<int>("id"),
+                        reader.SafeGet<int>("tour"),
+                        reader.SafeGet<DateTime>("date_time"),
+                        reader.SafeGet<TimeSpan>("total_time"),
+                        reader.SafeGet<Rating>("rating"),
+                        reader.SafeGet<Difficulty>("difficulty"),
+                        reader.SafeGet<string>("comment")));
+                }
+                conn.Close();
+                Log.Info("Get all tours");
+                return tourLogs;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Cannot get all tourlogs: " + ex.Message);
+                return null;
+            }
+        }
     }
 }

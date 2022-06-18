@@ -11,7 +11,7 @@ namespace Server.Rest_API.Controller
         string Get();
         string Get(object id);
         string Post(string body);
-        void Put(object id);
+        void Patch(string body);
         void Delete(int id);
 
         // http://9090/api/Tour/1
@@ -47,9 +47,9 @@ namespace Server.Rest_API.Controller
                         Delete(Int32.Parse(urlParams.Item1[1]));
                         break;
                     }
-                case "put":
+                case "patch":
                     {
-                        Put(urlParams);
+                        Patch(documentContents);
                         break;
                     }
                 default:

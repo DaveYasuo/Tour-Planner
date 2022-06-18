@@ -24,6 +24,10 @@ namespace Server.Rest_API.Controller
         {
             return tourLogSqlDao.AddNewTourLog(tourLog);
         }
+        private IEnumerable<TourLog> GetAllTourLogs()
+        {
+            return tourLogSqlDao.GetAllTourLogs();
+        }
 
         public void Delete(int id)
         {
@@ -32,7 +36,17 @@ namespace Server.Rest_API.Controller
 
         public string Get()
         {
-            throw new NotImplementedException();
+            try
+            {
+                string json = JsonSerializer.Serialize(GetAllTourLogs());
+                Log.Info("Serialize all tours");
+                return json;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Cannot serialize all tours: " + ex.Message);
+                return null;
+            }
         }
 
         public string Get(object id)
@@ -47,7 +61,7 @@ namespace Server.Rest_API.Controller
             return JsonSerializer.Serialize(AddTourLog(tourLog));
         }
 
-        public void Put(object id)
+        public void Patch(string body)
         {
             throw new NotImplementedException();
         }

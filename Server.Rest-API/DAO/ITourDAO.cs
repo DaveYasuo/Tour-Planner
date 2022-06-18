@@ -8,6 +8,7 @@ namespace Server.Rest_API.DAO
     {
         Tour FindById(int tourId);
         Tour AddNewTour(Tour newTour);
+        Tour UpdateTour(Tour newTour);
         IEnumerable<Tour> GetTours();
     }
 }
