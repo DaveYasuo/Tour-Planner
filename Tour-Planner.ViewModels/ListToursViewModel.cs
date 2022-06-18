@@ -176,7 +176,7 @@ namespace Tour_Planner.ViewModels
 
         private void DisplayAddTourLog()
         {
-            var viewModel = new AddTourLogViewModel(service);
+            var viewModel = new AddTourLogViewModel(service, mediator);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)

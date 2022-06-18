@@ -28,10 +28,10 @@ namespace Tour_Planner.ViewModels
             this.mediator = mediator;
             this.service = service;
             _duration = default;
-            _description = "hi";
             _distance = default;
             _title = "";
             _destination = "";
+            _description = "";
             _origin = "";
             mediator.Subscribe(ShowTourData, ViewModelMessage.SelectTour);
         }

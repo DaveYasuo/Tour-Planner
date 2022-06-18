@@ -13,6 +13,7 @@ namespace Tour_Planner.Converters
             try
             {
                 EnumString = Enum.GetName(value.GetType(), value)!;
+                EnumString = EnumString.Replace('_', ' ');
                 return EnumString;
             }
             catch
