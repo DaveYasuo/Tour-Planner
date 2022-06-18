@@ -42,6 +42,7 @@ namespace Tour_Planner.ViewModels
             _dialogService = dialogService;
             ShowTours = new RelayCommand(async (_) => await UpdateTours());
             DisplayAddTourCommand = new RelayCommand(_ => DisplayAddTour());
+            DisplayAddTourLogCommand = new RelayCommand(_ => DisplayAddTourLog());
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
             DeleteTourCommand = new RelayCommand(async _ => await DeleteTour());
             _selectedTour = null;
@@ -119,6 +120,12 @@ namespace Tour_Planner.ViewModels
             await Task.Delay(1000);
             LoadingImage = loadedImage.Item2;
         }
+
+        private void UpdateTourLogs()
+        {
+
+        }
+
         private async Task DeleteTour()
         {
             if (SelectedTour is null)
@@ -167,10 +174,25 @@ namespace Tour_Planner.ViewModels
             return new BitmapImage();
         }
 
+        private void DisplayAddTourLog()
+        {
+            var viewModel = new AddTourLogViewModel(service);
+            bool? result = _dialogService.ShowDialog(viewModel);
+            if (!result.HasValue) return;
+            if (result.Value)
+            {
+                //_ = UpdateTourLogs();
+            }
+            else
+            {
+                // cancelled
+            }
+        }
         public ICommand DisplayAddTourCommand { get; }
         public ICommand CreatePdfCommand { get; }
         public ICommand ShowTours { get; }
         public ICommand DeleteTourCommand { get; }
+        public ICommand DisplayAddTourLogCommand { get; }
 
 
     }
