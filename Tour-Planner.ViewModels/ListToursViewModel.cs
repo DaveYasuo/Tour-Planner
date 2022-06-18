@@ -266,7 +266,7 @@ namespace Tour_Planner.ViewModels
         }
         private void EditTour()
         {
-            var viewModel = new EditTourViewModel(service, SelectedTour!);
+            var viewModel = new EditTourViewModel(service, mediator,SelectedTour!);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
@@ -278,7 +278,7 @@ namespace Tour_Planner.ViewModels
                 // cancelled
             }
         }
-        }
+        
 
         public ICommand DisplayAddTourCommand { get; }
         public ICommand CreatePdfCommand { get; }
