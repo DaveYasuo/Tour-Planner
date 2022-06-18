@@ -8,6 +8,8 @@ using System.Windows;
 using System.Windows.Input;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
+using Tour_Planner.DataModels.Enums;
+using Tour_Planner.Models;
 
 namespace Tour_Planner.ViewModels
 {
@@ -49,9 +51,10 @@ namespace Tour_Planner.ViewModels
                     return;
                 }
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                //Enum.TryParse(_selectedItem, out RouteType routeType);
-                //Tour newTour = new(_title, _origin, _destination, _description, routeType); // todo
-                //var result = await service.AddTour(newTour);
+                Enum.TryParse(_selectedItem, out DifficultyType difficultyType);
+                Enum.TryParse(_ratingItem, out RatingType ratingType);
+                TourLog newTour = new(1, _dateAndTime, _totalTime, ratingType, difficultyType,_comment); // Muss noch id holen
+                var result = await service.AddTour(newTour);
                 //Debug.WriteLine(result);
 
             });
@@ -136,7 +139,7 @@ namespace Tour_Planner.ViewModels
                 case "TotalTime":
                     if (TotalTime == TimeSpan.Zero && (totalTimeHasBeenTouched || onSubmit))
                     {
-                        //TotalTime = null;
+                       // TotalTime = null;
                         //if (!totalTimeRaiseProperty)
                         //{
                             //RaisePropertyChangedEvent(nameof(TotalTime));
