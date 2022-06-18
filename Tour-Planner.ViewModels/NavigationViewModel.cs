@@ -20,7 +20,6 @@ namespace Tour_Planner.ViewModels
             DisplayAddTourCommand = new RelayCommand(_ =>
             {
                 mediator.Publish(ViewModelMessage.AddTour, null);
-
             });
         }
 

@@ -58,7 +58,6 @@ namespace Tour_Planner.ViewModels
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
                 TourLog newTour = new(tour.Id, DateTime, TotalTime, (Rating)SelectedRating!, (Difficulty)SelectedDifficulty!, Comment); // Muss noch id holen
                 var result = await service.AddTourLog(newTour);
-                //Debug.WriteLine(result);
 
             });
         }

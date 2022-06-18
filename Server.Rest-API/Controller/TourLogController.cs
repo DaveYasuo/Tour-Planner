@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading.Tasks;
 using log4net;
 using Npgsql;
 using Server.Rest_API.Common;
@@ -25,7 +26,7 @@ namespace Server.Rest_API.Controller
             return tourLogSqlDao.AddNewTourLog(tourLog);
         }
 
-        public void Delete(int id)
+        public void Delete(object id)
         {
             throw new NotImplementedException();
         }
@@ -40,11 +41,11 @@ namespace Server.Rest_API.Controller
             throw new NotImplementedException();
         }
 
-        public string Post(string body)
+        public Task<string> Post(string body)
         {
             TourLog tourLog = JsonSerializer.Deserialize<TourLog>(body);
             //mapQuest.GetRoute(tourLog);
-            return JsonSerializer.Serialize(AddTourLog(tourLog));
+            return Task.Run(() => JsonSerializer.Serialize(AddTourLog(tourLog)));
         }
 
         public void Put(object id)

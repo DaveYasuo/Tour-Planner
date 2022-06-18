@@ -10,13 +10,13 @@ namespace Server.Rest_API.Controller
     {
         string Get();
         string Get(object id);
-        string Post(string body);
+        Task<string> Post(string body);
         void Put(object id);
-        void Delete(int id);
+        void Delete(object id);
 
         // http://9090/api/Tour/1
         // http://9090/api/Tour/?id=1
-        string Handle(string httpMethod, Tuple<List<string>, Dictionary<string, string>> urlParams, string documentContents)
+        async Task<string> Handle(string httpMethod, Tuple<List<string>, Dictionary<string, string>> urlParams, string documentContents)
         {
             httpMethod = httpMethod.ToLower();
 
@@ -39,12 +39,12 @@ namespace Server.Rest_API.Controller
                     }
                 case "post":
                     {
-                        result = Post(documentContents);
+                        result = await Post(documentContents);
                         break;
                     }
                 case "delete":
                     {
-                        Delete(Int32.Parse(urlParams.Item1[1]));
+                        Delete(int.Parse(urlParams.Item1[1]));
                         break;
                     }
                 case "put":

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Tour_Planner.ViewModels
         private string _title;
         private string _origin;
         private string _destination;
+        private string? _routeImagePath;
         private RouteType _routeType;
         private double _distance;
         private TimeSpan _duration;
@@ -33,6 +35,7 @@ namespace Tour_Planner.ViewModels
             _destination = "";
             _description = "";
             _origin = "";
+            _routeImagePath = null;
             mediator.Subscribe(ShowTourData, ViewModelMessage.SelectTour);
         }
 
@@ -47,6 +50,14 @@ namespace Tour_Planner.ViewModels
             RouteType = tour.RouteType;
             Distance = tour.Distance;
             Duration = tour.Duration;
+            if (string.IsNullOrEmpty(tour.ImagePath))
+            {
+                RouteImagePath = null;
+            }
+            else
+            {
+                RouteImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\..\\..\\..\\..\\RouteImages\\" + tour.ImagePath);
+            }
         }
         public string Title
         {
@@ -115,6 +126,17 @@ namespace Tour_Planner.ViewModels
             {
                 if (_duration == value) return;
                 _duration = value;
+                RaisePropertyChangedEvent();
+            }
+        }
+
+        public string? RouteImagePath
+        {
+            get => _routeImagePath;
+            set
+            {
+                if (_routeImagePath == value) return;
+                _routeImagePath = value;
                 RaisePropertyChangedEvent();
             }
         }
