@@ -16,6 +16,8 @@ namespace Server.Rest_API.SqlServer
             _connString = conString;
             CreateDatabaseIfNotExists();
             NpgsqlConnection.GlobalTypeMapper.MapEnum<RouteType>("routetype");
+            NpgsqlConnection.GlobalTypeMapper.MapEnum<Rating>("ratingtype");
+            NpgsqlConnection.GlobalTypeMapper.MapEnum<Difficulty>("difficultytype");
             Console.WriteLine(_connString);
         }
 
@@ -32,6 +34,30 @@ namespace Server.Rest_API.SqlServer
                         'shortest',
                         'pedestrian',
                         'bicycle'
+                    )
+                ", conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = new NpgsqlCommand(@"
+                    DROP TYPE IF EXISTS ratingtype;
+                    CREATE TYPE ratingtype AS  ENUM(
+                        'very_good',
+                        'good',
+                        'medium',
+                        'bad',
+                        'very_bad'
+                    )
+                ", conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = new NpgsqlCommand(@"
+                    DROP TYPE IF EXISTS difficultytype;
+                    CREATE TYPE difficultytype AS  ENUM(
+                        'easy',
+                        'medium',
+                        'hard'
                     )
                 ", conn))
                 {
@@ -61,14 +87,11 @@ namespace Server.Rest_API.SqlServer
                     Create TABLE IF NOT EXISTS tourlog(
                         id SERIAL,
                         tour INTEGER NOT NULL,
-                        date DATE NOT NULL,
-                        type routetype NOT NULL,
-                        duration INTERVAL NOT NULL,
-                        distance DOUBLE PRECISION NOT NULL,
-                        rating VARCHAR(256) NOT NULL,
-                        report TEXT NOT NULL,
-                        avgspeed DOUBLE PRECISION NOT NULL,
-                        maxspeed DOUBLE PRECISION NOT NULL,
+                        date_time DATE NOT NULL,
+                        total_time INTERVAL NOT NULL,
+                        rating ratingtype NOT NULL,
+                        difficulty difficultytype NOT NULL,
+                        comment TEXT NOT NULL,
                         PRIMARY KEY(id),
                         CONSTRAINT fk_tour
                             FOREIGN KEY(tour) 
