@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Tour_Planner.Extensions;
+using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
 using Tour_Planner.DataModels.Enums;
@@ -21,6 +23,8 @@ namespace Tour_Planner.ViewModels
         private string _comment;
         private TimeSpan _totalTime;
         private DateTime _dateAndTime = DateTime.Now;
+        private IMediator mediator;
+        private Tour? tour;
         public string Error { get; set; } = "";
 
         bool selectedRatingHasBeenTouched = false;
@@ -28,10 +32,11 @@ namespace Tour_Planner.ViewModels
         bool dateAndTimeHasBeenTouched = false;
         bool commentHasBeenTouched = false;
         bool selectedItemHasBeenTouched = false;
-        bool totalTimeRaiseProperty = false;
-        public AddTourLogViewModel(IRestService service)
+        bool totalTimeRaiseProperty = true;
+        public AddTourLogViewModel(IRestService service, IMediator mediator)
         {
             this.service = service;
+            this.mediator = mediator;
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             SaveCommand = new RelayCommand(async _ =>
             {
@@ -58,6 +63,13 @@ namespace Tour_Planner.ViewModels
                 //Debug.WriteLine(result);
 
             });
+            mediator.Subscribe(SetSelectedTour, DataModels.Enums.ViewModelMessage.SelectTour);
+        }
+
+
+        private void SetSelectedTour(object? obj = null)
+        {
+            tour = (Tour)obj!;
         }
 
         public string this[string propertyName]
@@ -139,13 +151,12 @@ namespace Tour_Planner.ViewModels
                 case "TotalTime":
                     if (TotalTime == TimeSpan.Zero && (totalTimeHasBeenTouched || onSubmit))
                     {
-                       // TotalTime = null;
-                        //if (!totalTimeRaiseProperty)
-                        //{
-                            //RaisePropertyChangedEvent(nameof(TotalTime));
-                            //totalTimeRaiseProperty = true;
-                        //}
-                        Error = "Total time cannot be empty!";
+                        if (totalTimeRaiseProperty && onSubmit)
+                        {
+                            RaisePropertyChangedEvent(nameof(TotalTime));
+                            totalTimeRaiseProperty = false;
+                        }
+                        Error = "Total time cannot be zero!";
                         return Error;
                     }
                     totalTimeHasBeenTouched = true;

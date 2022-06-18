@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Tour_Planner.DataModels.Enums;
+using Tour_Planner.Extensions;
 using Tour_Planner.Models;
 using Tour_Planner.Services;
 using Tour_Planner.Services.Interfaces;
@@ -19,36 +22,34 @@ namespace Tour_Planner.ViewModels
     {
         public ObservableCollection<Tour> ListTours { get; set; }
 
+        private readonly IMediator mediator;
         private readonly IRestService service;
-        private string _description;
-        private Tour? _selectedTour;
-        private string _searchBarContent;
         private readonly IDialogService _dialogService;
+        private ImageSource? _loadingImage;
+        private readonly Tuple<ImageSource, ImageSource> loadedImage;
+        private string _searchBarContent;
+        private Tour? _selectedTour;
+
         List<Tour> AllTours = new();
-        public ListToursViewModel(IDialogService dialogService, IRestService service)
+
+        public ListToursViewModel(IDialogService dialogService, IRestService service, IMediator mediator)
         {
+            this.mediator = mediator;
             this.service = service;
-            _description = "hi";
+            _loadingImage = null;
+            loadedImage = new(GetBitmapImage("\\refresh.gif"), GetBitmapImage("\\refresh.png"));
             ListTours = new ObservableCollection<Tour>();
             _dialogService = dialogService;
             ShowTours = new RelayCommand(async (_) => await UpdateTours());
             DisplayAddTourCommand = new RelayCommand(_ => DisplayAddTour());
             DisplayAddTourLogCommand = new RelayCommand(_ => DisplayAddTourLog());
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
-            DeleteTourCommand = new RelayCommand(async (_) => await DeleteTour());
+            DeleteTourCommand = new RelayCommand(async _ => await DeleteTour());
             _selectedTour = null;
+            _searchBarContent = "";
+            mediator.Subscribe(DisplayAddTour, ViewModelMessage.AddTour);
         }
 
-
-        public string Description
-        {
-            get => _description;
-            set
-            {
-                _description = value;
-                RaisePropertyChangedEvent();
-            }
-        }
         public Tour? SelectedTour
         {
             get => _selectedTour;
@@ -56,11 +57,33 @@ namespace Tour_Planner.ViewModels
             {
                 if (_selectedTour == value) return;
                 _selectedTour = value;
+                mediator.Publish(ViewModelMessage.SelectTour, SelectedTour);
+                RaisePropertyChangedEvent();
+            }
+        }
+        public ImageSource? LoadingImage
+        {
+            get { return _loadingImage; }
+            set
+            {
+                if (value == _loadingImage) return;
+                _loadingImage = value;
+                RaisePropertyChangedEvent();
+            }
+        }
+        public string SearchBarContent
+        {
+            get => _searchBarContent;
+            set
+            {
+                if (_searchBarContent == value) return;
+                _searchBarContent = value;
+                FilterByText();
                 RaisePropertyChangedEvent();
             }
         }
 
-        private void DisplayAddTour()
+        private void DisplayAddTour(object? obj = null)
         {
             var viewModel = new AddTourViewModel(service);
             bool? result = _dialogService.ShowDialog(viewModel);
@@ -82,6 +105,8 @@ namespace Tour_Planner.ViewModels
         }
         private async Task UpdateTours()
         {
+            LoadingImage = loadedImage.Item2;
+            LoadingImage = loadedImage.Item1;
             List<Tour>? tours = await service.GetTour();
             if (tours is not null)
             {
@@ -92,6 +117,8 @@ namespace Tour_Planner.ViewModels
                     ListTours.Add(item);
                 }
             }
+            await Task.Delay(1000);
+            LoadingImage = loadedImage.Item2;
         }
 
         private void UpdateTourLogs()
@@ -116,34 +143,40 @@ namespace Tour_Planner.ViewModels
             }
 
         }
-
         private void FilterByText()
         {
             ListTours.Clear();
-            foreach(Tour tour in AllTours)
+            foreach (Tour tour in AllTours)
             {
-                if (tour.Title.Contains(_searchBarContent) || tour.Description.Contains(_searchBarContent) || tour.Origin.Contains(_searchBarContent) || tour.Destination.Contains(_searchBarContent) || tour.RouteType.ToString().Contains(_searchBarContent) || tour.Distance.ToString().Contains(_searchBarContent) || tour.Duration.ToString().Contains(_searchBarContent))
+                if (tour.Title.ToLower().Contains(_searchBarContent) ||
+                    tour.Description.ToLower().Contains(_searchBarContent) ||
+                    tour.Origin.ToLower().Contains(_searchBarContent) ||
+                    tour.Destination.ToLower().Contains(_searchBarContent) ||
+                    tour.RouteType.ToString().Contains(_searchBarContent) ||
+                    tour.Distance.ToString().Contains(_searchBarContent) ||
+                    tour.Duration.ToString().Contains(_searchBarContent))
                 {
                     ListTours.Add(tour);
                 }
             }
         }
-        public string SearchBarContent
+        public BitmapImage GetBitmapImage(string location)
         {
-            get => _searchBarContent;
-            set
-           {
-                if (_searchBarContent == value) return;
-                _searchBarContent = value;
-                FilterByText();
-                RaisePropertyChangedEvent();
-                // var currentViewModel = new ListToursViewModel();
+            try
+            {
+                var image = new BitmapImage(new Uri(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\..\\..\\..\\Images" + location), UriKind.RelativeOrAbsolute));
+                return image;
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            return new BitmapImage();
         }
 
         private void DisplayAddTourLog()
         {
-            var viewModel = new AddTourLogViewModel(service);
+            var viewModel = new AddTourLogViewModel(service, mediator);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
@@ -160,6 +193,7 @@ namespace Tour_Planner.ViewModels
         public ICommand ShowTours { get; }
         public ICommand DeleteTourCommand { get; }
         public ICommand DisplayAddTourLogCommand { get; }
+
 
     }
 }

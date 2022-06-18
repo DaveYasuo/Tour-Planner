@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
-using Tour_Planner.Converters;
 using Tour_Planner.DataModels.Enums;
+using Tour_Planner.Extensions;
 
 namespace Tour_Planner.Models
 {

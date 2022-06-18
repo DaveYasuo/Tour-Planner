@@ -3,13 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" 
-        d:DataContext="{d:DesignInstance Type=viewModels:AddTourViewModel}"
         mc:Ignorable="d"
         Title="New Tour" Height="450" Width="800"
-        xmlns:Converters="clr-namespace:Tour_Planner.Converters;assembly=Tour-Planner.Converters" 
-        xmlns:src="clr-namespace:Tour_Planner.DataModels.Collections;assembly=Tour-Planner.DataModels"
-        >
+        xmlns:src="clr-namespace:Tour_Planner.DataModels.Collections;assembly=Tour-Planner.DataModels" 
+        xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:AddTourLogViewModel}">
 
     <Window.Resources>
         <ControlTemplate x:Key="ValidationTemplate">
@@ -18,9 +15,9 @@
                 <Ellipse Fill="Red" Width="10" Height="10" ToolTip="{Binding Path=/ErrorContent}" Margin="5"></Ellipse>
             </StackPanel>
         </ControlTemplate>
-        <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <src:RouteTypes x:Key="myRouteTypes"/>
     </Window.Resources>
+    
     <Grid>
         <Label Content="Add a new tour" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" FontSize="32"/>
         <Label Content="Tour Title" HorizontalAlignment="Left" Margin="126,76,0,0" VerticalAlignment="Top"/>
