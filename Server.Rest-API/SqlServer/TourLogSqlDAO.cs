@@ -33,7 +33,7 @@ namespace Server.Rest_API.SqlServer
                 using (var cmd = new NpgsqlCommand("INSERT INTO public.tour (id, tour, dateTime, total_time, rating, difficulty, comment) VALUES (DEFAULT, @id, @tour, @dateTime, @total_time, @rating, @difficulty, @comment);", conn))
                 {
                     cmd.Parameters.AddWithValue("tour", tourLog.TourId);
-                    cmd.Parameters.AddWithValue("dateTime", tourLog.DateAndTime);
+                    cmd.Parameters.AddWithValue("dateTime", tourLog.DateTime);
                     cmd.Parameters.AddWithValue("total_time", tourLog.TotalTime);
                     cmd.Parameters.AddWithValue("rating", tourLog.Rating);
                     cmd.Parameters.AddWithValue("difficulty", tourLog.Difficulty);

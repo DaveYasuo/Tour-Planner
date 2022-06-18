@@ -8,8 +8,6 @@ using Tour_Planner.Extensions;
 using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
-using Tour_Planner.DataModels.Enums;
-using Tour_Planner.Models;
 
 namespace Tour_Planner.ViewModels
 {
@@ -20,9 +18,9 @@ namespace Tour_Planner.ViewModels
         private Rating? _ratingItem;
         private string _comment;
         private TimeSpan _totalTime;
-        private DateTime _dateAndTime = DateTime.Now;
+        private DateTime _dateTime = DateTime.Now;
         private IMediator mediator;
-        private Tour? tour;
+        private Tour tour;
         public string Error { get; set; } = "";
 
         bool selectedRatingHasBeenTouched = false;
@@ -30,8 +28,10 @@ namespace Tour_Planner.ViewModels
         bool dateAndTimeHasBeenTouched = false;
         bool commentHasBeenTouched = false;
         bool selectedItemHasBeenTouched = false;
-        public AddTourLogViewModel(IRestService service, IMediator mediator)
+        public AddTourLogViewModel(IRestService service, IMediator mediator, Tour tour)
         {
+            this.tour = tour;
+            mediator.Subscribe(SetSelectedTour, ViewModelMessage.SelectTour);
             _selectedDifficulty = null;
             _ratingItem = null;
             _comment = "";
@@ -40,7 +40,7 @@ namespace Tour_Planner.ViewModels
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             SaveCommand = new RelayCommand(async _ =>
             {
-                List<string> testableProperty = new List<string>() { nameof(SelectedDifficulty), nameof(SelectedRating), nameof(Comment), nameof(TotalTime), nameof(DateAndTime) };
+                List<string> testableProperty = new() { nameof(SelectedDifficulty), nameof(SelectedRating), nameof(Comment), nameof(TotalTime), nameof(DateTime) };
                 bool hasError = false;
                 foreach (var item in testableProperty)
                 {
@@ -56,14 +56,11 @@ namespace Tour_Planner.ViewModels
                     return;
                 }
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                Enum.TryParse(_selectedItem, out DifficultyType difficultyType);
-                Enum.TryParse(_ratingItem, out RatingType ratingType);
-                TourLog newTour = new(tour.Id, _dateAndTime, _totalTime, ratingType, difficultyType,_comment); // Muss noch id holen
+                TourLog newTour = new(tour.Id, DateTime, TotalTime, (Rating)SelectedRating!, (Difficulty)SelectedDifficulty!, Comment); // Muss noch id holen
                 var result = await service.AddTourLog(newTour);
                 //Debug.WriteLine(result);
 
             });
-            mediator.Subscribe(SetSelectedTour, DataModels.Enums.ViewModelMessage.SelectTour);
         }
 
 
@@ -121,13 +118,13 @@ namespace Tour_Planner.ViewModels
             }
         }
 
-        public DateTime DateAndTime
+        public DateTime DateTime
         {
-            get => _dateAndTime;
+            get => _dateTime;
             set
             {
-                if (_dateAndTime == value) return;
-                _dateAndTime = value;
+                if (_dateTime == value) return;
+                _dateTime = value;
                 RaisePropertyChangedEvent();
             }
         }
@@ -163,7 +160,7 @@ namespace Tour_Planner.ViewModels
                     totalTimeHasBeenTouched = true;
                     break;
                 case "DateAndTime":
-                    if ((string.IsNullOrEmpty(_dateAndTime.ToString()) || _dateAndTime.ToString().Trim().Length == 0) && (dateAndTimeHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(_dateTime.ToString()) || _dateTime.ToString().Trim().Length == 0) && (dateAndTimeHasBeenTouched || onSubmit))
                     {
                         Error = "Date and time cannot be empty!";
                         return Error;

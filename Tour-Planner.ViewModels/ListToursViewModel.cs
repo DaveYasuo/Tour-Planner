@@ -42,7 +42,11 @@ namespace Tour_Planner.ViewModels
             _dialogService = dialogService;
             ShowTours = new RelayCommand(async (_) => await UpdateTours());
             DisplayAddTourCommand = new RelayCommand(_ => DisplayAddTour());
-            DisplayAddTourLogCommand = new RelayCommand(_ => DisplayAddTourLog());
+            DisplayAddTourLogCommand = new RelayCommand(_ =>
+            {
+                if (SelectedTour is null) return;
+                DisplayAddTourLog();
+            });
             CreatePdfCommand = new RelayCommand(_ => CreatePdf());
             DeleteTourCommand = new RelayCommand(async _ => await DeleteTour());
             _selectedTour = null;
@@ -55,9 +59,9 @@ namespace Tour_Planner.ViewModels
             get => _selectedTour;
             set
             {
+                mediator.Publish(ViewModelMessage.SelectTour, SelectedTour);
                 if (_selectedTour == value) return;
                 _selectedTour = value;
-                mediator.Publish(ViewModelMessage.SelectTour, SelectedTour);
                 RaisePropertyChangedEvent();
             }
         }
@@ -176,7 +180,7 @@ namespace Tour_Planner.ViewModels
 
         private void DisplayAddTourLog()
         {
-            var viewModel = new AddTourLogViewModel(service, mediator);
+            var viewModel = new AddTourLogViewModel(service, mediator, SelectedTour!);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)

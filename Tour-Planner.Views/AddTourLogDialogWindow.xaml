@@ -40,7 +40,7 @@
         <wpfTool:TimeSpanUpDown Value="{Binding TotalTime,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" HorizontalAlignment="Left" Margin="165,114,0,276" Minimum="00:00:00:00" Width="120"></wpfTool:TimeSpanUpDown>
 
         <Label Content="Date" HorizontalAlignment="Center" Margin="0,110,0,0" VerticalAlignment="Top"/>
-        <wpfTool:DateTimePicker Value="{Binding DateAndTime,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" HorizontalAlignment="Left" Margin="496,114,0,276" Width="220"></wpfTool:DateTimePicker>
+        <wpfTool:DateTimePicker Value="{Binding DateTime,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" HorizontalAlignment="Left" Margin="496,114,0,276" Width="220"></wpfTool:DateTimePicker>
 
         <Label Content="Comment" HorizontalAlignment="Left" Margin="51,145,0,0" VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" Width="451" Margin="165,149,0,0" />
