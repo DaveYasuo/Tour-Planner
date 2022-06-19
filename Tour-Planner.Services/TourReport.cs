@@ -12,6 +12,7 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Models;
 
 namespace Tour_Planner.Services
@@ -19,11 +20,11 @@ namespace Tour_Planner.Services
 
     public class TourReport
     {
+        string folderPath = ".\\..\\..\\..\\..\\Reports/";
 
         public void CreateTourReport(Tour tour ,List<TourLog> tourLogs)
         {
             //const string LOREM_IPSUM_TEXT = "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-            string folderPath = ".\\..\\..\\..\\..\\Reports/";
             string TARGET_PDF = ".\\..\\..\\..\\..\\Reports/" + tour.Title + ".pdf";
             string imagePath = ".\\..\\..\\..\\..\\RouteImages/";
 
@@ -85,6 +86,101 @@ namespace Tour_Planner.Services
             Console.WriteLine("Pdf Created");
 
             document.Close();
+        }
+
+        public void CreateSummaryReport(List<Tour> tours,List<TourLog> tourLogs)
+        {
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+            string TARGET_PDF = ".\\..\\..\\..\\..\\Reports/"+"Summary_"+DateTime.Today+ ".pdf";
+
+            PdfWriter writer = new PdfWriter(TARGET_PDF);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+
+            Paragraph TitleHeader = new Paragraph("Summary")
+                    .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
+                    .SetFontSize(14)
+                    .SetBold()
+                    .SetFontColor(ColorConstants.RED);
+
+            document.Add(TitleHeader);
+            Table table = new Table(UnitValue.CreatePercentArray(5)).UseAllAvailableWidth();
+            table.AddHeaderCell(getHeaderCell("Title"));
+            table.AddHeaderCell(getHeaderCell("Average time"));
+            table.AddHeaderCell(getHeaderCell("Average distance"));
+            table.AddHeaderCell(getHeaderCell("Rating"));
+            table.SetFontSize(14).SetBackgroundColor(ColorConstants.WHITE);
+            foreach (Tour tour in tours)
+            {
+                List<TourLog> tourLogsFromTour = GetAllTourLogsFromTour(tourLogs, tour);
+                table.AddCell(tour.Title);
+                table.AddCell(GetAverageTime(tourLogsFromTour).ToString());
+                table.AddCell(GetAverageDistance(tourLogsFromTour).ToString());
+                table.AddCell(GetAverageRating(tourLogsFromTour).ToString());
+            }
+
+            document.Add(table);
+            document.Close();
+        }
+        
+        private TimeSpan GetAverageTime(List<TourLog> tourLogs)
+        {
+            TimeSpan averageTime = TimeSpan.Zero;
+            TimeSpan addedTime = TimeSpan.Zero;
+            foreach(TourLog tourLog in tourLogs)
+            {
+                addedTime = addedTime.Add(tourLog.TotalTime);
+            }
+            averageTime = addedTime.Divide(tourLogs.Count());
+            return averageTime;
+        }
+        private Rating GetAverageRating(List<TourLog> tourLogs)
+        {
+            Rating rating;
+            float averageRating = 0;
+            int addedRating = 0;
+            foreach (TourLog tourLog in tourLogs)
+            {
+                addedRating += (int) tourLog.Rating;
+            }
+            averageRating = addedRating / tourLogs.Count();
+            Math.Round(averageRating);
+            switch (averageRating)
+            {
+                case 0: rating = Rating.very_good; break;
+                case 1: rating = Rating.good; break;
+                case 2: rating = Rating.medium; break;
+                case 3: rating = Rating.bad; break;
+                case 4: rating = Rating.very_bad; break;
+                default: rating = Rating.very_bad; break;
+            }
+            return rating;
+        }
+
+        private double GetAverageDistance(List<TourLog> tourLogs)
+        {
+            double averageDistance = 0;
+            double addedDistance = 0;
+            foreach(TourLog tourLog in tourLogs)
+            {
+                addedDistance += tourLog.Distance;
+            }
+            averageDistance = addedDistance / tourLogs.Count();
+            averageDistance = Math.Round(averageDistance,3);
+            return averageDistance;
+        }
+
+        private List<TourLog> GetAllTourLogsFromTour(List<TourLog> tourLogs, Tour tour)
+        {
+            List<TourLog> tourLogsForTour = new List<TourLog>();
+            foreach(TourLog tourLog in tourLogs)
+            {
+                if(tour.Id == tourLog.TourId) tourLogsForTour.Add(tourLog); 
+            }
+            return tourLogsForTour;
         }
 
         private static Cell getHeaderCell(String s)
