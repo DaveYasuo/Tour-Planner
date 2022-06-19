@@ -91,6 +91,7 @@ namespace Server.Rest_API.SqlServer
                         total_time INTERVAL NOT NULL,
                         rating ratingtype NOT NULL,
                         difficulty difficultytype NOT NULL,
+                        distance DOUBLE PRECISION NOT NULL,
                         comment TEXT NOT NULL,
                         PRIMARY KEY(id),
                         CONSTRAINT fk_tour

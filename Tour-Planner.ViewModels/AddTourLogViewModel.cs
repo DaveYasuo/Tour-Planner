@@ -17,12 +17,14 @@ namespace Tour_Planner.ViewModels
         private Difficulty? _selectedDifficulty;
         private Rating? _ratingItem;
         private string _comment;
+        private double _distance;
         private TimeSpan _totalTime;
         private DateTime _dateTime = DateTime.Now;
         private IMediator mediator;
         private Tour tour;
         public string Error { get; set; } = "";
 
+        bool distanceHasBeenTouched = false;
         bool selectedRatingHasBeenTouched = false;
         bool totalTimeHasBeenTouched = false;
         bool dateAndTimeHasBeenTouched = false;
@@ -36,12 +38,13 @@ namespace Tour_Planner.ViewModels
             _selectedDifficulty = null;
             _ratingItem = null;
             _comment = "";
+            _distance = 0;
             this.service = service;
             this.mediator = mediator;
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             SaveCommand = new RelayCommand(async _ =>
             {
-                List<string> testableProperty = new() { nameof(SelectedDifficulty), nameof(SelectedRating), nameof(Comment), nameof(TotalTime), nameof(DateTime) };
+                List<string> testableProperty = new() { nameof(SelectedDifficulty), nameof(SelectedRating), nameof(Comment), nameof(TotalTime), nameof(DateTime), nameof(Distance) };
                 bool hasError = false;
                 foreach (var item in testableProperty)
                 {
@@ -57,7 +60,7 @@ namespace Tour_Planner.ViewModels
                     return;
                 }
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                TourLog newTour = new(tour.Id, DateTime, TotalTime, (Rating)SelectedRating!, (Difficulty)SelectedDifficulty!, Comment); // Muss noch id holen
+                TourLog newTour = new(tour.Id, DateTime, TotalTime, (Rating)SelectedRating!, (Difficulty)SelectedDifficulty!, Distance, Comment); // Muss noch id holen
                 var result = await service.AddTourLog(newTour);
                 mediator.Publish(ViewModelMessage.UpdateTourLogList, null);
             });
@@ -121,6 +124,16 @@ namespace Tour_Planner.ViewModels
                 RaisePropertyChangedEvent();
             }
         }
+        public double Distance
+        {
+            get => _distance;
+            set
+            {
+                if (_distance == value) return;
+                _distance = value;
+                RaisePropertyChangedEvent();
+            }
+        }
         private string GetErrorForProperty(string propertyName, bool onSubmit)
         {
 
@@ -151,13 +164,25 @@ namespace Tour_Planner.ViewModels
                     }
                     totalTimeHasBeenTouched = true;
                     break;
-                case "DateAndTime":
+                case "DateTime":
                     if ((string.IsNullOrEmpty(_dateTime.ToString()) || _dateTime.ToString().Trim().Length == 0) && (dateAndTimeHasBeenTouched || onSubmit))
                     {
                         Error = "Date and time cannot be empty!";
                         return Error;
                     }
                     dateAndTimeHasBeenTouched = true;
+                    break;
+                case "Distance":
+                    if (Distance <= 0 && (distanceHasBeenTouched || onSubmit))
+                    {
+                        if (onSubmit)
+                        {
+                            RaisePropertyChangedEvent(nameof(Distance));
+                        }
+                        Error = "Distance cannot be empty!";
+                        return Error;
+                    }
+                    distanceHasBeenTouched = true;
                     break;
                 case "Comment":
                     if (!string.IsNullOrEmpty(_comment) && _comment.Trim().Length == 0 && commentHasBeenTouched)
@@ -189,7 +214,6 @@ namespace Tour_Planner.ViewModels
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
-
 
         public event EventHandler<DialogCloseRequestedEventArgs>? CloseRequested;
     }
