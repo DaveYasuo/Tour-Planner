@@ -10,6 +10,7 @@ namespace Tour_Planner.Services.Interfaces
         Task<bool> AddTourLog(TourLog tourLog);
         Task<List<Tour>?> GetTours();
         Task<bool> DeleteTour(int id);
+        Task<bool> DeleteTourLog(int id);
         Task<bool> UpdateTour(Tour tour);
         Task<List<TourLog>?> GetAllTourLogs();
         Task<List<TourLog>?> GetAllTourLogsFromTour(Tour tour);

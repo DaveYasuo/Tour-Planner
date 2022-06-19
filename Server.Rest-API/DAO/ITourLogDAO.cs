@@ -8,5 +8,6 @@ namespace Server.Rest_API.DAO
     {
         TourLog AddNewTourLog(TourLog newTourLog);
         IEnumerable<TourLog> GetAllTourLogs();
+        void DeleteTourLog(int id);
     }
 }
