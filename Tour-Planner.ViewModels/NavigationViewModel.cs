@@ -55,6 +55,12 @@ namespace Tour_Planner.ViewModels
             {
                 MessageBox.Show("Could not open browser for the help page.\n" + $"Please visit '{url}' manually.", "Tour-Planner - Help");
             }
+                mediator.Publish(ViewModelMessage.EditTour, null);
+            });
+            ExportTourCommand = new RelayCommand(_ => ExportTour());
+            ImportTourCommand = new RelayCommand(async (_) => await ImportTour());
+            CreateTourReportCommand = new RelayCommand(_ => CreateTourReport());
+            CreateSummaryReportCommand = new RelayCommand(_ => CreateSummaryReport());
         }
 
         private void SetSelectedTour(object? obj = null)
@@ -89,6 +95,12 @@ namespace Tour_Planner.ViewModels
                 MessageBox.Show("Select a tour to report");
             }
         }
+        private async Task CreateSummaryReport()
+        {
+            List<TourLog> tourLogs = await service.GetAllTourLogs();
+            List<Tour> tours = await service.GetTours();
+            tr.CreateSummaryReport(tours, tourLogs);
+        }
 
 
         public ICommand DisplayAddTourCommand { get; }
@@ -98,5 +110,6 @@ namespace Tour_Planner.ViewModels
         public ICommand ImportTourCommand { get; }
         public ICommand CreateTourReportCommand { get; }
         public ICommand ShowHelpCommand { get; }
+        public ICommand CreateSummaryReportCommand { get; }
     }
 }
