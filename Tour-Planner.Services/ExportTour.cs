@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows;
 using Tour_Planner.Models;
 
 namespace Tour_Planner.Services
@@ -22,10 +15,10 @@ namespace Tour_Planner.Services
             {
                 Directory.CreateDirectory(folderPath);
             }
-            using (StreamWriter sw = new StreamWriter(folderPath + fileName, false))
-            {
-                sw.Write(json);
-            };
+
+            using StreamWriter sw = new StreamWriter(folderPath + fileName, false);
+            sw.Write(json);
+            ;
 
             return true;
         }

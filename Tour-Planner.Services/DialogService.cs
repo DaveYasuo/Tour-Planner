@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using Tour_Planner.Services.Interfaces;
 
 namespace Tour_Planner.Services

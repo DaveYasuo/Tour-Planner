@@ -1,5 +1,3 @@
-using System;
-
 namespace Tour_Planner.DataModels
 {
     public class Class1

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Tour_Planner.DataModels.Enums;
@@ -16,9 +15,6 @@ namespace Tour_Planner.ViewModels
 {
     public class EditTourLogViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
-        private IRestService service;
-        private IMediator mediator;
-        private TourLog selectedTourLog;
         private Difficulty _selectedDifficulty;
         private Rating _ratingItem;
         private string _comment;
@@ -27,55 +23,48 @@ namespace Tour_Planner.ViewModels
         private string _distance;
         public string Error { get; set; } = "";
 
-        bool distanceHasBeenTouched = false;
-        bool totalTimeHasBeenTouched = false;
-        bool dateAndTimeHasBeenTouched = false;
-        bool commentHasBeenTouched = false;
+        private bool _distanceHasBeenTouched;
+        private bool _totalTimeHasBeenTouched;
+        private bool _dateAndTimeHasBeenTouched;
+        private bool _commentHasBeenTouched;
 
         public EditTourLogViewModel(IRestService service, IMediator mediator, TourLog selectedTourLog)
         {
-            this.service = service;
-            this.mediator = mediator;
-            this.selectedTourLog = selectedTourLog;
             _selectedDifficulty = selectedTourLog.Difficulty;
             _ratingItem = selectedTourLog.Rating;
             _comment = selectedTourLog.Comment;
             _totalTime = selectedTourLog.TotalTime;
             _dateTime = selectedTourLog.DateTime;
-            _distance = selectedTourLog.Distance.ToString();
+            _distance = selectedTourLog.Distance.ToString(CultureInfo.InvariantCulture);
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
-            SaveCommand = new RelayCommand(async _ =>
+
+            async void Execute(object _)
             {
                 List<string> testableProperty = new() { nameof(Comment), nameof(TotalTime), nameof(DateTime), nameof(Distance) };
                 bool hasError = false;
-                foreach (var item in testableProperty)
+                foreach (var item in testableProperty.Where(item => GetErrorForProperty(item, true) is not ""))
                 {
-
-                    if (GetErrorForProperty(item, true) is not "")
-                    {
-                        hasError = true;
-                    }
+                    hasError = true;
                 }
+
                 if (hasError)
                 {
                     MessageBox.Show("Please fill out the form before submitting");
                     return;
                 }
+
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
                 TourLog newTour = new(selectedTourLog.Id, selectedTourLog.TourId, DateTime, TotalTime, SelectedRating, SelectedDifficulty, double.Parse(Distance), Comment);
                 var result = await service.UpdateTourLog(newTour);
                 mediator.Publish(ViewModelMessage.UpdateTourLogList, null);
-            });
-        }
-
-
-        public string this[string propertyName]
-        {
-            get
-            {
-                return GetErrorForProperty(propertyName, false);
             }
+
+            SaveCommand = new RelayCommand(Execute);
         }
+
+
+        public string this[string propertyName] => GetErrorForProperty(propertyName, false);
+
         public Difficulty SelectedDifficulty
         {
             get => _selectedDifficulty;
@@ -143,7 +132,7 @@ namespace Tour_Planner.ViewModels
             switch (propertyName)
             {
                 case "TotalTime":
-                    if (TotalTime == TimeSpan.Zero && (totalTimeHasBeenTouched || onSubmit))
+                    if (TotalTime == TimeSpan.Zero && (_totalTimeHasBeenTouched || onSubmit))
                     {
                         if (onSubmit)
                         {
@@ -152,18 +141,18 @@ namespace Tour_Planner.ViewModels
                         Error = "Total time cannot be zero!";
                         return Error;
                     }
-                    totalTimeHasBeenTouched = true;
+                    _totalTimeHasBeenTouched = true;
                     break;
                 case "DateTime":
-                    if ((string.IsNullOrEmpty(DateTime.ToString()) || DateTime.ToString().Trim().Length == 0) && (dateAndTimeHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(DateTime.ToString()) || DateTime.ToString().Trim().Length == 0) && (_dateAndTimeHasBeenTouched || onSubmit))
                     {
                         Error = "Date and time cannot be empty!";
                         return Error;
                     }
-                    dateAndTimeHasBeenTouched = true;
+                    _dateAndTimeHasBeenTouched = true;
                     break;
                 case "Distance":
-                    if (Distance == "0" && (distanceHasBeenTouched || onSubmit))
+                    if (Distance == "0" && (_distanceHasBeenTouched || onSubmit))
                     {
                         if (onSubmit)
                         {
@@ -172,16 +161,16 @@ namespace Tour_Planner.ViewModels
                         Error = "Distance cannot be 0!";
                         return Error;
                     }
-                    distanceHasBeenTouched = true;
+                    _distanceHasBeenTouched = true;
                     break;
                 case "Comment":
-                    if (!string.IsNullOrEmpty(Comment) && Comment.Trim().Length == 0 && commentHasBeenTouched)
+                    if (!string.IsNullOrEmpty(Comment) && Comment.Trim().Length == 0 && _commentHasBeenTouched)
                     {
 
                         Error = "Comment cannot be only spaces!";
                         return Error;
                     }
-                    commentHasBeenTouched = true;
+                    _commentHasBeenTouched = true;
                     break;
             }
             return Error;

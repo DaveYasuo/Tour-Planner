@@ -1,5 +1,3 @@
-using System;
-
 namespace Tour_Planner.Views
 {
     public class Class1

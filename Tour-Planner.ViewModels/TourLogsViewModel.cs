@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -18,45 +15,46 @@ namespace Tour_Planner.ViewModels
     {
         public ObservableCollection<TourLog> ListToursLogs { get; set; }
 
-        private Tour? tour;
+        private Tour? _tour;
         private TourLog? _selectedTourLog;
-        private readonly IMediator mediator;
-        private readonly IRestService service;
+        private readonly IMediator _mediator;
+        private readonly IRestService _service;
         private readonly IDialogService _dialogService;
-        List<TourLog> AllTourLogs = new();
+        private List<TourLog> _allTourLogs = new();
 
         public TourLogsViewModel(IDialogService dialogService, IRestService service, IMediator mediator)
         {
-            this.mediator = mediator;
-            this.service = service;
+            _mediator = mediator;
+            _service = service;
             _dialogService = dialogService;
             ListToursLogs = new ObservableCollection<TourLog>();
-            mediator.Subscribe(UpdateTourLogs, ViewModelMessage.SelectTour);
-            mediator.Subscribe(UpdateTourLogs, ViewModelMessage.UpdateTourLogList);
+            mediator.Subscribe(UpdateTourLogsFromNewTour, ViewModelMessage.SelectTour);
+            mediator.Subscribe(UpdateTourLogsFromNewTour, ViewModelMessage.UpdateTourLogList);
             mediator.Subscribe(DisplayEditTourLog, ViewModelMessage.EditTourLog);
-            tour = null;
+            _tour = null;
             DisplayAddTourLogCommand = new RelayCommand(_ => DisplayAddTourLog());
-            DeleteTourLogCommand = new RelayCommand(async _ => await DeleteTourLog());
+            DeleteTourLogCommand = new RelayCommand(ExecuteDeleteTourLog);
             DisplayEditTourLogCommand = new RelayCommand(_ => DisplayEditTourLog());
+        }
+
+        private async void ExecuteDeleteTourLog(object _)
+        {
+            await DeleteTourLog();
         }
 
         private void DisplayAddTourLog()
         {
-            if (tour == null)
+            if (_tour == null)
             {
                 MessageBox.Show("Select tour before adding a tourlog", "Error");
                 return;
             }
-            var viewModel = new AddTourLogViewModel(service, mediator, tour);
+            var viewModel = new AddTourLogViewModel(_service, _mediator, _tour);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
             {
                 _ = UpdateTourLogs();
-            }
-            else
-            {
-                // cancelled
             }
         }
         private void DisplayEditTourLog(object? obj = null)
@@ -66,36 +64,32 @@ namespace Tour_Planner.ViewModels
                 MessageBox.Show("Select tourlog before editing a tourlog", "Error");
                 return;
             }
-            var viewModel = new EditTourLogViewModel(service, mediator, SelectedTourLog);
+            var viewModel = new EditTourLogViewModel(_service, _mediator, SelectedTourLog);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
             {
                 _ = UpdateTourLogs();
             }
-            else
-            {
-                // cancelled
-            }
         }
 
-        private void UpdateTourLogs(object? obj = null)
+        private void UpdateTourLogsFromNewTour(object? obj = null)
         {
             if (obj != null)
             {
-                tour = (Tour)obj!;
+                _tour = (Tour)obj!;
             }
             _ = UpdateTourLogs();
         }
         private async Task UpdateTourLogs()
         {
-            if (tour is null) return;
-            List<TourLog>? tourLogs = await service.GetAllTourLogsFromTour(tour);
+            if (_tour is null) return;
+            List<TourLog>? tourLogs = await _service.GetAllTourLogsFromTour(_tour);
             if (tourLogs is not null)
             {
                 ListToursLogs.Clear();
-                AllTourLogs = tourLogs;
-                foreach (var item in AllTourLogs)
+                _allTourLogs = tourLogs;
+                foreach (var item in _allTourLogs)
                 {
                     ListToursLogs.Add(item);
                 }
@@ -109,14 +103,12 @@ namespace Tour_Planner.ViewModels
                 MessageBox.Show("Please select a tourlog to delete!", "Error");
                 return;
             }
-            else
+
+            bool result = await _service.DeleteTourLog(SelectedTourLog.Id);
+            if (result)
             {
-                bool result = await service.DeleteTourLog(SelectedTourLog.Id);
-                if (result)
-                {
-                    await UpdateTourLogs();
-                    SelectedTourLog = null;
-                }
+                await UpdateTourLogs();
+                SelectedTourLog = null;
             }
         }
 
@@ -127,7 +119,7 @@ namespace Tour_Planner.ViewModels
             {
                 if (_selectedTourLog == value) return;
                 _selectedTourLog = value;
-                mediator.Publish(ViewModelMessage.SelectTourLog, SelectedTourLog);
+                _mediator.Publish(ViewModelMessage.SelectTourLog, SelectedTourLog);
                 RaisePropertyChangedEvent();
             }
         }

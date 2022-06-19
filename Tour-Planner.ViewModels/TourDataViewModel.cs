@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
-using Tour_Planner.Services;
 using Tour_Planner.Services.Interfaces;
 
 namespace Tour_Planner.ViewModels
 {
     public class TourDataViewModel : BaseViewModel
     {
-        private readonly IMediator mediator;
-        private IRestService service;
         private string _description;
         private string _title;
         private string _origin;
@@ -25,10 +18,8 @@ namespace Tour_Planner.ViewModels
         private double _distance;
         private TimeSpan _duration;
 
-        public TourDataViewModel(IRestService service, IMediator mediator)
+        public TourDataViewModel(IMediator mediator)
         {
-            this.mediator = mediator;
-            this.service = service;
             _duration = default;
             _distance = default;
             _title = "";
@@ -41,8 +32,8 @@ namespace Tour_Planner.ViewModels
 
         private void ShowTourData(object? o)
         {
-            Tour tour = (Tour)o!;
-            if (tour == null) return;
+            if (o == null) return;
+            Tour tour = (Tour)o;
             Title = tour.Title;
             Origin = tour.Origin;
             Destination = tour.Destination;
@@ -50,14 +41,7 @@ namespace Tour_Planner.ViewModels
             RouteType = tour.RouteType;
             Distance = tour.Distance;
             Duration = tour.Duration;
-            if (string.IsNullOrEmpty(tour.ImagePath))
-            {
-                RouteImagePath = null;
-            }
-            else
-            {
-                RouteImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\..\\..\\..\\..\\RouteImages\\" + tour.ImagePath);
-            }
+            RouteImagePath = string.IsNullOrEmpty(tour.ImagePath) ? null : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\..\\..\\..\\..\\RouteImages\\" + tour.ImagePath);
         }
         public string Title
         {
@@ -114,7 +98,7 @@ namespace Tour_Planner.ViewModels
             get => _distance;
             set
             {
-                if (_distance == value) return;
+                if (Math.Abs(_distance - value) < 0.001) return;
                 _distance = value;
                 RaisePropertyChangedEvent();
             }

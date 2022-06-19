@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using iText.IO.Font.Constants;
+﻿using iText.IO.Font.Constants;
 using iText.IO.Image;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
@@ -12,6 +6,11 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Models;
 
@@ -25,8 +24,8 @@ namespace Tour_Planner.Services
         public void CreateTourReport(Tour tour, List<TourLog> tourLogs)
         {
             //const string LOREM_IPSUM_TEXT = "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-            string TARGET_PDF = ".\\..\\..\\..\\..\\Reports/" + tour.Title + ".pdf";
-            string imagePath = ".\\..\\..\\..\\..\\RouteImages/";
+            string targetPdf = ".\\..\\..\\..\\..\\Reports/" + tour.Title + ".pdf";
+            const string imagePath = ".\\..\\..\\..\\..\\RouteImages/";
 
 
             if (!Directory.Exists(folderPath))
@@ -34,16 +33,16 @@ namespace Tour_Planner.Services
                 Directory.CreateDirectory(folderPath);
             }
 
-            PdfWriter writer = new PdfWriter(TARGET_PDF);
+            PdfWriter writer = new PdfWriter(targetPdf);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-            Paragraph TitleHeader = new Paragraph("Tour Details of: " + tour.Title)
+            Paragraph titleHeader = new Paragraph("Tour Details of: " + tour.Title)
                     .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                     .SetFontSize(14)
                     .SetBold()
                     .SetFontColor(ColorConstants.RED);
-            document.Add(TitleHeader);
+            document.Add(titleHeader);
             document.Add(new Paragraph(tour.Description));
             document.Add(new Paragraph("Start: " + tour.Origin));
             document.Add(new Paragraph("Destination: " + tour.Destination));
@@ -61,26 +60,26 @@ namespace Tour_Planner.Services
             document.Add(image.SetAutoScale(true));
 
             //TourLogs
-            Paragraph TourlogsHeader = new Paragraph("Tourlogs")
+            Paragraph tourlogsHeader = new Paragraph("Tourlogs")
                 .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN))
                 .SetFontSize(18)
                 .SetBold();
-            document.Add(TourlogsHeader);
+            document.Add(tourlogsHeader);
             Table table = new Table(UnitValue.CreatePercentArray(7)).UseAllAvailableWidth();
-            table.AddHeaderCell(getHeaderCell("Date and time"));
-            table.AddHeaderCell(getHeaderCell("Total time"));
-            table.AddHeaderCell(getHeaderCell("Distance"));
-            table.AddHeaderCell(getHeaderCell("Km/h"));
-            table.AddHeaderCell(getHeaderCell("Rating"));
-            table.AddHeaderCell(getHeaderCell("Difficulty"));
-            table.AddHeaderCell(getHeaderCell("Comment"));
+            table.AddHeaderCell(GetHeaderCell("Date and time"));
+            table.AddHeaderCell(GetHeaderCell("Total time"));
+            table.AddHeaderCell(GetHeaderCell("Distance"));
+            table.AddHeaderCell(GetHeaderCell("Km/h"));
+            table.AddHeaderCell(GetHeaderCell("Rating"));
+            table.AddHeaderCell(GetHeaderCell("Difficulty"));
+            table.AddHeaderCell(GetHeaderCell("Comment"));
             table.SetFontSize(14).SetBackgroundColor(ColorConstants.WHITE);
             foreach (TourLog tourLog in tourLogs)
             {
-                table.AddCell(tourLog.DateTime.ToString());
+                table.AddCell(tourLog.DateTime.ToString(CultureInfo.InvariantCulture));
                 table.AddCell(tourLog.TotalTime.ToString());
-                table.AddCell(tourLog.Distance.ToString());
-                table.AddCell(Math.Round((tourLog.Distance / tourLog.TotalTime.TotalHours), 1).ToString());
+                table.AddCell(tourLog.Distance.ToString(CultureInfo.InvariantCulture));
+                table.AddCell(Math.Round((tourLog.Distance / tourLog.TotalTime.TotalHours), 1).ToString(CultureInfo.InvariantCulture));
                 table.AddCell(tourLog.Rating.ToString());
                 table.AddCell(tourLog.Difficulty.ToString());
                 table.AddCell(tourLog.Comment);
@@ -99,25 +98,25 @@ namespace Tour_Planner.Services
             {
                 Directory.CreateDirectory(folderPath);
             }
-            string TARGET_PDF = ".\\..\\..\\..\\..\\Reports/" + "Summary_" + ".pdf";
+            string targetPdf = ".\\..\\..\\..\\..\\Reports/" + "Summary_" + ".pdf";
 
-            PdfWriter writer = new PdfWriter(TARGET_PDF);
+            PdfWriter writer = new PdfWriter(targetPdf);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-            Paragraph TitleHeader = new Paragraph("Summary")
+            Paragraph titleHeader = new Paragraph("Summary")
                     .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                     .SetFontSize(14)
                     .SetBold()
                     .SetFontColor(ColorConstants.RED);
 
-            document.Add(TitleHeader);
+            document.Add(titleHeader);
             Table table = new Table(UnitValue.CreatePercentArray(5)).UseAllAvailableWidth();
-            table.AddHeaderCell(getHeaderCell("Title"));
-            table.AddHeaderCell(getHeaderCell("Average time"));
-            table.AddHeaderCell(getHeaderCell("Average distance"));
-            table.AddHeaderCell(getHeaderCell("Average Km/h"));
-            table.AddHeaderCell(getHeaderCell("Rating"));
+            table.AddHeaderCell(GetHeaderCell("Title"));
+            table.AddHeaderCell(GetHeaderCell("Average time"));
+            table.AddHeaderCell(GetHeaderCell("Average distance"));
+            table.AddHeaderCell(GetHeaderCell("Average Km/h"));
+            table.AddHeaderCell(GetHeaderCell("Rating"));
             table.SetFontSize(14).SetBackgroundColor(ColorConstants.WHITE);
             foreach (Tour tour in tours)
             {
@@ -129,8 +128,8 @@ namespace Tour_Planner.Services
                 if (tourLogsFromTour.Count != 0)
                 {
                     table.AddCell(averageTime.ToString());
-                    table.AddCell(averageDistance.ToString());
-                    table.AddCell(Math.Round(averageSpeed, 2).ToString());
+                    table.AddCell(averageDistance.ToString(CultureInfo.InvariantCulture));
+                    table.AddCell(Math.Round(averageSpeed, 2).ToString(CultureInfo.InvariantCulture));
                     table.AddCell(GetAverageRating(tourLogsFromTour).ToString());
                 }
                 else
@@ -148,44 +147,35 @@ namespace Tour_Planner.Services
 
         private TimeSpan GetAverageTime(List<TourLog> tourLogs)
         {
-            TimeSpan averageTime = TimeSpan.Zero;
             TimeSpan addedTime = TimeSpan.Zero;
             foreach (TourLog tourLog in tourLogs)
             {
                 addedTime = addedTime.Add(tourLog.TotalTime);
             }
-            averageTime = addedTime.Divide(tourLogs.Count());
+            var averageTime = addedTime.Divide(tourLogs.Count);
             return averageTime;
         }
         private Rating GetAverageRating(List<TourLog> tourLogs)
         {
             Rating rating;
-            int addedRating = 0;
-            foreach (TourLog tourLog in tourLogs)
+            int addedRating = tourLogs.Sum(tourLog => (int)tourLog.Rating);
+            float averageRating = addedRating / (float)tourLogs.Count;
+            double roundAverageRating = Math.Round(averageRating);
+            rating = roundAverageRating switch
             {
-                addedRating += (int)tourLog.Rating;
-            }
-            float averageRating = addedRating / tourLogs.Count();
-            Math.Round(averageRating);
-            switch (averageRating)
-            {
-                case 0: rating = Rating.very_good; break;
-                case 1: rating = Rating.good; break;
-                case 2: rating = Rating.medium; break;
-                case 3: rating = Rating.bad; break;
-                case 4: rating = Rating.very_bad; break;
-                default: rating = Rating.very_bad; break;
-            }
+                0 => Rating.very_good,
+                1 => Rating.good,
+                2 => Rating.medium,
+                3 => Rating.bad,
+                4 => Rating.very_bad,
+                _ => Rating.very_bad
+            };
             return rating;
         }
 
         private double GetAverageDistance(List<TourLog> tourLogs)
         {
-            double addedDistance = 0;
-            foreach (TourLog tourLog in tourLogs)
-            {
-                addedDistance += tourLog.Distance;
-            }
+            double addedDistance = tourLogs.Sum(tourLog => tourLog.Distance);
             double averageDistance = addedDistance / tourLogs.Count();
             averageDistance = Math.Round(averageDistance, 3);
             return averageDistance;
@@ -193,60 +183,12 @@ namespace Tour_Planner.Services
 
         private List<TourLog> GetAllTourLogsFromTour(List<TourLog> tourLogs, Tour tour)
         {
-            List<TourLog> tourLogsForTour = new();
-            foreach (TourLog tourLog in tourLogs)
-            {
-                if (tour.Id == tourLog.TourId) tourLogsForTour.Add(tourLog);
-            }
-            return tourLogsForTour;
+            return tourLogs.Where(tourLog => tour.Id == tourLog.TourId).ToList();
         }
 
-        private static Cell getHeaderCell(string s)
+        private static Cell GetHeaderCell(string s)
         {
             return new Cell().Add(new Paragraph(s)).SetBold().SetBackgroundColor(ColorConstants.GRAY);
         }
     }
 }
-
-/*
-Paragraph listHeader = new Paragraph("Lorem Ipsum ...")
-        .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD))
-        .SetFontSize(14)
-        .SetBold()
-        .SetFontColor(ColorConstants.BLUE);
-List list = new List()
-        .SetSymbolIndent(12)
-        .SetListSymbol("\u2022")
-        .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD));
-list.Add(new ListItem("lorem ipsum 1"))
-        .Add(new ListItem("lorem ipsum 2"))
-        .Add(new ListItem("lorem ipsum 3"))
-        .Add(new ListItem("lorem ipsum 4"))
-        .Add(new ListItem("lorem ipsum 5"))
-        .Add(new ListItem("lorem ipsum 6"));
-document.Add(listHeader);
-document.Add(list);
-
-Paragraph tableHeader = new Paragraph("Lorem Ipsum Table ...")
-        .SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN))
-        .SetFontSize(18)
-        .SetBold()
-        .SetFontColor(ColorConstants.GREEN);
-document.Add(tableHeader);
-Table table = new Table(UnitValue.CreatePercentArray(4)).UseAllAvailableWidth();
-table.AddHeaderCell(getHeaderCell("Ipsum 1"));
-table.AddHeaderCell(getHeaderCell("Ipsum 2"));
-table.AddHeaderCell(getHeaderCell("Ipsum 3"));
-table.AddHeaderCell(getHeaderCell("Ipsum 4"));
-table.SetFontSize(14).SetBackgroundColor(ColorConstants.WHITE);
-table.AddCell("lorem 1");
-table.AddCell("lorem 2");
-table.AddCell("lorem 3");
-table.AddCell("lorem 4");
-document.Add(table);
-
-Console.WriteLine("Pdf Created");
-
-
-document.Add(new AreaBreak());
-*/

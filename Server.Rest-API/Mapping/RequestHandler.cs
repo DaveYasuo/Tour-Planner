@@ -2,19 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.Rest_API.Mapping
 {
     public class RequestHandler : IRequestHandler
     {
-        readonly IController tourController;
-        readonly IController tourLogController;
+        private readonly IController _tourController;
+        private readonly IController _tourLogController;
         public RequestHandler()
         {
-            tourController = new TourController();
-            tourLogController = new TourLogController();
+            _tourController = new TourController();
+            _tourLogController = new TourLogController();
         }
 
         public IController GetController(string controller)
@@ -23,8 +21,8 @@ namespace Server.Rest_API.Mapping
 
             return endPoint switch
             {
-                EndPoint.Tour => tourController,
-                EndPoint.TourLog => tourLogController,
+                EndPoint.Tour => _tourController,
+                EndPoint.TourLog => _tourLogController,
                 _ => null
             };
         }

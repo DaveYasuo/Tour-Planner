@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using Tour_Planner.Services.Interfaces;
+﻿using Tour_Planner.Services.Interfaces;
 
 namespace Tour_Planner.Views
 {
@@ -11,7 +10,7 @@ namespace Tour_Planner.Views
         public AddTourLogDialogWindow()
         {
             InitializeComponent();
-    
+
         }
     }
 }

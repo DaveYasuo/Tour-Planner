@@ -1,8 +1,8 @@
-﻿using System;
-using System.Reflection;
-using log4net;
+﻿using log4net;
 using Npgsql;
 using Server.Rest_API.Common;
+using System;
+using System.Reflection;
 using Tour_Planner.DataModels.Enums;
 
 namespace Server.Rest_API.SqlServer

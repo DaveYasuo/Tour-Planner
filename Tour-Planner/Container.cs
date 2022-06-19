@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
 using Tour_Planner.Extensions;
 using Tour_Planner.Services;
 using Tour_Planner.Services.Interfaces;
@@ -10,7 +9,7 @@ namespace Tour_Planner
 {
     public class Container
     {
-        private readonly ServiceProvider serviceProvider;
+        private readonly ServiceProvider _serviceProvider;
 
         public Container()
         {
@@ -27,17 +26,17 @@ namespace Tour_Planner
             services.AddSingleton<NavigationViewModel>();
             services.AddSingleton<TourLogsViewModel>();
 
-            serviceProvider = services.BuildServiceProvider();
-            serviceProvider.GetService<IDialogService>()!.Register<AddTourViewModel, AddTourDialogWindow>();
-            serviceProvider.GetService<IDialogService>()!.Register<AddTourLogViewModel, AddTourLogDialogWindow>();        
-            serviceProvider.GetService<IDialogService>()!.Register<EditTourViewModel, EditTourDialogWindow>(); 
-            serviceProvider.GetService<IDialogService>()!.Register<EditTourLogViewModel, EditTourLogDialogWindow>();
+            _serviceProvider = services.BuildServiceProvider();
+            _serviceProvider.GetService<IDialogService>()!.Register<AddTourViewModel, AddTourDialogWindow>();
+            _serviceProvider.GetService<IDialogService>()!.Register<AddTourLogViewModel, AddTourLogDialogWindow>();
+            _serviceProvider.GetService<IDialogService>()!.Register<EditTourViewModel, EditTourDialogWindow>();
+            _serviceProvider.GetService<IDialogService>()!.Register<EditTourLogViewModel, EditTourLogDialogWindow>();
         }
 
-        public ListToursViewModel ListToursViewModel => serviceProvider.GetService<ListToursViewModel>()!;
+        public ListToursViewModel ListToursViewModel => _serviceProvider.GetService<ListToursViewModel>()!;
         //public HomeViewModel HomeViewModel => serviceProvider.GetService<HomeViewModel>()!;
-        public TourDataViewModel TourDataViewModel => serviceProvider.GetService<TourDataViewModel>()!;
-        public NavigationViewModel NavigationViewModel => serviceProvider.GetService<NavigationViewModel>()!;
-        public TourLogsViewModel TourLogsViewModel => serviceProvider.GetService<TourLogsViewModel>()!;
+        public TourDataViewModel TourDataViewModel => _serviceProvider.GetService<TourDataViewModel>()!;
+        public NavigationViewModel NavigationViewModel => _serviceProvider.GetService<NavigationViewModel>()!;
+        public TourLogsViewModel TourLogsViewModel => _serviceProvider.GetService<TourLogsViewModel>()!;
     }
 }

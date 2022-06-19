@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Tour_Planner.Services;
-using Tour_Planner.Services.Interfaces;
 
 namespace Tour_Planner.ViewModels
 {

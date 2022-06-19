@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using log4net;
-using System.Reflection;
+﻿using log4net;
 using Npgsql;
 using Server.Rest_API.Common;
 using Server.Rest_API.DAO;
-using Tour_Planner.Models;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Tour_Planner.DataModels.Enums;
+using Tour_Planner.Models;
 
 namespace Server.Rest_API.SqlServer
 {
@@ -30,21 +29,19 @@ namespace Server.Rest_API.SqlServer
             using var transaction = conn.BeginTransaction();
             try
             {
-                using (var cmd = new NpgsqlCommand("INSERT INTO public.tourlog (id, tour, date_time, total_time, rating, difficulty, distance, comment) VALUES (DEFAULT, @tour, @date_time, @total_time, @rating, @difficulty, @distance, @comment);", conn))
-                {
-                    cmd.Parameters.AddWithValue("tour", tourLog.TourId);
-                    cmd.Parameters.AddWithValue("date_time", tourLog.DateTime);
-                    cmd.Parameters.AddWithValue("total_time", tourLog.TotalTime);
-                    cmd.Parameters.AddWithValue("rating", tourLog.Rating);
-                    cmd.Parameters.AddWithValue("difficulty", tourLog.Difficulty);
-                    cmd.Parameters.AddWithValue("distance", tourLog.Distance);
-                    cmd.Parameters.AddWithValue("comment", tourLog.Comment);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
-                    transaction.Commit();
-                    Log.Info($"Inserted tourLog ");
-                    return tourLog;
-                };
+                using var cmd = new NpgsqlCommand("INSERT INTO public.tourlog (id, tour, date_time, total_time, rating, difficulty, distance, comment) VALUES (DEFAULT, @tour, @date_time, @total_time, @rating, @difficulty, @distance, @comment);", conn);
+                cmd.Parameters.AddWithValue("tour", tourLog.TourId);
+                cmd.Parameters.AddWithValue("date_time", tourLog.DateTime);
+                cmd.Parameters.AddWithValue("total_time", tourLog.TotalTime);
+                cmd.Parameters.AddWithValue("rating", tourLog.Rating);
+                cmd.Parameters.AddWithValue("difficulty", tourLog.Difficulty);
+                cmd.Parameters.AddWithValue("distance", tourLog.Distance);
+                cmd.Parameters.AddWithValue("comment", tourLog.Comment);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+                Log.Info($"Inserted tourLog ");
+                return tourLog;
             }
             catch (Exception ex)
             {
@@ -94,20 +91,18 @@ namespace Server.Rest_API.SqlServer
             using var transaction = conn.BeginTransaction();
             try
             {
-                using (var cmd = new NpgsqlCommand("UPDATE public.tourlog SET date_time=@dateTime, total_time=@totalTime, distance=@distance, rating=@rating, difficulty=@difficulty, comment=@comment WHERE id=@id;", conn))
-                {
-                    cmd.Parameters.AddWithValue("@dateTime", tourLog.DateTime);
-                    cmd.Parameters.AddWithValue("@totalTime", tourLog.TotalTime);
-                    cmd.Parameters.AddWithValue("@rating", tourLog.Rating);
-                    cmd.Parameters.AddWithValue("@distance", tourLog.Distance);
-                    cmd.Parameters.AddWithValue("@difficulty", tourLog.Difficulty);
-                    cmd.Parameters.AddWithValue("@comment", tourLog.Comment);
-                    cmd.Parameters.AddWithValue("@id", tourLog.Id);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
-                    transaction.Commit();
-                    Log.Info($"Updated tourlog {tourLog.Id}");
-                };
+                using var cmd = new NpgsqlCommand("UPDATE public.tourlog SET date_time=@dateTime, total_time=@totalTime, distance=@distance, rating=@rating, difficulty=@difficulty, comment=@comment WHERE id=@id;", conn);
+                cmd.Parameters.AddWithValue("@dateTime", tourLog.DateTime);
+                cmd.Parameters.AddWithValue("@totalTime", tourLog.TotalTime);
+                cmd.Parameters.AddWithValue("@rating", tourLog.Rating);
+                cmd.Parameters.AddWithValue("@distance", tourLog.Distance);
+                cmd.Parameters.AddWithValue("@difficulty", tourLog.Difficulty);
+                cmd.Parameters.AddWithValue("@comment", tourLog.Comment);
+                cmd.Parameters.AddWithValue("@id", tourLog.Id);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+                Log.Info($"Updated tourlog {tourLog.Id}");
             }
             catch (Exception ex)
             {
@@ -154,20 +149,16 @@ namespace Server.Rest_API.SqlServer
 
             try
             {
-                using (var cmd = new NpgsqlCommand("DELETE from public.tourlog WHERE id = @id;", conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
-                    transaction.Commit();
-                    Log.Info($"Deleted tourlog with Id: {id}");
-                    return;
-                };
+                using var cmd = new NpgsqlCommand("DELETE from public.tourlog WHERE id = @id;", conn);
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+                Log.Info($"Deleted tourlog with Id: {id}");
             }
             catch (Exception ex)
             {
-                Log.Error($"Cannot delete tourlog: " + ex.Message);
-                return;
+                Log.Error("Cannot delete tourlog: " + ex.Message);
             }
         }
     }

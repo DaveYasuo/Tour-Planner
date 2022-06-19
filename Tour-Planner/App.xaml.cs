@@ -1,11 +1,6 @@
-﻿using System.Diagnostics;
+﻿using log4net;
 using System.Reflection;
 using System.Windows;
-using log4net;
-using Tour_Planner.Services;
-using Tour_Planner.Services.Interfaces;
-using Tour_Planner.ViewModels;
-using Tour_Planner.Views;
 
 namespace Tour_Planner
 {

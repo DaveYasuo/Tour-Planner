@@ -1,5 +1,3 @@
-using System;
-
 namespace Tour_Planner.Extensions
 {
     public class Class1

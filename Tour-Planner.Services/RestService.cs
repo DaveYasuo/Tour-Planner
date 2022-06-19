@@ -1,14 +1,12 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using log4net;
 using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 
@@ -21,10 +19,6 @@ namespace Tour_Planner.Services
         public readonly string BaseUrl = "http://localhost:8888/api";
 
         private static readonly HttpClient Client = new();
-        public RestService()
-        {
-        }
-
 
 
         public async Task<Tour?> AddTour(Tour tour)
@@ -32,12 +26,9 @@ namespace Tour_Planner.Services
             try
             {
                 var httpResponseMessage = await Client.PostAsync($"{BaseUrl}/Tour", new StringContent(JsonSerializer.Serialize(tour), Encoding.UTF8, "application/json"));
-                if (httpResponseMessage.IsSuccessStatusCode)
-                {
-                    string result = await httpResponseMessage.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<Tour>(result);
-                }
-                return null;
+                if (!httpResponseMessage.IsSuccessStatusCode) return null;
+                string result = await httpResponseMessage.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<Tour>(result);
             }
             catch (Exception)
             {
@@ -50,11 +41,7 @@ namespace Tour_Planner.Services
             try
             {
                 var result = await Client.GetFromJsonAsync<List<Tour>>($"{BaseUrl}/Tour");
-                if (result is not null)
-                {
-                    return result;
-                }
-                return null;
+                return result ?? null;
             }
             catch (Exception ex)
             {
@@ -86,11 +73,7 @@ namespace Tour_Planner.Services
             try
             {
                 var result = await Client.GetStringAsync($"{BaseUrl}/TourLog");
-                if (result is not null && result != "")
-                {
-                    return JsonSerializer.Deserialize<List<TourLog>>(result);
-                }
-                return null;
+                return result != "" ? JsonSerializer.Deserialize<List<TourLog>>(result) : null;
             }
             catch (Exception ex)
             {
@@ -104,11 +87,7 @@ namespace Tour_Planner.Services
             try
             {
                 var result = await Client.GetStringAsync($"{BaseUrl}/TourLog/" + tour.Id);
-                if (result is not null && result != "")
-                {
-                    return JsonSerializer.Deserialize<List<TourLog>>(result);
-                }
-                return null;
+                return result != "" ? JsonSerializer.Deserialize<List<TourLog>>(result) : null;
             }
             catch (Exception ex)
             {

@@ -1,14 +1,10 @@
-﻿using System;
+﻿using log4net;
+using Server.Rest_API.SqlServer;
+using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
-using log4net;
-using Npgsql;
-using Server.Rest_API.Common;
-using Server.Rest_API.SqlServer;
 using Tour_Planner.Models;
 
 namespace Server.Rest_API.Controller
@@ -16,17 +12,17 @@ namespace Server.Rest_API.Controller
     public class TourLogController : IController
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
-        private readonly TourLogSqlDAO tourLogSqlDao = new TourLogSqlDAO();
+        private readonly TourLogSqlDAO _tourLogSqlDao = new();
         public TourLogController()
         {
         }
         private TourLog AddTourLog(TourLog tourLog)
         {
-            return tourLogSqlDao.AddNewTourLog(tourLog);
+            return _tourLogSqlDao.AddNewTourLog(tourLog);
         }
         private IEnumerable<TourLog> GetAllTourLogs()
         {
-            return tourLogSqlDao.GetAllTourLogs();
+            return _tourLogSqlDao.GetAllTourLogs();
         }
 
         public void Delete(object id)
@@ -36,7 +32,7 @@ namespace Server.Rest_API.Controller
 
         private void DeleteATourLog(int id)
         {
-            tourLogSqlDao.DeleteTourLog(id);
+            _tourLogSqlDao.DeleteTourLog(id);
         }
 
         public string Get()
@@ -72,24 +68,24 @@ namespace Server.Rest_API.Controller
 
         private IEnumerable<TourLog> GetAllTourLogsFromTour(int tourId)
         {
-            return tourLogSqlDao.GetAllTourLogsFromTour(tourId);
+            return _tourLogSqlDao.GetAllTourLogsFromTour(tourId);
         }
 
         public Task<string> Post(object body)
         {
-            TourLog tourLog = JsonSerializer.Deserialize<TourLog>(body.ToString());
+            TourLog tourLog = JsonSerializer.Deserialize<TourLog>(body.ToString()!);
             return Task.Run(() => JsonSerializer.Serialize(AddTourLog(tourLog)));
         }
 
         public void Patch(object body)
         {
-            TourLog tourLog = JsonSerializer.Deserialize<TourLog>(body.ToString());
+            TourLog tourLog = JsonSerializer.Deserialize<TourLog>(body.ToString()!);
             UpdateTourLog(tourLog);
         }
 
         private void UpdateTourLog(TourLog tourLog)
         {
-            tourLogSqlDao.UpdateTourLog(tourLog);
+            _tourLogSqlDao.UpdateTourLog(tourLog);
         }
     }
 }

@@ -5,8 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
-using System.Text;
-using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Web;
@@ -20,11 +18,11 @@ namespace Server.Rest_API.API
         public readonly string RouteUrl = "http://open.mapquestapi.com/directions/v2/route";
         public readonly string RouteImageUrl = "http://www.mapquestapi.com/staticmap/v5/map";
         private static readonly HttpClient Client = new();
-        private readonly string MapQuestKey;
+        private readonly string _mapQuestKey;
 
         public MapQuest(string key)
         {
-            MapQuestKey = key;
+            _mapQuestKey = key;
         }
 
 
@@ -33,12 +31,12 @@ namespace Server.Rest_API.API
         {
             var builder = new UriBuilder(RouteUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
-            query["key"] = MapQuestKey;
+            query["key"] = _mapQuestKey;
             query["from"] = tour.Origin;
             query["to"] = tour.Destination;
             query["unit"] = "k";
             query["routeType"] = tour.RouteType.ToString();
-            builder.Query = query.ToString();
+            builder.Query = query.ToString()!;
             string uri = builder.ToString();
             var response = await Client.GetAsync(uri);
             Debug.WriteLine(await response.Content.ReadAsStringAsync());
@@ -47,7 +45,7 @@ namespace Server.Rest_API.API
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonString = response.Content.ReadAsStringAsync().Result;
-                    JsonObject mapQuest = JsonNode.Parse(jsonString).AsObject();
+                    JsonObject mapQuest = JsonNode.Parse(jsonString)!.AsObject();
                     if (mapQuest["route"]?["distance"] is { } tmpDistance &&
                         mapQuest["route"]?["boundingBox"] is { } tmpBoundingBox &&
                         mapQuest["route"]?["sessionId"] is { } tmpSessionId &&
@@ -78,11 +76,11 @@ namespace Server.Rest_API.API
         {
             var builder = new UriBuilder(RouteImageUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
-            query["key"] = MapQuestKey;
+            query["key"] = _mapQuestKey;
             query["session"] = sessionID;
             query["size"] = "1920,1440";
             query["boundingBox"] = boundingBox;
-            builder.Query = query.ToString();
+            builder.Query = query.ToString()!;
             string uri = builder.ToString();
             try
             {
@@ -93,7 +91,7 @@ namespace Server.Rest_API.API
                     string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\..\\..\\..\\..\\RouteImages");
                     Directory.CreateDirectory(folderPath);
                     string imageName = Guid.NewGuid() + ".jpeg";
-                    using (var fs = new FileStream(Path.Combine(folderPath, imageName), FileMode.OpenOrCreate))
+                    await using (var fs = new FileStream(Path.Combine(folderPath, imageName), FileMode.OpenOrCreate))
                     {
                         await response.Content.CopyToAsync(fs);
                     }

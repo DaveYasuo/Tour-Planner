@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Tour_Planner.Converters
@@ -24,21 +20,15 @@ namespace Tour_Planner.Converters
                 int ind = tmp.IndexOf('.');
                 var isDigit = IsDigitsOnly(tmp);
 
-                if (isDigit.Item1 && isDigit.Item2)
-                {
-                    if (ind == -1) return double.Parse(tmp);
+                if (!isDigit.Item1 || !isDigit.Item2) return double.Parse(tmp.Remove(length));
+                if (ind == -1) return double.Parse(tmp);
 
-                    if (ind != 0 && ind != length)
-                    {
-                        int dec = length - ind;
-                        if (dec <= 3) return value;
-                    }
-                    if (ind == length)
-                    {
-                        return value;
-                    }
+                if (ind != 0 && ind != length)
+                {
+                    int dec = length - ind;
+                    if (dec <= 3) return value;
                 }
-                return double.Parse(tmp.Remove(length));
+                return ind == length ? value : double.Parse(tmp.Remove(length));
             }
             catch
             {
@@ -46,21 +36,21 @@ namespace Tour_Planner.Converters
             }
         }
 
-        static (bool, bool) IsDigitsOnly(string str)
+        private static (bool, bool) IsDigitsOnly(string str)
         {
             int dotCnt = 0;
-            foreach (char c in str)
+            foreach (var c in str)
             {
-                if ((c < '0' || c > '9') && c != '.')
+                switch (c)
                 {
-                    return (false, false);
-                }
-                if (c == '.')
-                {
-                    dotCnt++;
+                    case < '0' or > '9' when c != '.':
+                        return (false, false);
+                    case '.':
+                        dotCnt++;
+                        break;
                 }
             }
-            return (true, dotCnt == 1 || dotCnt == 0);
+            return (true, dotCnt is 1 or 0);
         }
 
     }

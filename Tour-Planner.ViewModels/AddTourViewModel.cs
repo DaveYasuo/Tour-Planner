@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
-using System.Diagnostics;
 using System.Windows.Input;
+using Tour_Planner.DataModels.Enums;
+using Tour_Planner.Extensions;
 using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
-using System.Collections.Generic;
-using Tour_Planner.DataModels.Enums;
-using Tour_Planner.Extensions;
 
 namespace Tour_Planner.ViewModels
 {
@@ -23,43 +23,50 @@ namespace Tour_Planner.ViewModels
 
         public string Error { get; set; } = "";
 
-        bool titleHasBeenTouched = false;
-        bool originHasBeenTouched = false;
-        bool destinationHasBeenTouched = false;
-        bool descriptionHasBeenTouched = false;
-        bool selectedItemHasBeenTouched = false;
+        private bool _titleHasBeenTouched;
+        private bool _originHasBeenTouched;
+        private bool _destinationHasBeenTouched;
+        private bool _descriptionHasBeenTouched;
+        private bool _selectedItemHasBeenTouched;
         public AddTourViewModel(IRestService service, IMediator mediator)
         {
-            SaveCommand = new RelayCommand(async _ =>
-                       {
-                           List<string> testableProperty = new() { nameof(Title), nameof(Origin), nameof(Destination), nameof(Description), nameof(SelectedRouteType) };
-                           bool hasError = false;
-                           foreach (var item in testableProperty)
-                           {
+            async void Execute(object _)
+            {
+                List<string> testableProperty = new()
+                {
+                    nameof(Title),
+                    nameof(Origin),
+                    nameof(Destination),
+                    nameof(Description),
+                    nameof(SelectedRouteType)
+                };
+                bool hasError = false;
+                foreach (var item in testableProperty.Where(item => GetErrorForProperty(item, true) is not ""))
+                {
+                    hasError = true;
+                }
 
-                               if (GetErrorForProperty(item, true) is not "")
-                               {
-                                   hasError = true;
-                               }
-                           }
-                           if (hasError)
-                           {
-                               MessageBox.Show("Please fill out the form before submitting", "Error");
-                               return;
-                           }
-                           CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                           Tour newTour = new(_title, _origin, _destination, _description, (RouteType)_routeType!); // todo
-                           var result = await service.AddTour(newTour);
-                           if (result == null)
-                           {
-                               mediator.Publish(ViewModelMessage.UpdateTourList, false);
-                               MessageBox.Show($"Cannot find a route for {newTour.Title} from {newTour.Origin} to {newTour.Destination}.", "Check your inputs");
-                           }
-                           else
-                           {
-                               mediator.Publish(ViewModelMessage.UpdateTourList, true);
-                           }
-                       });
+                if (hasError)
+                {
+                    MessageBox.Show("Please fill out the form before submitting", "Error");
+                    return;
+                }
+
+                CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
+                Tour newTour = new(_title, _origin, _destination, _description, (RouteType)_routeType!); // todo
+                var result = await service.AddTour(newTour);
+                if (result == null)
+                {
+                    mediator.Publish(ViewModelMessage.UpdateTourList, false);
+                    MessageBox.Show($"Cannot find a route for {newTour.Title} from {newTour.Origin} to {newTour.Destination}.", "Check your inputs");
+                }
+                else
+                {
+                    mediator.Publish(ViewModelMessage.UpdateTourList, true);
+                }
+            }
+
+            SaveCommand = new RelayCommand(Execute);
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             _description = PlaceHolder;
             _title = PlaceHolder;
@@ -110,13 +117,7 @@ namespace Tour_Planner.ViewModels
         }
 
 
-        public string this[string propertyName]
-        {
-            get
-            {
-                return GetErrorForProperty(propertyName, false);
-            }
-        }
+        public string this[string propertyName] => GetErrorForProperty(propertyName, false);
 
         public RouteType? SelectedRouteType
         {
@@ -136,42 +137,42 @@ namespace Tour_Planner.ViewModels
             switch (propertyName)
             {
                 case "Title":
-                    if ((string.IsNullOrEmpty(Title) || Title.Trim().Length == 0) && (titleHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(Title) || Title.Trim().Length == 0) && (_titleHasBeenTouched || onSubmit))
                     {
                         Title = "";
                         Error = "Title cannot be empty!";
                         return Error;
                     }
-                    titleHasBeenTouched = true;
+                    _titleHasBeenTouched = true;
                     break;
                 case "Origin":
-                    if ((string.IsNullOrEmpty(Origin) || Origin.Trim().Length == 0) && (originHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(Origin) || Origin.Trim().Length == 0) && (_originHasBeenTouched || onSubmit))
                     {
                         Origin = "";
                         Error = "Origin cannot be empty!";
                         return Error;
                     }
-                    originHasBeenTouched = true;
+                    _originHasBeenTouched = true;
                     break;
                 case "Destination":
-                    if ((string.IsNullOrEmpty(Destination) || Destination.Trim().Length == 0) && (destinationHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(Destination) || Destination.Trim().Length == 0) && (_destinationHasBeenTouched || onSubmit))
                     {
                         Destination = "";
                         Error = "Destination cannot be empty!";
                         return Error;
                     }
-                    destinationHasBeenTouched = true;
+                    _destinationHasBeenTouched = true;
                     break;
                 case "Description":
-                    if (!string.IsNullOrEmpty(Description) && Description.Trim().Length == 0 && descriptionHasBeenTouched)
+                    if (!string.IsNullOrEmpty(Description) && Description.Trim().Length == 0 && _descriptionHasBeenTouched)
                     {
                         Error = "Description cannot be only spaces!";
                         return Error;
                     }
-                    descriptionHasBeenTouched = true;
+                    _descriptionHasBeenTouched = true;
                     break;
                 case "SelectedRouteType":
-                    if (SelectedRouteType == null && (selectedItemHasBeenTouched || onSubmit))
+                    if (SelectedRouteType == null && (_selectedItemHasBeenTouched || onSubmit))
                     {
                         if (onSubmit)
                         {
@@ -179,7 +180,7 @@ namespace Tour_Planner.ViewModels
                         }
                         Error = "Route Type cannot be empty!";
                     }
-                    selectedItemHasBeenTouched = true;
+                    _selectedItemHasBeenTouched = true;
                     return Error;
             }
             return Error;

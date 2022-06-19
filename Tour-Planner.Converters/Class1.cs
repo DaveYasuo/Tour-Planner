@@ -1,5 +1,3 @@
-using System;
-
 namespace Tour_Planner.Converters
 {
     public class Class1

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Tour_Planner.Models;
 
 namespace Server.Rest_API.DAO

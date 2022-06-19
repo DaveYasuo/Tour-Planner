@@ -1,12 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tour_Planner.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Tour_Planner.Converters.Tests
+namespace Tour_Planner.ConvertersTests
 {
     [TestClass()]
     public class StringToDoubleConverterTests
@@ -32,8 +28,8 @@ namespace Tour_Planner.Converters.Tests
             {
                 StringToDoubleConverter stringToDoubleConverter = new StringToDoubleConverter();
                 var result = stringToDoubleConverter.ConvertBack(test, null!, null!, null!);
-                double.Parse(result.ToString()!);
-                Assert.IsTrue(true);
+                var parsed = double.Parse(result.ToString()!);
+                Assert.IsTrue(parsed.GetType() != result.GetType());
             }
             catch (Exception)
             {

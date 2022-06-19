@@ -1,10 +1,8 @@
-﻿using System;
-using System.Reflection;
-using System.Configuration;
-using System.IO;
+﻿using log4net;
 using Microsoft.Extensions.Configuration;
-using Server.Rest_API.SqlServer;
-using log4net;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace Server.Rest_API.Common
 {

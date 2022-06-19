@@ -1,7 +1,5 @@
 using Moq;
-using NUnit.Framework;
 using Tour_Planner.Services.Interfaces;
-using Tour_Planner.ViewModels;
 
 namespace Test.Tour_Planner.Services
 {

@@ -4,12 +4,10 @@ namespace Server.Rest_API
 {
     internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
-         
-            //var conString = builder.GetConnectionString("DefaultDB");
-            //Postgres connection = new Postgres(conString);
-            Server server = new Server();
+
+            Server server = new();
             await server.StartAsync();
         }
     }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -18,27 +16,42 @@ namespace Tour_Planner.ViewModels
     public class NavigationViewModel
     {
         private readonly IMediator _mediator;
-        Tour? _selectedTour;
-        ExportTour exporter = new ExportTour();
-        ImportTour importer;
-        TourReport tr = new TourReport();
-        IRestService service;
+        private Tour? _selectedTour;
+        private readonly ExportTour _exporter = new();
+        private readonly ImportTour _importer;
+        private readonly TourReport _tr = new();
+        private readonly IRestService _service;
 
         public NavigationViewModel(IMediator mediator, IRestService service)
         {
             _mediator = mediator;
-            this.service = service;
-            importer = new ImportTour(service);
+            _service = service;
+            _importer = new ImportTour(service);
             mediator.Subscribe(SetSelectedTour, ViewModelMessage.SelectTour);
             DisplayAddTourCommand = new RelayCommand(_ => mediator.Publish(ViewModelMessage.AddTour, null));
             DisplayEditTourCommand = new RelayCommand(_ => mediator.Publish(ViewModelMessage.EditTour, null));
             DisplayEditTourLogCommand = new RelayCommand(_ => mediator.Publish(ViewModelMessage.EditTourLog, null));
             ExportTourCommand = new RelayCommand(_ => ExportTour());
-            ImportTourCommand = new RelayCommand(async (_) => await ImportTour());
-            CreateTourReportCommand = new RelayCommand(async _ => await CreateTourReport());
+            ImportTourCommand = new RelayCommand(ExecuteImportTour);
+            CreateTourReportCommand = new RelayCommand(ExecuteCreateTourReport);
             ShowHelpCommand = new RelayCommand(_ => ShowHelp());
-            CreateSummaryReportCommand = new RelayCommand(async _ => await CreateSummaryReport());
+            CreateSummaryReportCommand = new RelayCommand(ExecuteCreateSummaryReport);
             ExitCommand = new RelayCommand(CloseApplication);
+        }
+
+        private async void ExecuteCreateSummaryReport(object _)
+        {
+            await CreateSummaryReport();
+        }
+
+        private async void ExecuteCreateTourReport(object _)
+        {
+            await CreateTourReport();
+        }
+
+        private async void ExecuteImportTour(object _)
+        {
+            await ImportTour();
         }
 
         private void CloseApplication(object obj)
@@ -48,7 +61,7 @@ namespace Tour_Planner.ViewModels
 
         private void ShowHelp()
         {
-            string url = "https://github.com/DaveYasuo/Tour-Planner";
+            const string url = "https://github.com/DaveYasuo/Tour-Planner";
             try
             {
                 ProcessStartInfo psi = new()
@@ -71,7 +84,7 @@ namespace Tour_Planner.ViewModels
         {
             if (_selectedTour != null)
             {
-                exporter.ExportSingleTour(_selectedTour);
+                _exporter.ExportSingleTour(_selectedTour);
                 return;
             }
             MessageBox.Show("Please select a tour to export!");
@@ -79,7 +92,7 @@ namespace Tour_Planner.ViewModels
 
         private async Task ImportTour()
         {
-            await importer.ImportSingleTour();
+            await _importer.ImportSingleTour();
             _mediator.Publish(ViewModelMessage.UpdateTourList, true);
         }
 
@@ -87,8 +100,8 @@ namespace Tour_Planner.ViewModels
         {
             if (_selectedTour != null)
             {
-                List<TourLog>? tourLogs = await service.GetAllTourLogsFromTour(_selectedTour);
-                tr.CreateTourReport(_selectedTour, tourLogs!);
+                List<TourLog>? tourLogs = await _service.GetAllTourLogsFromTour(_selectedTour);
+                _tr.CreateTourReport(_selectedTour, tourLogs!);
             }
             else
             {
@@ -97,9 +110,9 @@ namespace Tour_Planner.ViewModels
         }
         private async Task CreateSummaryReport()
         {
-            List<TourLog>? tourLogs = await service.GetAllTourLogs();
-            List<Tour>? tours = await service.GetTours();
-            tr.CreateSummaryReport(tours, tourLogs);
+            List<TourLog>? tourLogs = await _service.GetAllTourLogs();
+            List<Tour>? tours = await _service.GetTours();
+            _tr.CreateSummaryReport(tours, tourLogs);
         }
 
 

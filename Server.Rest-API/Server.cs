@@ -1,4 +1,7 @@
-﻿using System;
+﻿using log4net;
+using Server.Rest_API.Controller;
+using Server.Rest_API.Mapping;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -7,10 +10,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
-using Server.Rest_API.Controller;
-using Server.Rest_API.Mapping;
-using Server.Rest_API.SqlServer;
 
 namespace Server.Rest_API
 {
@@ -18,7 +17,7 @@ namespace Server.Rest_API
     {
         private bool _listening;
         private readonly HttpListener _listener;
-        private readonly IRequestHandler handler;
+        private readonly IRequestHandler _handler;
         private CancellationTokenSource _tokenSource;
         private readonly ConcurrentDictionary<string, Task> _tasks = new();
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
@@ -36,11 +35,11 @@ namespace Server.Rest_API
             // Create a listener.
             _listener = new HttpListener();
             // Add the prefixes.
-            foreach (string s in prefixes)
+            foreach (var s in prefixes)
             {
                 _listener.Prefixes.Add(s);
             }
-            handler = new RequestHandler();
+            _handler = new RequestHandler();
         }
 
         public async Task StartAsync()
@@ -77,7 +76,7 @@ namespace Server.Rest_API
                 }
                 catch (Exception)
                 {
-
+                    // ignored
                 }
             }
         }
@@ -88,22 +87,22 @@ namespace Server.Rest_API
             HttpListenerRequest request = context.Request;
 
             string documentContents;
-            using (Stream receiveStream = request.InputStream)
+            await using (Stream receiveStream = request.InputStream)
             {
                 using StreamReader readStream = new(receiveStream, Encoding.UTF8);
-                documentContents = readStream.ReadToEnd();
+                documentContents = await readStream.ReadToEndAsync();
             }
             Console.WriteLine($"Received request for {request.Url}");
             Console.WriteLine($"Received request for {request.HttpMethod}"); // post
             Console.WriteLine($"Received request for {request.RawUrl}"); //api/Tour
 
-            Tuple<List<string>, Dictionary<string, string>> urlParams = handler.ParseUrl(request.RawUrl);
+            Tuple<List<string>, Dictionary<string, string>> urlParams = _handler.ParseUrl(request.RawUrl);
             // Obtain a response object.
             HttpListenerResponse response = context.Response;
             string responseString = null;
             if (urlParams is not null && urlParams.Item1.Count != 0)
             {
-                IController controller = handler.GetController(urlParams.Item1[0]);
+                IController controller = _handler.GetController(urlParams.Item1[0]);
                 if (controller is not null) responseString = await controller.Handle(request.HttpMethod, urlParams, documentContents);
             }
             // Get a response stream and write the response to it.
@@ -119,7 +118,7 @@ namespace Server.Rest_API
                 buffer = Encoding.UTF8.GetBytes(responseString);
             }
             response.ContentLength64 = buffer.Length;
-            output.Write(buffer, 0, buffer.Length);
+            await output.WriteAsync(buffer, 0, buffer.Length);
             // You must close the output stream.
             output.Close();
         }
@@ -150,5 +149,4 @@ namespace Server.Rest_API
             _listener.Stop();
         }
     }
-
 }
