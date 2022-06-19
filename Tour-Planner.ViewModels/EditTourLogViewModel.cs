@@ -24,13 +24,13 @@ namespace Tour_Planner.ViewModels
         private string _comment;
         private TimeSpan _totalTime;
         private DateTime _dateTime;
+        private double _distance;
         public string Error { get; set; } = "";
 
-        bool selectedRatingHasBeenTouched = false;
+        bool distanceHasBeenTouched = false;
         bool totalTimeHasBeenTouched = false;
         bool dateAndTimeHasBeenTouched = false;
         bool commentHasBeenTouched = false;
-        bool selectedItemHasBeenTouched = false;
 
         public EditTourLogViewModel(IRestService service, IMediator mediator, TourLog selectedTourLog)
         {
@@ -42,10 +42,11 @@ namespace Tour_Planner.ViewModels
             _comment = selectedTourLog.Comment;
             _totalTime = selectedTourLog.TotalTime;
             _dateTime = selectedTourLog.DateTime;
+            _distance = selectedTourLog.Distance;
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             SaveCommand = new RelayCommand(async _ =>
             {
-                List<string> testableProperty = new() { nameof(SelectedDifficulty), nameof(SelectedRating), nameof(Comment), nameof(TotalTime), nameof(DateTime) };
+                List<string> testableProperty = new() { nameof(Comment), nameof(TotalTime), nameof(DateTime), nameof(Distance) };
                 bool hasError = false;
                 foreach (var item in testableProperty)
                 {
@@ -61,7 +62,7 @@ namespace Tour_Planner.ViewModels
                     return;
                 }
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                TourLog newTour = new(selectedTourLog.Id,selectedTourLog.TourId, DateTime, TotalTime, SelectedRating, SelectedDifficulty, Comment);
+                TourLog newTour = new(selectedTourLog.Id, selectedTourLog.TourId, DateTime, TotalTime, SelectedRating, SelectedDifficulty, Distance, Comment);
                 var result = await service.UpdateTourLog(newTour);
                 mediator.Publish(ViewModelMessage.UpdateTourLogList, null);
             });
@@ -125,24 +126,22 @@ namespace Tour_Planner.ViewModels
                 RaisePropertyChangedEvent();
             }
         }
+        public double Distance
+        {
+            get => _distance;
+            set
+            {
+                if (_distance == value) return;
+                _distance = value;
+                RaisePropertyChangedEvent();
+            }
+        }
         private string GetErrorForProperty(string propertyName, bool onSubmit)
         {
 
             Error = "";
             switch (propertyName)
             {
-                case "SelectedRating":
-                    if (_ratingItem == null && (selectedRatingHasBeenTouched || onSubmit))
-                    {
-                        if (onSubmit)
-                        {
-                            RaisePropertyChangedEvent(nameof(SelectedRating));
-                        }
-                        Error = "Rating cannot be empty!";
-                        return Error;
-                    }
-                    selectedRatingHasBeenTouched = true;
-                    break;
                 case "TotalTime":
                     if (TotalTime == TimeSpan.Zero && (totalTimeHasBeenTouched || onSubmit))
                     {
@@ -155,13 +154,25 @@ namespace Tour_Planner.ViewModels
                     }
                     totalTimeHasBeenTouched = true;
                     break;
-                case "DateAndTime":
+                case "DateTime":
                     if ((string.IsNullOrEmpty(_dateTime.ToString()) || _dateTime.ToString().Trim().Length == 0) && (dateAndTimeHasBeenTouched || onSubmit))
                     {
                         Error = "Date and time cannot be empty!";
                         return Error;
                     }
                     dateAndTimeHasBeenTouched = true;
+                    break;
+                case "Distance":
+                    if (Distance <= 0 && (distanceHasBeenTouched || onSubmit))
+                    {
+                        if (onSubmit)
+                        {
+                            RaisePropertyChangedEvent(nameof(Distance));
+                        }
+                        Error = "Distance cannot be empty!";
+                        return Error;
+                    }
+                    distanceHasBeenTouched = true;
                     break;
                 case "Comment":
                     if (!string.IsNullOrEmpty(_comment) && _comment.Trim().Length == 0 && commentHasBeenTouched)
@@ -172,17 +183,6 @@ namespace Tour_Planner.ViewModels
                     }
                     commentHasBeenTouched = true;
                     break;
-                case "SelectedDifficulty":
-                    if (_selectedDifficulty == null && (selectedItemHasBeenTouched || onSubmit))
-                    {
-                        if (onSubmit)
-                        {
-                            RaisePropertyChangedEvent(nameof(SelectedDifficulty));
-                        }
-                        Error = "Difficulty cannot be empty!";
-                    }
-                    selectedItemHasBeenTouched = true;
-                    return Error;
             }
             return Error;
         }

@@ -11,7 +11,7 @@ namespace Tour_Planner.Models
 {
     public class TourLog
     {
-        public TourLog(int id, int tourId, DateTime dateTime, TimeSpan totalTime, Rating rating, Difficulty difficulty, string comment)
+        public TourLog(int id, int tourId, DateTime dateTime, TimeSpan totalTime, Rating rating, Difficulty difficulty, double distance, string comment)
         {
             Id = id;
             TourId = tourId;
@@ -20,9 +20,10 @@ namespace Tour_Planner.Models
             Rating = rating;
             Difficulty = difficulty;
             Comment = comment;
+            Distance = distance;
         }
 
-        public TourLog(int tourId, DateTime dateTime, TimeSpan totalTime, Rating rating, Difficulty difficulty, string comment)
+        public TourLog(int tourId, DateTime dateTime, TimeSpan totalTime, Rating rating, Difficulty difficulty, double distance, string comment)
         {
             Id = default;
             TourId = tourId;
@@ -31,6 +32,7 @@ namespace Tour_Planner.Models
             Rating = rating;
             Difficulty = difficulty;
             Comment = comment;
+            Distance = distance;
         }
         public TourLog() { }
 
@@ -43,6 +45,6 @@ namespace Tour_Planner.Models
         public Rating Rating { get; set; }
         public Difficulty Difficulty { get; set; }
         public string Comment { get; set; }
-
+        public double Distance { get; set; }
     }
 }

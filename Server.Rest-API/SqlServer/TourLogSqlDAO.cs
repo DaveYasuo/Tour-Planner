@@ -30,13 +30,14 @@ namespace Server.Rest_API.SqlServer
             using var transaction = conn.BeginTransaction();
             try
             {
-                using (var cmd = new NpgsqlCommand("INSERT INTO public.tourlog (id, tour, date_time, total_time, rating, difficulty, comment) VALUES (DEFAULT, @tour, @date_time, @total_time, @rating, @difficulty, @comment);", conn))
+                using (var cmd = new NpgsqlCommand("INSERT INTO public.tourlog (id, tour, date_time, total_time, rating, difficulty, distance, comment) VALUES (DEFAULT, @tour, @date_time, @total_time, @rating, @difficulty, @distance, @comment);", conn))
                 {
                     cmd.Parameters.AddWithValue("tour", tourLog.TourId);
                     cmd.Parameters.AddWithValue("date_time", tourLog.DateTime);
                     cmd.Parameters.AddWithValue("total_time", tourLog.TotalTime);
                     cmd.Parameters.AddWithValue("rating", tourLog.Rating);
                     cmd.Parameters.AddWithValue("difficulty", tourLog.Difficulty);
+                    cmd.Parameters.AddWithValue("distance", tourLog.Distance);
                     cmd.Parameters.AddWithValue("comment", tourLog.Comment);
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
@@ -61,7 +62,7 @@ namespace Server.Rest_API.SqlServer
             {
                 var tourLogs = new List<TourLog>();
                 using var conn = Connection();
-                using var cmd = new NpgsqlCommand("SELECT id, tour, date_time, total_time, rating, difficulty, comment from public.tourlog WHERE tour=@tour;", conn);
+                using var cmd = new NpgsqlCommand("SELECT id, tour, date_time, total_time, rating, difficulty, comment, distance from public.tourlog WHERE tour=@tour;", conn);
                 cmd.Parameters.AddWithValue("tour", id);
                 cmd.Prepare();
                 using var reader = cmd.ExecuteReader();
@@ -73,6 +74,7 @@ namespace Server.Rest_API.SqlServer
                         reader.SafeGet<TimeSpan>("total_time"),
                         reader.SafeGet<Rating>("rating"),
                         reader.SafeGet<Difficulty>("difficulty"),
+                        reader.SafeGet<double>("distance"),
                         reader.SafeGet<string>("comment")));
                 }
                 conn.Close();
@@ -92,11 +94,12 @@ namespace Server.Rest_API.SqlServer
             using var transaction = conn.BeginTransaction();
             try
             {
-                using (var cmd = new NpgsqlCommand("UPDATE public.tourlog SET date_time=@dateTime, total_time=@totalTime, rating=@rating, difficulty=@difficulty, comment=@comment WHERE id=@id;", conn))
+                using (var cmd = new NpgsqlCommand("UPDATE public.tourlog SET date_time=@dateTime, total_time=@totalTime, distance=@distance, rating=@rating, difficulty=@difficulty, comment=@comment WHERE id=@id;", conn))
                 {
                     cmd.Parameters.AddWithValue("@dateTime", tourLog.DateTime);
                     cmd.Parameters.AddWithValue("@totalTime", tourLog.TotalTime);
                     cmd.Parameters.AddWithValue("@rating", tourLog.Rating);
+                    cmd.Parameters.AddWithValue("@distance", tourLog.Distance);
                     cmd.Parameters.AddWithValue("@difficulty", tourLog.Difficulty);
                     cmd.Parameters.AddWithValue("@comment", tourLog.Comment);
                     cmd.Parameters.AddWithValue("@id", tourLog.Id);
@@ -119,7 +122,7 @@ namespace Server.Rest_API.SqlServer
             {
                 var tourLogs = new List<TourLog>();
                 using var conn = Connection();
-                using var cmd = new NpgsqlCommand("SELECT id, tour, date_time, total_time, rating, difficulty, comment from public.tourlog;", conn);
+                using var cmd = new NpgsqlCommand("SELECT id, tour, date_time, total_time, rating, difficulty, comment, distance from public.tourlog;", conn);
                 cmd.Prepare();
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -130,6 +133,7 @@ namespace Server.Rest_API.SqlServer
                         reader.SafeGet<TimeSpan>("total_time"),
                         reader.SafeGet<Rating>("rating"),
                         reader.SafeGet<Difficulty>("difficulty"),
+                        reader.SafeGet<double>("distance"),
                         reader.SafeGet<string>("comment")));
                 }
                 conn.Close();

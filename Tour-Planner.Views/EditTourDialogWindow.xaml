@@ -23,9 +23,11 @@
         <Label Content="Edit tour" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" FontSize="32"/>
         <Label Content="Tour Title" HorizontalAlignment="Left" Margin="126,76,0,0" VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left" Margin="240,80,0,0" TextWrapping="Wrap"  Text="{Binding Title, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Tour Description" HorizontalAlignment="Left" Margin="126,105,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" Width="451" Margin="240,111,0,0" />
+        <Label Content="Tour Description" HorizontalAlignment="Left" Margin="126,162,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left"  AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" Width="451" Margin="240,168,0,0" />
         <Button Content="Save" HorizontalAlignment="Left" Command="{Binding SaveCommand}" Margin="626,342,0,0" VerticalAlignment="Top" RenderTransformOrigin="5.111,1.689"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Command="{Binding CancelCommand}" Margin="93,342,0,0" VerticalAlignment="Top"/>
+        <Label Content="Distance covered" HorizontalAlignment="Left" Margin="126,114,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Margin="240,118,0,0" TextWrapping="Wrap"  Text="{Binding Distance, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>
