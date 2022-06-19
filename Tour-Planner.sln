@@ -28,7 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Rest-API", "Server.R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tour-Planner.Extensions", "Tour-Planner.Extensions\Tour-Planner.Extensions.csproj", "{4F274DF8-278D-4542-B689-D755F8CD3B6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tour-Planner.Models", "Tour-Planner.Models\Tour-Planner.Models.csproj", "{9B06E811-EB0C-4551-9F15-867A42CD6528}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tour-Planner.Models", "Tour-Planner.Models\Tour-Planner.Models.csproj", "{9B06E811-EB0C-4551-9F15-867A42CD6528}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tour-Planner.ConvertersTests", "Tour-Planner.ConvertersTests\Tour-Planner.ConvertersTests.csproj", "{1BCB2983-258B-4270-87F6-F970D0CBE634}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +86,10 @@ Global
 		{9B06E811-EB0C-4551-9F15-867A42CD6528}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B06E811-EB0C-4551-9F15-867A42CD6528}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B06E811-EB0C-4551-9F15-867A42CD6528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BCB2983-258B-4270-87F6-F970D0CBE634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BCB2983-258B-4270-87F6-F970D0CBE634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BCB2983-258B-4270-87F6-F970D0CBE634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BCB2983-258B-4270-87F6-F970D0CBE634}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

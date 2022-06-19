@@ -59,6 +59,6 @@
         </ComboBox>
         <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBRatingType, Converter={StaticResource NullToVisibilityConverter}}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="555,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
         <Label Content="Distance covered" HorizontalAlignment="Left" Margin="51,150,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="216,154,0,0" TextWrapping="Wrap"  Text="{Binding Distance, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" PreviewTextInput="NumberValidationTextBox" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="216,154,0,0" TextWrapping="Wrap"  Text="{Binding Distance, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, Converter={StaticResource StringToDoubleConverter}}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>

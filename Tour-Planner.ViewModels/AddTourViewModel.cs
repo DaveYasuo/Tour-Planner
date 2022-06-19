@@ -20,7 +20,6 @@ namespace Tour_Planner.ViewModels
         private string _destination;
         private string _description;
         private RouteType? _routeType;
-        private readonly IRestService service;
 
         public string Error { get; set; } = "";
 
@@ -31,10 +30,9 @@ namespace Tour_Planner.ViewModels
         bool selectedItemHasBeenTouched = false;
         public AddTourViewModel(IRestService service, IMediator mediator)
         {
-            this.service = service;
             SaveCommand = new RelayCommand(async _ =>
                        {
-                           List<string> testableProperty = new List<string>() { nameof(Title), nameof(Origin), nameof(Destination), nameof(Description), nameof(SelectedRouteType) };
+                           List<string> testableProperty = new() { nameof(Title), nameof(Origin), nameof(Destination), nameof(Description), nameof(SelectedRouteType) };
                            bool hasError = false;
                            foreach (var item in testableProperty)
                            {
@@ -138,7 +136,7 @@ namespace Tour_Planner.ViewModels
             switch (propertyName)
             {
                 case "Title":
-                    if ((string.IsNullOrEmpty(_title) || _title.Trim().Length == 0) && (titleHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(Title) || Title.Trim().Length == 0) && (titleHasBeenTouched || onSubmit))
                     {
                         Title = "";
                         Error = "Title cannot be empty!";
@@ -147,7 +145,7 @@ namespace Tour_Planner.ViewModels
                     titleHasBeenTouched = true;
                     break;
                 case "Origin":
-                    if ((string.IsNullOrEmpty(_origin) || _origin.Trim().Length == 0) && (originHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(Origin) || Origin.Trim().Length == 0) && (originHasBeenTouched || onSubmit))
                     {
                         Origin = "";
                         Error = "Origin cannot be empty!";
@@ -156,7 +154,7 @@ namespace Tour_Planner.ViewModels
                     originHasBeenTouched = true;
                     break;
                 case "Destination":
-                    if ((string.IsNullOrEmpty(_destination) || _destination.Trim().Length == 0) && (destinationHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(Destination) || Destination.Trim().Length == 0) && (destinationHasBeenTouched || onSubmit))
                     {
                         Destination = "";
                         Error = "Destination cannot be empty!";
@@ -165,7 +163,7 @@ namespace Tour_Planner.ViewModels
                     destinationHasBeenTouched = true;
                     break;
                 case "Description":
-                    if (!string.IsNullOrEmpty(_description) && _description.Trim().Length == 0 && descriptionHasBeenTouched)
+                    if (!string.IsNullOrEmpty(Description) && Description.Trim().Length == 0 && descriptionHasBeenTouched)
                     {
                         Error = "Description cannot be only spaces!";
                         return Error;
@@ -173,7 +171,7 @@ namespace Tour_Planner.ViewModels
                     descriptionHasBeenTouched = true;
                     break;
                 case "SelectedRouteType":
-                    if (_routeType == null && (selectedItemHasBeenTouched || onSubmit))
+                    if (SelectedRouteType == null && (selectedItemHasBeenTouched || onSubmit))
                     {
                         if (onSubmit)
                         {

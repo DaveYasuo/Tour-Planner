@@ -41,7 +41,11 @@ namespace Tour_Planner.ViewModels
             loadedImage = new(GetBitmapImage("\\refresh.gif"), GetBitmapImage("\\refresh.png"));
             ListTours = new ObservableCollection<Tour>();
             _dialogService = dialogService;
-            ShowTours = new RelayCommand(async (_) => await UpdateTours());
+            RefreshCommand = new RelayCommand(async (_) =>
+            {
+                await UpdateTours();
+                mediator.Publish(ViewModelMessage.UpdateTourLogList, null);
+            });
             DisplayAddTourCommand = new RelayCommand(_ => DisplayAddTour());
             DisplayEditTourCommand = new RelayCommand(_ => DisplayEditTour());
             DeleteTourCommand = new RelayCommand(async _ => await DeleteTour());
@@ -236,7 +240,7 @@ namespace Tour_Planner.ViewModels
             }
         }
         public ICommand DisplayAddTourCommand { get; }
-        public ICommand ShowTours { get; }
+        public ICommand RefreshCommand { get; }
         public ICommand DeleteTourCommand { get; }
         public ICommand DisplayEditTourCommand { get; }
     }

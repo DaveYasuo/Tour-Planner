@@ -8,7 +8,7 @@
         xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewmodels:EditTourLogViewModel}"
-        Title="EditTourLogDialogWindow" Height="450" Width="800">
+        Title="Edit Tour Log" Height="450" Width="800">
 
     <Window.Resources>
         <ControlTemplate x:Key="ValidationTemplate">
@@ -22,7 +22,7 @@
         <src:RatingTypes x:Key="myRatingTypes"/>
     </Window.Resources>
     <Grid>
-        <Label Content="Add a new tourlog" HorizontalAlignment="Left" Margin="51,13,0,0" VerticalAlignment="Top" FontSize="32"/>
+        <Label Content="Edit tourlog" HorizontalAlignment="Left" Margin="51,13,0,0" VerticalAlignment="Top" FontSize="32"/>
 
         <Label Content="Difficulty" HorizontalAlignment="Left" Margin="51,79,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="CBDifficultyType" HorizontalAlignment="Left" Margin="216,81,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{StaticResource myDifficultyTypes}" SelectedItem="{Binding SelectedDifficulty, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}">
@@ -57,6 +57,6 @@
         </ComboBox>
         <TextBlock Text="- Select -" Visibility="{Binding SelectedItem, ElementName=CBRatingType, Converter={StaticResource NullToVisibilityConverter}}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="555,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" />
         <Label Content="Distance covered" HorizontalAlignment="Left" Margin="51,150,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="216,154,0,0" TextWrapping="Wrap"  Text="{Binding Distance, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" PreviewTextInput="NumberValidationTextBox" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="216,154,0,0" TextWrapping="Wrap"  Text="{Binding Distance, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, Converter={StaticResource StringToDoubleConverter}}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>

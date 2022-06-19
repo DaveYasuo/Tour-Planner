@@ -9,6 +9,7 @@
             <local:Container x:Key="Container"/>
             <Converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
             <Converters:EnumToStringConverter x:Key="DefaultEnumToStringConverter"/>
+            <Converters:StringToDoubleConverter x:Key="StringToDoubleConverter"/>
             <BitmapImage x:Key="DefaultImage" UriSource="Images/tour.png"/>
         </ResourceDictionary>
     </Application.Resources>

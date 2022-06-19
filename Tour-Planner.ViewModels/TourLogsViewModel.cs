@@ -33,6 +33,7 @@ namespace Tour_Planner.ViewModels
             ListToursLogs = new ObservableCollection<TourLog>();
             mediator.Subscribe(UpdateTourLogs, ViewModelMessage.SelectTour);
             mediator.Subscribe(UpdateTourLogs, ViewModelMessage.UpdateTourLogList);
+            mediator.Subscribe(DisplayEditTourLog, ViewModelMessage.EditTourLog);
             tour = null;
             DisplayAddTourLogCommand = new RelayCommand(_ => DisplayAddTourLog());
             DeleteTourLogCommand = new RelayCommand(async _ => await DeleteTourLog());
@@ -58,7 +59,7 @@ namespace Tour_Planner.ViewModels
                 // cancelled
             }
         }
-        private void DisplayEditTourLog()
+        private void DisplayEditTourLog(object? obj = null)
         {
             if (SelectedTourLog == null)
             {

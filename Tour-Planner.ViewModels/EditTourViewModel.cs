@@ -30,7 +30,7 @@ namespace Tour_Planner.ViewModels
                 foreach (var item in testableProperty)
                 {
 
-                    if (GetErrorForProperty(item, true) is not "")
+                    if (GetErrorForProperty(item) is not "")
                     {
                         hasError = true;
                     }
@@ -81,7 +81,7 @@ namespace Tour_Planner.ViewModels
             }
         }
 
-        private string GetErrorForProperty(string propertyName, bool onSubmit)
+        private string GetErrorForProperty(string propertyName)
         {
 
             Error = "";

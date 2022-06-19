@@ -20,9 +20,12 @@
                 <Separator />
                 <MenuItem Header="_Exit" />
             </MenuItem>
-            <MenuItem Command="{Binding DisplayEditTourCommand}"  Header="_Edit"></MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Edit Tour" Command="{Binding DisplayEditTourCommand}" />
+                <MenuItem Header="_Edit TourLog" Command="{Binding DisplayEditTourLogCommand}"/>
+            </MenuItem>
             <MenuItem Header="_Options"></MenuItem>
-            <MenuItem Header="_Help"></MenuItem>
+            <MenuItem Header="_Help" Command="{Binding ShowHelpCommand}"></MenuItem>
         </Menu>
     </DockPanel>
 </UserControl>

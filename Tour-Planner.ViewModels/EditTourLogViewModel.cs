@@ -24,7 +24,7 @@ namespace Tour_Planner.ViewModels
         private string _comment;
         private TimeSpan _totalTime;
         private DateTime _dateTime;
-        private double _distance;
+        private string _distance;
         public string Error { get; set; } = "";
 
         bool distanceHasBeenTouched = false;
@@ -42,7 +42,7 @@ namespace Tour_Planner.ViewModels
             _comment = selectedTourLog.Comment;
             _totalTime = selectedTourLog.TotalTime;
             _dateTime = selectedTourLog.DateTime;
-            _distance = selectedTourLog.Distance;
+            _distance = selectedTourLog.Distance.ToString();
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             SaveCommand = new RelayCommand(async _ =>
             {
@@ -62,7 +62,7 @@ namespace Tour_Planner.ViewModels
                     return;
                 }
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                TourLog newTour = new(selectedTourLog.Id, selectedTourLog.TourId, DateTime, TotalTime, SelectedRating, SelectedDifficulty, Distance, Comment);
+                TourLog newTour = new(selectedTourLog.Id, selectedTourLog.TourId, DateTime, TotalTime, SelectedRating, SelectedDifficulty, double.Parse(Distance), Comment);
                 var result = await service.UpdateTourLog(newTour);
                 mediator.Publish(ViewModelMessage.UpdateTourLogList, null);
             });
@@ -126,14 +126,14 @@ namespace Tour_Planner.ViewModels
                 RaisePropertyChangedEvent();
             }
         }
-        public double Distance
+        public string Distance
         {
             get => _distance;
             set
             {
                 if (_distance == value) return;
-                _distance = value;
                 RaisePropertyChangedEvent();
+                _distance = value;
             }
         }
         private string GetErrorForProperty(string propertyName, bool onSubmit)
@@ -155,7 +155,7 @@ namespace Tour_Planner.ViewModels
                     totalTimeHasBeenTouched = true;
                     break;
                 case "DateTime":
-                    if ((string.IsNullOrEmpty(_dateTime.ToString()) || _dateTime.ToString().Trim().Length == 0) && (dateAndTimeHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(DateTime.ToString()) || DateTime.ToString().Trim().Length == 0) && (dateAndTimeHasBeenTouched || onSubmit))
                     {
                         Error = "Date and time cannot be empty!";
                         return Error;
@@ -163,19 +163,19 @@ namespace Tour_Planner.ViewModels
                     dateAndTimeHasBeenTouched = true;
                     break;
                 case "Distance":
-                    if (Distance <= 0 && (distanceHasBeenTouched || onSubmit))
+                    if (Distance == "0" && (distanceHasBeenTouched || onSubmit))
                     {
                         if (onSubmit)
                         {
                             RaisePropertyChangedEvent(nameof(Distance));
                         }
-                        Error = "Distance cannot be empty!";
+                        Error = "Distance cannot be 0!";
                         return Error;
                     }
                     distanceHasBeenTouched = true;
                     break;
                 case "Comment":
-                    if (!string.IsNullOrEmpty(_comment) && _comment.Trim().Length == 0 && commentHasBeenTouched)
+                    if (!string.IsNullOrEmpty(Comment) && Comment.Trim().Length == 0 && commentHasBeenTouched)
                     {
 
                         Error = "Comment cannot be only spaces!";

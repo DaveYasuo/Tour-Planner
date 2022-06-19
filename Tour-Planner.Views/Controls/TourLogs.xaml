@@ -32,7 +32,7 @@
                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ColumnWidth="*" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding DateTime, StringFormat='dd.MM.yyyy hh:mm:ss'}" Header="Date"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Distance}" Header="Distance (km)"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Distance, Converter={StaticResource StringToDoubleConverter}}" Header="Distance (km)"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding TotalTime}" Header="Duration"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Rating, Converter={StaticResource DefaultEnumToStringConverter}}" Header="Rating"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Difficulty, Converter={StaticResource DefaultEnumToStringConverter}}" Header="Difficulty"></DataGridTextColumn>

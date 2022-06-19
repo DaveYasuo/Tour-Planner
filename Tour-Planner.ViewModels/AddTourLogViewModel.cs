@@ -17,7 +17,7 @@ namespace Tour_Planner.ViewModels
         private Difficulty? _selectedDifficulty;
         private Rating? _ratingItem;
         private string _comment;
-        private double _distance;
+        private string _distance;
         private TimeSpan _totalTime;
         private DateTime _dateTime = DateTime.Now;
         private IMediator mediator;
@@ -38,7 +38,7 @@ namespace Tour_Planner.ViewModels
             _selectedDifficulty = null;
             _ratingItem = null;
             _comment = "";
-            _distance = 0;
+            _distance = "0";
             this.service = service;
             this.mediator = mediator;
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
@@ -60,7 +60,7 @@ namespace Tour_Planner.ViewModels
                     return;
                 }
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                TourLog newTour = new(tour.Id, DateTime, TotalTime, (Rating)SelectedRating!, (Difficulty)SelectedDifficulty!, Distance, Comment); // Muss noch id holen
+                TourLog newTour = new(tour.Id, DateTime, TotalTime, (Rating)SelectedRating!, (Difficulty)SelectedDifficulty!, double.Parse(Distance), Comment); // Muss noch id holen
                 var result = await service.AddTourLog(newTour);
                 mediator.Publish(ViewModelMessage.UpdateTourLogList, null);
             });
@@ -124,7 +124,7 @@ namespace Tour_Planner.ViewModels
                 RaisePropertyChangedEvent();
             }
         }
-        public double Distance
+        public string Distance
         {
             get => _distance;
             set
@@ -141,7 +141,7 @@ namespace Tour_Planner.ViewModels
             switch (propertyName)
             {
                 case "SelectedRating":
-                    if (_ratingItem == null && (selectedRatingHasBeenTouched || onSubmit))
+                    if (SelectedRating == null && (selectedRatingHasBeenTouched || onSubmit))
                     {
                         if (onSubmit)
                         {
@@ -165,7 +165,7 @@ namespace Tour_Planner.ViewModels
                     totalTimeHasBeenTouched = true;
                     break;
                 case "DateTime":
-                    if ((string.IsNullOrEmpty(_dateTime.ToString()) || _dateTime.ToString().Trim().Length == 0) && (dateAndTimeHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(DateTime.ToString()) || DateTime.ToString().Trim().Length == 0) && (dateAndTimeHasBeenTouched || onSubmit))
                     {
                         Error = "Date and time cannot be empty!";
                         return Error;
@@ -173,19 +173,19 @@ namespace Tour_Planner.ViewModels
                     dateAndTimeHasBeenTouched = true;
                     break;
                 case "Distance":
-                    if (Distance <= 0 && (distanceHasBeenTouched || onSubmit))
+                    if (Distance == "0" && (distanceHasBeenTouched || onSubmit))
                     {
                         if (onSubmit)
                         {
                             RaisePropertyChangedEvent(nameof(Distance));
                         }
-                        Error = "Distance cannot be empty!";
+                        Error = "Distance cannot be 0!";
                         return Error;
                     }
                     distanceHasBeenTouched = true;
                     break;
                 case "Comment":
-                    if (!string.IsNullOrEmpty(_comment) && _comment.Trim().Length == 0 && commentHasBeenTouched)
+                    if (!string.IsNullOrEmpty(Comment) && Comment.Trim().Length == 0 && commentHasBeenTouched)
                     {
 
                         Error = "Comment cannot be only spaces!";
@@ -194,7 +194,7 @@ namespace Tour_Planner.ViewModels
                     commentHasBeenTouched = true;
                     break;
                 case "SelectedDifficulty":
-                    if (_selectedDifficulty == null && (selectedItemHasBeenTouched || onSubmit))
+                    if (SelectedDifficulty == null && (selectedItemHasBeenTouched || onSubmit))
                     {
                         if (onSubmit)
                         {
