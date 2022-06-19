@@ -114,5 +114,29 @@ namespace Server.Rest_API.SqlServer
                 return null;
             }
         }
+
+        public void DeleteTourLog(int id)
+        {
+            using var conn = Connection();
+            using var transaction = conn.BeginTransaction();
+
+            try
+            {
+                using (var cmd = new NpgsqlCommand("DELETE from public.tourlog WHERE id = @id;", conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                    transaction.Commit();
+                    Log.Info($"Deleted tourlog with Id: {id}");
+                    return;
+                };
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Cannot delete tourlog: " + ex.Message);
+                return;
+            }
+        }
     }
 }

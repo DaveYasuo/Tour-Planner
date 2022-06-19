@@ -10,5 +10,6 @@ namespace Server.Rest_API.DAO
         Tour AddNewTour(Tour newTour);
         void UpdateTour(Tour newTour);
         IEnumerable<Tour> GetTours();
+        void DeleteTour(int tourId);
     }
 }

@@ -29,9 +29,14 @@ namespace Server.Rest_API.Controller
             return tourLogSqlDao.GetAllTourLogs();
         }
 
+        private void DeleteATourLog(int id)
+        {
+            tourLogSqlDao.DeleteTourLog(id);
+        }
+
         public void Delete(object id)
         {
-            throw new NotImplementedException();
+            DeleteATourLog((int)id);
         }
 
         public string Get()

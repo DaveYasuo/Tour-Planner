@@ -116,5 +116,10 @@ namespace Tour_Planner.Services
                 return null;
             }
         }
+        public async Task<bool> DeleteTourLog(int id)
+        {
+            var result = await Client.DeleteAsync($"{BaseUrl}/TourLog/" + id);
+            return result.IsSuccessStatusCode;
+        }
     }
 }

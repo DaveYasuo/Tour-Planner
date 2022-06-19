@@ -88,6 +88,13 @@ namespace Tour_Planner.ViewModels
             }
         }
 
+        private async Task DeleteTourLog()
+        {
+            if(SelectedTourLog != null)
+            await service.DeleteTourLog(SelectedTourLog.Id);
+            await UpdateTourLogs();
+        }
+
         public ICommand DisplayAddTourLogCommand { get; }
     }
 }
