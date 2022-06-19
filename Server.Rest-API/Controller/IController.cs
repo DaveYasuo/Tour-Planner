@@ -10,8 +10,8 @@ namespace Server.Rest_API.Controller
     {
         string Get();
         string Get(object id);
-        Task<string> Post(string body);
-        void Patch(string body);
+        Task<string> Post(object body);
+        void Patch(object body);
         void Delete(object id);
 
         // http://9090/api/Tour/1

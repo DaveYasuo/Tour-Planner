@@ -1,25 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <RootNamespace>Tour_Planner</RootNamespace>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<RootNamespace>Tour_Planner</RootNamespace>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Images\" />
-    <Folder Include="Resources\" />
-  </ItemGroup>
+	<ItemGroup>
+	  <None Remove="Images\tour.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.14" />
-  </ItemGroup>
+	<ItemGroup>
+	  <Content Include="Images\tour.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Tour-Planner.Services\Tour-Planner.Services.csproj" />
-    <ProjectReference Include="..\Tour-Planner.Views\Tour-Planner.Views.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Resources\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="log4net" Version="2.0.14" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Tour-Planner.Services\Tour-Planner.Services.csproj" />
+		<ProjectReference Include="..\Tour-Planner.Views\Tour-Planner.Views.csproj" />
+	</ItemGroup>
 
 </Project>

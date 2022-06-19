@@ -31,7 +31,12 @@ namespace Server.Rest_API.Controller
 
         public void Delete(object id)
         {
-            throw new NotImplementedException();
+            DeleteATourLog((int)id);
+        }
+
+        private void DeleteATourLog(int id)
+        {
+            tourLogSqlDao.DeleteTourLog(id);
         }
 
         public string Get()
@@ -70,16 +75,21 @@ namespace Server.Rest_API.Controller
             return tourLogSqlDao.GetAllTourLogsFromTour(tourId);
         }
 
-        public Task<string> Post(string body)
+        public Task<string> Post(object body)
         {
-            TourLog tourLog = JsonSerializer.Deserialize<TourLog>(body);
-            //mapQuest.GetRoute(tourLog);
+            TourLog tourLog = JsonSerializer.Deserialize<TourLog>(body.ToString());
             return Task.Run(() => JsonSerializer.Serialize(AddTourLog(tourLog)));
         }
 
-        public void Patch(string body)
+        public void Patch(object body)
         {
-            throw new NotImplementedException();
+            TourLog tourLog = JsonSerializer.Deserialize<TourLog>(body.ToString());
+            UpdateTourLog(tourLog);
+        }
+
+        private void UpdateTourLog(TourLog tourLog)
+        {
+            tourLogSqlDao.UpdateTourLog(tourLog);
         }
     }
 }

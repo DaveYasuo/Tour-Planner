@@ -57,9 +57,9 @@ namespace Server.Rest_API.Controller
             }
         }
 
-        public async Task<string> Post(string body)
+        public async Task<string> Post(object body)
         {
-            Tour tour = JsonSerializer.Deserialize<Tour>(body);
+            Tour tour = JsonSerializer.Deserialize<Tour>(body.ToString());
             MapQuestResponse response = await mapQuest.GetRoute(tour);
             if (response == null) return null;
             tour.Distance = response.Distance;
@@ -76,9 +76,9 @@ namespace Server.Rest_API.Controller
             throw new NotImplementedException();
         }
 
-        public void Patch(string body)
+        public void Patch(object body)
         {
-            Tour tour = JsonSerializer.Deserialize<Tour>(body);
+            Tour tour = JsonSerializer.Deserialize<Tour>(body.ToString());
             UpdateTour(tour);
         }
 

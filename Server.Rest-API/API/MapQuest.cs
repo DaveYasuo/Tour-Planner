@@ -36,6 +36,7 @@ namespace Server.Rest_API.API
             query["key"] = MapQuestKey;
             query["from"] = tour.Origin;
             query["to"] = tour.Destination;
+            query["unit"] = "k";
             query["routeType"] = tour.RouteType.ToString();
             builder.Query = query.ToString();
             string uri = builder.ToString();

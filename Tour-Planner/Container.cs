@@ -31,6 +31,7 @@ namespace Tour_Planner
             serviceProvider.GetService<IDialogService>()!.Register<AddTourViewModel, AddTourDialogWindow>();
             serviceProvider.GetService<IDialogService>()!.Register<AddTourLogViewModel, AddTourLogDialogWindow>();        
             serviceProvider.GetService<IDialogService>()!.Register<EditTourViewModel, EditTourDialogWindow>(); 
+            serviceProvider.GetService<IDialogService>()!.Register<EditTourLogViewModel, EditTourLogDialogWindow>();
         }
 
         public ListToursViewModel ListToursViewModel => serviceProvider.GetService<ListToursViewModel>()!;

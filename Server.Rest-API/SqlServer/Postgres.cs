@@ -87,7 +87,7 @@ namespace Server.Rest_API.SqlServer
                     Create TABLE IF NOT EXISTS tourlog(
                         id SERIAL,
                         tour INTEGER NOT NULL,
-                        date_time DATE NOT NULL,
+                        date_time TIMESTAMP NOT NULL,
                         total_time INTERVAL NOT NULL,
                         rating ratingtype NOT NULL,
                         difficulty difficultytype NOT NULL,

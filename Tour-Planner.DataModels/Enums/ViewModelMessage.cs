@@ -9,8 +9,11 @@ namespace Tour_Planner.DataModels.Enums
     public enum ViewModelMessage
     {
         AddTour,
+        AddTourLog,
         EditTour,
+        EditTourLog,
         UpdateTourList,
+        UpdateTourLogList,
         RemoveTour,
         SelectTour,
         SelectTourLog,

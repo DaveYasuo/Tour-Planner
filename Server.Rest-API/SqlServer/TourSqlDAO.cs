@@ -57,7 +57,6 @@ namespace Server.Rest_API.SqlServer
             {
                 transaction.Rollback();
                 Log.Error($"Cannot insert tour {tour.Title}: " + ex.Message);
-                Console.WriteLine($"Cannot insert tour {tour.Title}: " + ex.Message);
                 return null;
             }
         }
@@ -83,7 +82,6 @@ namespace Server.Rest_API.SqlServer
             {
                 transaction.Rollback();
                 Log.Error($"Cannot insert tour {tour.Title}: " + ex.Message);
-                Console.WriteLine($"Cannot insert tour {tour.Title}: " + ex.Message);
             }
         }
 
@@ -138,6 +136,7 @@ namespace Server.Rest_API.SqlServer
             }
             catch (Exception ex)
             {
+                transaction.Rollback();
                 Log.Error($"Cannot delete tour: " + ex.Message);
                 return;
             }

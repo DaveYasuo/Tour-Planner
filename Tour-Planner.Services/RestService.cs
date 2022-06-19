@@ -116,5 +116,24 @@ namespace Tour_Planner.Services
                 return null;
             }
         }
+
+        public async Task<bool> DeleteTourLog(int id)
+        {
+            var result = await Client.DeleteAsync($"{BaseUrl}/TourLog/" + id);
+            return result.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UpdateTourLog(TourLog newTour)
+        {
+            try
+            {
+                var responseMessage = await Client.PatchAsync($"{BaseUrl}/TourLog", new StringContent(JsonSerializer.Serialize(newTour), Encoding.UTF8, "application/json"));
+                return responseMessage.IsSuccessStatusCode;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

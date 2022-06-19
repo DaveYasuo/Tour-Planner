@@ -129,7 +129,7 @@ namespace Tour_Planner.ViewModels
         {
             if (SelectedTour is null)
             {
-                MessageBox.Show("Please select a tour to delete!");
+                MessageBox.Show("Please select a tour to delete!", "Error");
             }
             else
             {
@@ -140,7 +140,6 @@ namespace Tour_Planner.ViewModels
                     SelectedTour = null;
                 }
             }
-
         }
         private async Task FilterByText()
         {

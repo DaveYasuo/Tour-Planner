@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Tour_Planner.DataModels.Enums;
@@ -11,16 +14,16 @@ using Tour_Planner.ViewModels.Commands;
 
 namespace Tour_Planner.ViewModels
 {
-    public class AddTourLogViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
+    public class EditTourLogViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
         private IRestService service;
-        private Difficulty? _selectedDifficulty;
-        private Rating? _ratingItem;
+        private IMediator mediator;
+        private TourLog selectedTourLog;
+        private Difficulty _selectedDifficulty;
+        private Rating _ratingItem;
         private string _comment;
         private TimeSpan _totalTime;
-        private DateTime _dateTime = DateTime.Now;
-        private IMediator mediator;
-        private Tour tour;
+        private DateTime _dateTime;
         public string Error { get; set; } = "";
 
         bool selectedRatingHasBeenTouched = false;
@@ -29,15 +32,16 @@ namespace Tour_Planner.ViewModels
         bool commentHasBeenTouched = false;
         bool selectedItemHasBeenTouched = false;
 
-        public AddTourLogViewModel(IRestService service, IMediator mediator, Tour tour)
+        public EditTourLogViewModel(IRestService service, IMediator mediator, TourLog selectedTourLog)
         {
-            this.tour = tour;
-            mediator.Subscribe(SetSelectedTour, ViewModelMessage.SelectTour);
-            _selectedDifficulty = null;
-            _ratingItem = null;
-            _comment = "";
             this.service = service;
             this.mediator = mediator;
+            this.selectedTourLog = selectedTourLog;
+            _selectedDifficulty = selectedTourLog.Difficulty;
+            _ratingItem = selectedTourLog.Rating;
+            _comment = selectedTourLog.Comment;
+            _totalTime = selectedTourLog.TotalTime;
+            _dateTime = selectedTourLog.DateTime;
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             SaveCommand = new RelayCommand(async _ =>
             {
@@ -57,8 +61,8 @@ namespace Tour_Planner.ViewModels
                     return;
                 }
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                TourLog newTour = new(tour.Id, DateTime, TotalTime, (Rating)SelectedRating!, (Difficulty)SelectedDifficulty!, Comment); // Muss noch id holen
-                var result = await service.AddTourLog(newTour);
+                TourLog newTour = new(selectedTourLog.Id,selectedTourLog.TourId, DateTime, TotalTime, SelectedRating, SelectedDifficulty, Comment);
+                var result = await service.UpdateTourLog(newTour);
                 mediator.Publish(ViewModelMessage.UpdateTourLogList, null);
             });
         }
@@ -71,7 +75,7 @@ namespace Tour_Planner.ViewModels
                 return GetErrorForProperty(propertyName, false);
             }
         }
-        public Difficulty? SelectedDifficulty
+        public Difficulty SelectedDifficulty
         {
             get => _selectedDifficulty;
             set
@@ -81,7 +85,7 @@ namespace Tour_Planner.ViewModels
                 RaisePropertyChangedEvent();
             }
         }
-        public Rating? SelectedRating
+        public Rating SelectedRating
         {
             get => _ratingItem;
             set
@@ -181,10 +185,6 @@ namespace Tour_Planner.ViewModels
                     return Error;
             }
             return Error;
-        }
-        private void SetSelectedTour(object? obj = null)
-        {
-            tour = (Tour)obj!;
         }
 
         public ICommand SaveCommand { get; }

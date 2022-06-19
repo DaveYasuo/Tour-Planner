@@ -12,7 +12,6 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBox x:Name="SearchTermTextBox" Grid.Row="0" Grid.Column="0" Text="{Binding SearchBarContent , UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Top">
         </TextBox>
@@ -28,6 +27,5 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button Grid.Row="0" Grid.Column="1" Content="Button" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

@@ -49,8 +49,30 @@ namespace Server.Rest_API.SqlServer
             {
                 transaction.Rollback();
                 Log.Error($"Cannot insert tourLog: " + ex.Message);
-                Console.WriteLine($"Cannot insert tourLog: " + ex.Message);
                 return null;
+            }
+        }
+
+        public void DeleteTourLog(int id)
+        {
+            using var conn = Connection();
+            using var transaction = conn.BeginTransaction();
+
+            try
+            {
+                using (var cmd = new NpgsqlCommand("DELETE from public.tourlog WHERE id = @id;", conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                    transaction.Commit();
+                    Log.Info($"Deleted tourlog with Id: {id}");
+                };
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                Log.Error($"Cannot delete tourlog: " + ex.Message);
             }
         }
 
@@ -82,6 +104,33 @@ namespace Server.Rest_API.SqlServer
             {
                 Log.Error($"Cannot get all tourlogs: " + ex.Message);
                 return null;
+            }
+        }
+
+        public void UpdateTourLog(TourLog tourLog)
+        {
+            using var conn = Connection();
+            using var transaction = conn.BeginTransaction();
+            try
+            {
+                using (var cmd = new NpgsqlCommand("UPDATE public.tourlog SET date_time=@dateTime, total_time=@totalTime, rating=@rating, difficulty=@difficulty, comment=@comment WHERE id=@id;", conn))
+                {
+                    cmd.Parameters.AddWithValue("@dateTime", tourLog.DateTime);
+                    cmd.Parameters.AddWithValue("@totalTime", tourLog.TotalTime);
+                    cmd.Parameters.AddWithValue("@rating", tourLog.Rating);
+                    cmd.Parameters.AddWithValue("@difficulty", tourLog.Difficulty);
+                    cmd.Parameters.AddWithValue("@comment", tourLog.Comment);
+                    cmd.Parameters.AddWithValue("@id", tourLog.Id);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                    transaction.Commit();
+                    Log.Info($"Updated tourlog {tourLog.Id}");
+                };
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                Log.Error($"Cannot update tourlog {tourLog.Id}: " + ex.Message);
             }
         }
 
