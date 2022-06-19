@@ -13,8 +13,10 @@
         <Menu DockPanel.Dock="Top" HorizontalAlignment="Stretch" >
             <MenuItem Header="_File">
                 <MenuItem Header="_New Tour" Command="{Binding DisplayAddTourCommand}" />
-                <MenuItem Header="_Import Tour" />
+                <MenuItem Header="_Import Tour" Command="{Binding ImportTourCommand}"/>
                 <MenuItem Header="_Export Tour" Command="{Binding ExportTourCommand}" />
+                <MenuItem Header="_Tour Report" Command="{Binding CreateTourReportCommand}"></MenuItem>
+                <MenuItem Header="_Summary Report"></MenuItem>
                 <Separator />
                 <MenuItem Header="_Exit" />
             </MenuItem>

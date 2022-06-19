@@ -13,26 +13,6 @@ namespace Tour_Planner.Services
 {
     public class ExportTour
     {
-        /*public void ExportTourFromInstance()
-        {
-            //Directory Explorer
-                /*if (Directory.Exists(folderPath))
-                {
-                    ProcessStartInfo startInfo = new ProcessStartInfo()
-                    {
-                        Arguments = folderPath,
-                        FileName = "explorer.exe"
-                    };
-
-                    Process.Start(startInfo);
-                }
-                else
-                {
-                    MessageBox.Show(string.Format("{0} Directory does not exist!", folderPath));
-                }
-        }*/
-
-
         public bool ExportSingleTour(Tour tour)
         {
             string folderPath = ".\\..\\..\\..\\..\\ExportedTours/";

@@ -44,7 +44,6 @@ namespace Tour_Planner.ViewModels
             ShowTours = new RelayCommand(async (_) => await UpdateTours());
             DisplayAddTourCommand = new RelayCommand(_ => DisplayAddTour());
             DisplayEditTourCommand = new RelayCommand(_ => DisplayEditTour());
-            CreatePdfCommand = new RelayCommand(_ => CreatePdf());
             DeleteTourCommand = new RelayCommand(async _ => await DeleteTour());
             _selectedTour = null;
             _searchBarContent = "";
@@ -100,12 +99,6 @@ namespace Tour_Planner.ViewModels
             {
                 // cancelled
             }
-        }
-        private void CreatePdf()
-        {
-            TourReport tr = new TourReport();
-            Tour tour = new Tour(1, "Dages Reise ins Zauberland", "Wien", "Linz", 40, "Ich bin geil weil ich so weit Fahrrad fahren kann!", new TimeSpan(2, 14, 18), "ImagePath", RouteType.pedestrian);
-            tr.CreatePdf(tour);
         }
         private async Task UpdateTours()
         {
@@ -244,7 +237,6 @@ namespace Tour_Planner.ViewModels
             }
         }
         public ICommand DisplayAddTourCommand { get; }
-        public ICommand CreatePdfCommand { get; }
         public ICommand ShowTours { get; }
         public ICommand DeleteTourCommand { get; }
         public ICommand DisplayEditTourCommand { get; }
