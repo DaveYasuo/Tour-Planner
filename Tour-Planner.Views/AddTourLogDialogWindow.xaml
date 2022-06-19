@@ -6,7 +6,7 @@
         xmlns:viewModels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels" 
         d:DataContext="{d:DesignInstance Type=viewModels:AddTourLogViewModel}"
         mc:Ignorable="d"
-        Title="New Tour" Height="450" Width="800"
+        Title="New Tour Log" Height="450" Width="800"
         xmlns:src="clr-namespace:Tour_Planner.DataModels.Collections;assembly=Tour-Planner.DataModels"
         xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         >
@@ -39,7 +39,7 @@
         <Label Content="Total time" VerticalAlignment="Top" Margin="51,110,-51,0"/>
         <wpfTool:TimeSpanUpDown Value="{Binding TotalTime,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" HorizontalAlignment="Left" Margin="165,114,0,276" Minimum="00:00:00:00" Width="120"></wpfTool:TimeSpanUpDown>
 
-        <Label Content="Date" HorizontalAlignment="Center" Margin="0,110,0,0" VerticalAlignment="Top"/>
+        <Label Content="Date" HorizontalAlignment="Left" Margin="381,110,0,0" VerticalAlignment="Top"/>
         <wpfTool:DateTimePicker Value="{Binding DateTime,ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ValidationTemplate}" HorizontalAlignment="Left" Margin="496,114,0,276" Width="220"></wpfTool:DateTimePicker>
 
         <Label Content="Comment" HorizontalAlignment="Left" Margin="51,145,0,0" VerticalAlignment="Top"/>

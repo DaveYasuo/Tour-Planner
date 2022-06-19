@@ -8,9 +8,10 @@ namespace Tour_Planner.Services.Interfaces
     {
         Task<Tour?> AddTour(Tour tour);
         Task<bool> AddTourLog(TourLog tourLog);
-        Task<List<Tour>?> GetTour();
+        Task<List<Tour>?> GetTours();
         Task<bool> DeleteTour(int id);
         Task<bool> UpdateTour(Tour tour);
-        Task<List<TourLog>?> GetTourLogs();
+        Task<List<TourLog>?> GetAllTourLogs();
+        Task<List<TourLog>?> GetAllTourLogsFromTour(Tour tour);
     }
 }

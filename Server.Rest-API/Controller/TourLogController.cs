@@ -17,7 +17,6 @@ namespace Server.Rest_API.Controller
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private readonly TourLogSqlDAO tourLogSqlDao = new TourLogSqlDAO();
-        private readonly IMapQuest mapQuest = DALFactory.GetMapQuestAPI();
         public TourLogController()
         {
         }
@@ -40,19 +39,35 @@ namespace Server.Rest_API.Controller
             try
             {
                 string json = JsonSerializer.Serialize(GetAllTourLogs());
-                Log.Info("Serialize all tours");
+                Log.Info("Serialize all tourlogs");
                 return json;
             }
             catch (Exception ex)
             {
-                Log.Warn("Cannot serialize all tours: " + ex.Message);
+                Log.Warn("Cannot serialize all tourlogs: " + ex.Message);
                 return null;
             }
         }
 
         public string Get(object id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                int tourId = int.Parse(id.ToString());
+                string json = JsonSerializer.Serialize(GetAllTourLogsFromTour(tourId));
+                Log.Info("Serialize all tourlogs");
+                return json;
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Cannot serialize all tourlogs: " + ex.Message);
+                return null;
+            }
+        }
+
+        private IEnumerable<TourLog> GetAllTourLogsFromTour(int tourId)
+        {
+            return tourLogSqlDao.GetAllTourLogsFromTour(tourId);
         }
 
         public Task<string> Post(string body)

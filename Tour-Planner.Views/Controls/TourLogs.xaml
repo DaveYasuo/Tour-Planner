@@ -3,11 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Tour_Planner.Views.Controls"
              xmlns:viewmodels="clr-namespace:Tour_Planner.ViewModels;assembly=Tour-Planner.ViewModels"
-             d:DataContext="{d:DesignInstance Type=viewmodels:ListToursViewModel}"
+             d:DataContext="{d:DesignInstance Type=viewmodels:TourLogsViewModel}"
              mc:Ignorable="d" 
-             DataContext="{Binding ListToursViewModel, Source={StaticResource Container}}"
+             DataContext="{Binding TourLogsViewModel, Source={StaticResource Container}}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,7 +21,7 @@
             <Label Grid.Column="0" Content="Logs:" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
             <Button  Grid.Column="1" Command="{Binding DisplayAddTourLogCommand}" Content="+" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
         </Grid>
-        <DataGrid Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding ListToursLogs}" SelectedItem="{Binding SelectedTourLog, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
         <!--<FlowDocumentReader Grid.Row="1" UseLayoutRounding="True" SnapsToDevicePixels="True" HorizontalAlignment="Stretch" >
             <FlowDocumentReader.Resources>

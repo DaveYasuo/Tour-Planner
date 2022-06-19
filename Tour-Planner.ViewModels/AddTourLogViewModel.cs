@@ -28,6 +28,7 @@ namespace Tour_Planner.ViewModels
         bool dateAndTimeHasBeenTouched = false;
         bool commentHasBeenTouched = false;
         bool selectedItemHasBeenTouched = false;
+
         public AddTourLogViewModel(IRestService service, IMediator mediator, Tour tour)
         {
             this.tour = tour;
@@ -62,11 +63,6 @@ namespace Tour_Planner.ViewModels
             });
         }
 
-
-        private void SetSelectedTour(object? obj = null)
-        {
-            tour = (Tour)obj!;
-        }
 
         public string this[string propertyName]
         {
@@ -105,7 +101,6 @@ namespace Tour_Planner.ViewModels
                 RaisePropertyChangedEvent();
             }
         }
-
         public TimeSpan TotalTime
         {
             get => _totalTime;
@@ -116,7 +111,6 @@ namespace Tour_Planner.ViewModels
                 RaisePropertyChangedEvent();
             }
         }
-
         public DateTime DateTime
         {
             get => _dateTime;
@@ -127,7 +121,6 @@ namespace Tour_Planner.ViewModels
                 RaisePropertyChangedEvent();
             }
         }
-
         private string GetErrorForProperty(string propertyName, bool onSubmit)
         {
 
@@ -189,8 +182,10 @@ namespace Tour_Planner.ViewModels
             }
             return Error;
         }
-
-        //public string this[string columnName] => throw new NotImplementedException();
+        private void SetSelectedTour(object? obj = null)
+        {
+            tour = (Tour)obj!;
+        }
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }

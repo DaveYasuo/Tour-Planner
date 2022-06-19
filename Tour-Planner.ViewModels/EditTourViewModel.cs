@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
-using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
@@ -15,10 +14,10 @@ namespace Tour_Planner.ViewModels
     {
 
         public string Error { get; set; } = "";
-        private Tour selectedTour;
-        private string _title;
-        private string _description;
-        public EditTourViewModel(IRestService service, IMediator mediator,Tour tour)
+        private readonly Tour selectedTour;
+        private readonly string _title;
+        private readonly string _description;
+        public EditTourViewModel(IRestService service, IMediator mediator, Tour tour)
         {
             selectedTour = tour;
             _title = tour.Title;
@@ -26,7 +25,7 @@ namespace Tour_Planner.ViewModels
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             SaveCommand = new RelayCommand(async _ =>
             {
-                List<string> testableProperty = new List<string>() { nameof(Title), nameof(Description)};
+                List<string> testableProperty = new List<string>() { nameof(Title), nameof(Description) };
                 bool hasError = false;
                 foreach (var item in testableProperty)
                 {
@@ -47,9 +46,7 @@ namespace Tour_Planner.ViewModels
                     return;
                 }
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                //Tour newTour = new(_title, _origin, _destination, _description, (RouteType)_routeType!); // todo
-                var result = await service.UpdateTour(selectedTour);
-
+                await service.UpdateTour(selectedTour);
             });
 
         }
@@ -99,7 +96,7 @@ namespace Tour_Planner.ViewModels
                     }
                     break;
                 case "Description":
-                    if (!string.IsNullOrEmpty(selectedTour.Description) && selectedTour.Description.Trim().Length == 0 )
+                    if (!string.IsNullOrEmpty(selectedTour.Description) && selectedTour.Description.Trim().Length == 0)
                     {
                         Error = "Description cannot be only spaces!";
                         return Error;
@@ -108,23 +105,9 @@ namespace Tour_Planner.ViewModels
             }
             return Error;
         }
-        /*private void EditTour()
-        {
-            var viewModel = new EditTourViewModel(service, SelectedTour!);
-            bool? result = _dialogService.ShowDialog(viewModel);
-            if (!result.HasValue) return;
-            if (result.Value)
-            {
-                //_ = UpdateTourLogs();
-            }
-            else
-            {
-                // cancelled
-            }
-        }*/
 
-        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
-        public ICommand EditTourCommand { get; }
+
+        public event EventHandler<DialogCloseRequestedEventArgs>? CloseRequested;
         public ICommand CancelCommand { get; }
         public ICommand SaveCommand { get; }
 

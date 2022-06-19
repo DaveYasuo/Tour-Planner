@@ -129,7 +129,6 @@ namespace Tour_Planner.ViewModels
                 RaisePropertyChangedEvent();
             }
         }
-
         public string? RouteImagePath
         {
             get => _routeImagePath;

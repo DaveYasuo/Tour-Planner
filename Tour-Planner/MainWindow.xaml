@@ -39,7 +39,7 @@
                     </Grid>
                 </Border>
                 <Border Grid.Row="1" BorderBrush="Black" BorderThickness="0, 0,1,1">
-                    <controls:TourLogs HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <controls:TourLogs HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Border>
             </Grid>
         </Grid>

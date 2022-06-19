@@ -11,7 +11,7 @@ using Tour_Planner.DataModels.Enums;
 
 namespace Server.Rest_API.SqlServer
 {
-    public class TourLogSqlDAO :ITourLogDAO
+    public class TourLogSqlDAO : ITourLogDAO
     {
         private readonly IDatabase _db;
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
@@ -50,6 +50,37 @@ namespace Server.Rest_API.SqlServer
                 transaction.Rollback();
                 Log.Error($"Cannot insert tourLog: " + ex.Message);
                 Console.WriteLine($"Cannot insert tourLog: " + ex.Message);
+                return null;
+            }
+        }
+
+        public IEnumerable<TourLog> GetAllTourLogsFromTour(int id)
+        {
+            try
+            {
+                var tourLogs = new List<TourLog>();
+                using var conn = Connection();
+                using var cmd = new NpgsqlCommand("SELECT id, tour, date_time, total_time, rating, difficulty, comment from public.tourlog WHERE tour=@tour;", conn);
+                cmd.Parameters.AddWithValue("tour", id);
+                cmd.Prepare();
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    tourLogs.Add(new TourLog(reader.SafeGet<int>("id"),
+                        reader.SafeGet<int>("tour"),
+                        reader.SafeGet<DateTime>("date_time"),
+                        reader.SafeGet<TimeSpan>("total_time"),
+                        reader.SafeGet<Rating>("rating"),
+                        reader.SafeGet<Difficulty>("difficulty"),
+                        reader.SafeGet<string>("comment")));
+                }
+                conn.Close();
+                Log.Info("Get all tours");
+                return tourLogs;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Cannot get all tourlogs: " + ex.Message);
                 return null;
             }
         }

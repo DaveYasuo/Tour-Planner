@@ -13,6 +13,7 @@ namespace Tour_Planner.DataModels.Enums
         UpdateTourList,
         RemoveTour,
         SelectTour,
+        SelectTourLog,
         ImportTour,
         ExportTour
     }

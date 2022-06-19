@@ -33,7 +33,7 @@ namespace Server.Rest_API.Controller
                         else
                         {
                             // api/tour/test
-                            result = Get(urlParams);
+                            result = Get(urlParams.Item1[1]);
                         };
                         break;
                     }
