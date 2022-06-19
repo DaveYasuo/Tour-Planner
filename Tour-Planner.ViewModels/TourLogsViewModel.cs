@@ -119,7 +119,6 @@ namespace Tour_Planner.ViewModels
             }
         }
 
-
         public TourLog? SelectedTourLog
         {
             get => _selectedTourLog;
@@ -130,13 +129,6 @@ namespace Tour_Planner.ViewModels
                 mediator.Publish(ViewModelMessage.SelectTourLog, SelectedTourLog);
                 RaisePropertyChangedEvent();
             }
-        }
-
-        private async Task DeleteTourLog()
-        {
-            if(SelectedTourLog != null)
-            await service.DeleteTourLog(SelectedTourLog.Id);
-            await UpdateTourLogs();
         }
 
         public ICommand DisplayAddTourLogCommand { get; }

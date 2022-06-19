@@ -14,7 +14,6 @@ namespace Tour_Planner.Services.Interfaces
         Task<bool> UpdateTour(Tour tour);
         Task<List<TourLog>?> GetAllTourLogs();
         Task<List<TourLog>?> GetAllTourLogsFromTour(Tour tour);
-        Task<bool> DeleteTourLog(int id);
         Task<bool> UpdateTourLog(TourLog newTour);
     }
 }
