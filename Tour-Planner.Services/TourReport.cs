@@ -94,7 +94,7 @@ namespace Tour_Planner.Services
             {
                 Directory.CreateDirectory(folderPath);
             }
-            string TARGET_PDF = ".\\..\\..\\..\\..\\Reports/"+"Summary_"+DateTime.Today+ ".pdf";
+            string TARGET_PDF = ".\\..\\..\\..\\..\\Reports/"+"Summary_" + ".pdf";
 
             PdfWriter writer = new PdfWriter(TARGET_PDF);
             PdfDocument pdf = new PdfDocument(writer);
@@ -107,7 +107,7 @@ namespace Tour_Planner.Services
                     .SetFontColor(ColorConstants.RED);
 
             document.Add(TitleHeader);
-            Table table = new Table(UnitValue.CreatePercentArray(5)).UseAllAvailableWidth();
+            Table table = new Table(UnitValue.CreatePercentArray(4)).UseAllAvailableWidth();
             table.AddHeaderCell(getHeaderCell("Title"));
             table.AddHeaderCell(getHeaderCell("Average time"));
             table.AddHeaderCell(getHeaderCell("Average distance"));
@@ -117,9 +117,18 @@ namespace Tour_Planner.Services
             {
                 List<TourLog> tourLogsFromTour = GetAllTourLogsFromTour(tourLogs, tour);
                 table.AddCell(tour.Title);
-                table.AddCell(GetAverageTime(tourLogsFromTour).ToString());
-                table.AddCell(GetAverageDistance(tourLogsFromTour).ToString());
-                table.AddCell(GetAverageRating(tourLogsFromTour).ToString());
+                if(tourLogsFromTour.Count != 0)
+                {
+                    table.AddCell(GetAverageTime(tourLogsFromTour).ToString());
+                    table.AddCell(GetAverageDistance(tourLogsFromTour).ToString());
+                    table.AddCell(GetAverageRating(tourLogsFromTour).ToString());
+                }
+                else
+                {
+                    table.AddCell("");
+                    table.AddCell("");
+                    table.AddCell("");
+                }
             }
 
             document.Add(table);
@@ -175,7 +184,7 @@ namespace Tour_Planner.Services
 
         private List<TourLog> GetAllTourLogsFromTour(List<TourLog> tourLogs, Tour tour)
         {
-            List<TourLog> tourLogsForTour = new List<TourLog>();
+            List<TourLog> tourLogsForTour = new();
             foreach(TourLog tourLog in tourLogs)
             {
                 if(tour.Id == tourLog.TourId) tourLogsForTour.Add(tourLog); 

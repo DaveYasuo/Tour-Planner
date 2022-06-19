@@ -14,10 +14,10 @@ namespace Server.Rest_API.SqlServer
         public Postgres(string conString)
         {
             _connString = conString;
-            CreateDatabaseIfNotExists();
             NpgsqlConnection.GlobalTypeMapper.MapEnum<RouteType>("routetype");
             NpgsqlConnection.GlobalTypeMapper.MapEnum<Rating>("ratingtype");
             NpgsqlConnection.GlobalTypeMapper.MapEnum<Difficulty>("difficultytype");
+            CreateDatabaseIfNotExists();
             Console.WriteLine(_connString);
         }
 
