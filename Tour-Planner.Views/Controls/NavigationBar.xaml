@@ -18,7 +18,7 @@
                 <MenuItem Header="_Tour Report" Command="{Binding CreateTourReportCommand}"></MenuItem>
                 <MenuItem Header="_Summary Report" Command="{Binding CreateSummaryReportCommand}"></MenuItem>
                 <Separator />
-                <MenuItem Header="_Exit" />
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Edit Tour" Command="{Binding DisplayEditTourCommand}" />

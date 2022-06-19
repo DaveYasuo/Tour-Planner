@@ -17,7 +17,7 @@ namespace Tour_Planner.ViewModels
 {
     public class NavigationViewModel
     {
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
         Tour? _selectedTour;
         ExportTour exporter = new ExportTour();
         ImportTour importer;
@@ -26,7 +26,7 @@ namespace Tour_Planner.ViewModels
 
         public NavigationViewModel(IMediator mediator, IRestService service)
         {
-            this.mediator = mediator;
+            _mediator = mediator;
             this.service = service;
             importer = new ImportTour(service);
             mediator.Subscribe(SetSelectedTour, ViewModelMessage.SelectTour);
@@ -37,6 +37,13 @@ namespace Tour_Planner.ViewModels
             ImportTourCommand = new RelayCommand(async (_) => await ImportTour());
             CreateTourReportCommand = new RelayCommand(async _ => await CreateTourReport());
             ShowHelpCommand = new RelayCommand(_ => ShowHelp());
+            CreateSummaryReportCommand = new RelayCommand(async _ => await CreateSummaryReport());
+            ExitCommand = new RelayCommand(CloseApplication);
+        }
+
+        private void CloseApplication(object obj)
+        {
+            Application.Current.Shutdown();
         }
 
         private void ShowHelp()
@@ -55,14 +62,7 @@ namespace Tour_Planner.ViewModels
             {
                 MessageBox.Show("Could not open browser for the help page.\n" + $"Please visit '{url}' manually.", "Tour-Planner - Help");
             }
-                mediator.Publish(ViewModelMessage.EditTour, null);
-            });
-            ExportTourCommand = new RelayCommand(_ => ExportTour());
-            ImportTourCommand = new RelayCommand(async (_) => await ImportTour());
-            CreateTourReportCommand = new RelayCommand(_ => CreateTourReport());
-            CreateSummaryReportCommand = new RelayCommand(_ => CreateSummaryReport());
         }
-
         private void SetSelectedTour(object? obj = null)
         {
             _selectedTour = (Tour)obj!;
@@ -80,7 +80,7 @@ namespace Tour_Planner.ViewModels
         private async Task ImportTour()
         {
             await importer.ImportSingleTour();
-            mediator.Publish(ViewModelMessage.UpdateTourList, true);
+            _mediator.Publish(ViewModelMessage.UpdateTourList, true);
         }
 
         private async Task CreateTourReport()
@@ -88,7 +88,7 @@ namespace Tour_Planner.ViewModels
             if (_selectedTour != null)
             {
                 List<TourLog>? tourLogs = await service.GetAllTourLogsFromTour(_selectedTour);
-                tr.CreateTourReport(_selectedTour, tourLogs);
+                tr.CreateTourReport(_selectedTour, tourLogs!);
             }
             else
             {
@@ -97,8 +97,8 @@ namespace Tour_Planner.ViewModels
         }
         private async Task CreateSummaryReport()
         {
-            List<TourLog> tourLogs = await service.GetAllTourLogs();
-            List<Tour> tours = await service.GetTours();
+            List<TourLog>? tourLogs = await service.GetAllTourLogs();
+            List<Tour>? tours = await service.GetTours();
             tr.CreateSummaryReport(tours, tourLogs);
         }
 
@@ -111,5 +111,6 @@ namespace Tour_Planner.ViewModels
         public ICommand CreateTourReportCommand { get; }
         public ICommand ShowHelpCommand { get; }
         public ICommand CreateSummaryReportCommand { get; }
+        public ICommand ExitCommand { get; }
     }
 }

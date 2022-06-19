@@ -77,7 +77,7 @@ namespace Tour_Planner.ViewModels
         {
             get
             {
-                return GetErrorForProperty(propertyName, false);
+                return GetErrorForProperty(propertyName);
             }
         }
 
