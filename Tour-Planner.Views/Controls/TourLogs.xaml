@@ -17,11 +17,32 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Logs:" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-            <Button  Grid.Column="1" Command="{Binding DisplayAddTourLogCommand}" Content="+" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+            <Label Grid.Column="0" Content="Logs:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button  Grid.Column="1" Command="{Binding DisplayAddTourLogCommand}" Content="+" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button  Grid.Column="2" Command="{Binding DeleteTourLogCommand}" Content="-" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button  Grid.Column="3" Command="{Binding DisplayEditTourLogCommand}" Content="Edit" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
-        <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding ListToursLogs}" SelectedItem="{Binding SelectedTourLog, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding Path=ListToursLogs}" 
+                  SelectedItem="{Binding SelectedTourLog, UpdateSourceTrigger=PropertyChanged}" 
+                  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ColumnWidth="Auto" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding DateTime}" Header="Date"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding TotalTime}" Header="Duration"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Rating}" Header="Rating"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Difficulty}" Header="Difficulty"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Comment}" Header="Comment">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <!--<FlowDocumentReader Grid.Row="1" UseLayoutRounding="True" SnapsToDevicePixels="True" HorizontalAlignment="Stretch" >
             <FlowDocumentReader.Resources>
