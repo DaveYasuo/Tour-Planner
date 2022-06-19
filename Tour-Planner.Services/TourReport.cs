@@ -66,9 +66,11 @@ namespace Tour_Planner.Services
                 .SetFontSize(18)
                 .SetBold();
             document.Add(TourlogsHeader);
-            Table table = new Table(UnitValue.CreatePercentArray(5)).UseAllAvailableWidth();
+            Table table = new Table(UnitValue.CreatePercentArray(7)).UseAllAvailableWidth();
             table.AddHeaderCell(getHeaderCell("Date and time"));
             table.AddHeaderCell(getHeaderCell("Total time"));
+            table.AddHeaderCell(getHeaderCell("Distance"));
+            table.AddHeaderCell(getHeaderCell("Km/h"));
             table.AddHeaderCell(getHeaderCell("Rating"));
             table.AddHeaderCell(getHeaderCell("Difficulty"));
             table.AddHeaderCell(getHeaderCell("Comment"));
@@ -77,6 +79,8 @@ namespace Tour_Planner.Services
             {
                 table.AddCell(tourLog.DateTime.ToString());
                 table.AddCell(tourLog.TotalTime.ToString());
+                table.AddCell(tourLog.Distance.ToString());
+                table.AddCell(Math.Round((tourLog.Distance/tourLog.TotalTime.TotalHours),1).ToString());
                 table.AddCell(tourLog.Rating.ToString());
                 table.AddCell(tourLog.Difficulty.ToString());
                 table.AddCell(tourLog.Comment);
@@ -107,24 +111,30 @@ namespace Tour_Planner.Services
                     .SetFontColor(ColorConstants.RED);
 
             document.Add(TitleHeader);
-            Table table = new Table(UnitValue.CreatePercentArray(4)).UseAllAvailableWidth();
+            Table table = new Table(UnitValue.CreatePercentArray(5)).UseAllAvailableWidth();
             table.AddHeaderCell(getHeaderCell("Title"));
             table.AddHeaderCell(getHeaderCell("Average time"));
             table.AddHeaderCell(getHeaderCell("Average distance"));
+            table.AddHeaderCell(getHeaderCell("Average Km/h"));
             table.AddHeaderCell(getHeaderCell("Rating"));
             table.SetFontSize(14).SetBackgroundColor(ColorConstants.WHITE);
             foreach (Tour tour in tours)
             {
                 List<TourLog> tourLogsFromTour = GetAllTourLogsFromTour(tourLogs, tour);
                 table.AddCell(tour.Title);
-                if(tourLogsFromTour.Count != 0)
+                TimeSpan averageTime = GetAverageTime(tourLogsFromTour);
+                double averageDistance = GetAverageDistance(tourLogsFromTour);
+                double averageSpeed = averageDistance / averageTime.TotalHours;
+                if (tourLogsFromTour.Count != 0)
                 {
-                    table.AddCell(GetAverageTime(tourLogsFromTour).ToString());
-                    table.AddCell(GetAverageDistance(tourLogsFromTour).ToString());
+                    table.AddCell(averageTime.ToString());
+                    table.AddCell(averageDistance.ToString());
+                    table.AddCell(Math.Round(averageSpeed,2).ToString());
                     table.AddCell(GetAverageRating(tourLogsFromTour).ToString());
                 }
                 else
                 {
+                    table.AddCell("");
                     table.AddCell("");
                     table.AddCell("");
                     table.AddCell("");

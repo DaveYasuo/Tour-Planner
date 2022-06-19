@@ -130,6 +130,7 @@ namespace Tour_Planner.ViewModels
                 if (result)
                 {
                     await UpdateTours();
+                    //File.Delete(".\\..\\..\\..\\..\\RouteImages/" + SelectedTour.ImagePath);
                     SelectedTour = null;
                 }
             }
