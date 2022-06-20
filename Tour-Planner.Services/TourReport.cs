@@ -19,7 +19,7 @@ namespace Tour_Planner.Services
 
     public class TourReport
     {
-        string folderPath = ".\\..\\..\\..\\..\\Reports/";
+        private const string FolderPath = ".\\..\\..\\..\\..\\Reports/";
 
         public void CreateTourReport(Tour tour, List<TourLog> tourLogs)
         {

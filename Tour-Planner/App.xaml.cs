@@ -21,6 +21,7 @@ namespace Tour_Planner
 
         public App()
         {
+            Log.Info("Start WPF application");
         }
     }
 }

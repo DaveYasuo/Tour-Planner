@@ -10,11 +10,10 @@ using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
 
-namespace Tour_Planner.ViewModels
+namespace Tour_Planner.ViewModels.Tours
 {
     public class AddTourViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
-        private const string PlaceHolder = null;
         private string _title;
         private string _origin;
         private string _destination;
@@ -68,10 +67,10 @@ namespace Tour_Planner.ViewModels
 
             SaveCommand = new RelayCommand(Execute);
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
-            _description = PlaceHolder;
-            _title = PlaceHolder;
-            _origin = PlaceHolder;
-            _destination = PlaceHolder;
+            _description = "";
+            _title = "";
+            _origin = "";
+            _destination = "";
             _routeType = null;
         }
 
