@@ -5,6 +5,7 @@
         AddTour,
         EditTour,
         EditTourLog,
+        UpdateComputedTourAttributes,
         UpdateTourList,
         UpdateTourLogList,
         SelectTour,

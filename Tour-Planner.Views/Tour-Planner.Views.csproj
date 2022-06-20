@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Attached\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Tour-Planner.Converters\Tour-Planner.Converters.csproj" />
     <ProjectReference Include="..\Tour-Planner.DataModels\Tour-Planner.DataModels.csproj" />
     <ProjectReference Include="..\Tour-Planner.Services\Tour-Planner.Services.csproj" />

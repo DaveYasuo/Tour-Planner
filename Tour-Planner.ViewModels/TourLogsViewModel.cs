@@ -93,6 +93,7 @@ namespace Tour_Planner.ViewModels
                 {
                     ListToursLogs.Add(item);
                 }
+                _mediator.Publish(ViewModelMessage.UpdateComputedTourAttributes, _allTourLogs);
             }
         }
 
