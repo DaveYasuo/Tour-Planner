@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using Tour_Planner.Models;
+using Tour_Planner.Services;
 
 namespace Test.Tour_Planner.Services
 {
@@ -7,10 +9,12 @@ namespace Test.Tour_Planner.Services
         [SetUp]
         public void Setup()
         {
+            RestService service = new RestService();
+            Tour tour = new Tour("TestCase",Wien,Linz,);
         }
 
         [Test]
-        public void Test1()
+        public void AddTourToDatabase()
         {
             Assert.Pass();
         }

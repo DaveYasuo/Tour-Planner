@@ -8,17 +8,24 @@ namespace Tour_Planner.Services
     {
         public bool ExportSingleTour(Tour tour)
         {
-            string folderPath = ".\\..\\..\\..\\..\\ExportedTours/";
-            string fileName = tour.Title + ".json";
             string json = JsonSerializer.Serialize(tour);
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-            }
+            // Configure save file dialog box
+            var dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = tour.Title; // Default file name
+            dialog.DefaultExt = ".json"; // Default file extension
+            dialog.Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt"; // Filter files by extension
 
-            using StreamWriter sw = new StreamWriter(folderPath + fileName, false);
-            sw.Write(json);
-            ;
+            // Show save file dialog box
+            bool? result = dialog.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dialog.FileName; 
+                using StreamWriter sw = new StreamWriter(filename, false);
+                sw.Write(json);
+            }
 
             return true;
         }

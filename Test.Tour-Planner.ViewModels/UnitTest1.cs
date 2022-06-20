@@ -7,6 +7,7 @@ namespace Test.Tour_Planner.ViewModels
         [SetUp]
         public void Setup()
         {
+
         }
 
         [Test]
