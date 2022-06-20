@@ -9,7 +9,7 @@ using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
 
-namespace Tour_Planner.ViewModels
+namespace Tour_Planner.ViewModels.TourLogs
 {
     public class TourLogsViewModel : BaseViewModel
     {

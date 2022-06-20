@@ -19,7 +19,7 @@ namespace Tour_Planner.Services
 
     public class TourReport
     {
-        string folderPath = ".\\..\\..\\..\\..\\Reports/";
+        private const string FolderPath = ".\\..\\..\\..\\..\\Reports/";
 
         public void CreateTourReport(Tour tour, List<TourLog> tourLogs)
         {
@@ -28,9 +28,9 @@ namespace Tour_Planner.Services
             const string imagePath = ".\\..\\..\\..\\..\\RouteImages/";
 
 
-            if (!Directory.Exists(folderPath))
+            if (!Directory.Exists(FolderPath))
             {
-                Directory.CreateDirectory(folderPath);
+                Directory.CreateDirectory(FolderPath);
             }
 
             PdfWriter writer = new PdfWriter(targetPdf);
@@ -94,9 +94,9 @@ namespace Tour_Planner.Services
         public void CreateSummaryReport(List<Tour>? tours, List<TourLog>? tourLogs)
         {
             if (tours == null || tourLogs == null) return;
-            if (!Directory.Exists(folderPath))
+            if (!Directory.Exists(FolderPath))
             {
-                Directory.CreateDirectory(folderPath);
+                Directory.CreateDirectory(FolderPath);
             }
             string targetPdf = ".\\..\\..\\..\\..\\Reports/" + "Summary_" + ".pdf";
 

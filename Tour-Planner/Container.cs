@@ -3,6 +3,8 @@ using Tour_Planner.Extensions;
 using Tour_Planner.Services;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels;
+using Tour_Planner.ViewModels.TourLogs;
+using Tour_Planner.ViewModels.Tours;
 using Tour_Planner.Views;
 
 namespace Tour_Planner
@@ -17,8 +19,7 @@ namespace Tour_Planner
 
             services.AddSingleton<IRestService>(new RestService());
             services.AddSingleton<IMediator>(new Mediator());
-            services.AddSingleton<IDialogService>(x => new DialogService());
-            //services.AddSingleton(x => new ListToursViewModel(x.GetService<IDialogService>()!, x.GetService<IRestService>()!));
+            services.AddSingleton<IDialogService>(_ => new DialogService());
 
 
             services.AddSingleton<TourDataViewModel>();

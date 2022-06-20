@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Tour_Planner.Extensions;
@@ -8,78 +9,73 @@ using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
 using Tour_Planner.ViewModels.Commands;
 
-namespace Tour_Planner.ViewModels
+namespace Tour_Planner.ViewModels.Tours
 {
     public class EditTourViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
 
         public string Error { get; set; } = "";
-        private readonly Tour selectedTour;
-        private readonly string _title;
-        private readonly string _description;
+        private readonly Tour _selectedTour;
+
         public EditTourViewModel(IRestService service, IMediator mediator, Tour tour)
         {
-            selectedTour = tour;
-            _title = tour.Title;
-            _description = tour.Description;
+            _selectedTour = tour;
+            string? title = tour.Title;
+            string? description = tour.Description;
             CancelCommand = new RelayCommand(_ => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
-            SaveCommand = new RelayCommand(async _ =>
+
+            async void ExecuteSave(object _)
             {
                 List<string> testableProperty = new List<string>() { nameof(Title), nameof(Description) };
                 bool hasError = false;
-                foreach (var item in testableProperty)
+                foreach (var unused in testableProperty.Where(item => GetErrorForProperty(item) is not ""))
                 {
-
-                    if (GetErrorForProperty(item) is not "")
-                    {
-                        hasError = true;
-                    }
+                    hasError = true;
                 }
+
                 if (hasError)
                 {
                     MessageBox.Show("Please fill out the form before submitting");
                     return;
                 }
-                if (selectedTour.Title == _title && selectedTour.Description == _description)
+
+                if (_selectedTour.Title == title && _selectedTour.Description == description)
                 {
                     CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
                     return;
                 }
+
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
-                await service.UpdateTour(selectedTour);
-            });
+                await service.UpdateTour(_selectedTour);
+            }
+
+            SaveCommand = new RelayCommand(ExecuteSave);
 
         }
 
         public string Title
         {
-            get => selectedTour.Title;
+            get => _selectedTour.Title;
             set
             {
-                if (selectedTour.Title == value) return;
-                selectedTour.Title = value;
+                if (_selectedTour.Title == value) return;
+                _selectedTour.Title = value;
                 RaisePropertyChangedEvent();
             }
         }
 
         public string Description
         {
-            get => selectedTour.Description;
+            get => _selectedTour.Description;
             set
             {
-                if (selectedTour.Description == value) return;
-                selectedTour.Description = value;
+                if (_selectedTour.Description == value) return;
+                _selectedTour.Description = value;
                 RaisePropertyChangedEvent();
             }
         }
 
-        public string this[string propertyName]
-        {
-            get
-            {
-                return GetErrorForProperty(propertyName);
-            }
-        }
+        public string this[string propertyName] => GetErrorForProperty(propertyName);
 
         private string GetErrorForProperty(string propertyName)
         {
@@ -88,7 +84,7 @@ namespace Tour_Planner.ViewModels
             switch (propertyName)
             {
                 case "Title":
-                    if ((string.IsNullOrEmpty(selectedTour.Title) || selectedTour.Title.Trim().Length == 0))
+                    if (string.IsNullOrEmpty(_selectedTour.Title) || _selectedTour.Title.Trim().Length == 0)
                     {
                         Title = "";
                         Error = "Title cannot be empty!";
@@ -96,7 +92,7 @@ namespace Tour_Planner.ViewModels
                     }
                     break;
                 case "Description":
-                    if (!string.IsNullOrEmpty(selectedTour.Description) && selectedTour.Description.Trim().Length == 0)
+                    if (!string.IsNullOrEmpty(_selectedTour.Description) && _selectedTour.Description.Trim().Length == 0)
                     {
                         Error = "Description cannot be only spaces!";
                         return Error;
