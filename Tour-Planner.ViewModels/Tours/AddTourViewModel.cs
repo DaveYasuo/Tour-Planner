@@ -16,6 +16,7 @@ namespace Tour_Planner.ViewModels.Tours
 {
     public class AddTourViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
+        private readonly IDialogService _dialogService;
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private string _title;
@@ -31,8 +32,10 @@ namespace Tour_Planner.ViewModels.Tours
         private bool _destinationHasBeenTouched;
         private bool _descriptionHasBeenTouched;
         private bool _selectedItemHasBeenTouched;
-        public AddTourViewModel(IRestService service, IMediator mediator)
+        public AddTourViewModel(IDialogService dialogService, IRestService service, IMediator mediator)
         {
+            _dialogService = dialogService;
+
             async void Execute(object _)
             {
                 List<string> testableProperty = new()
@@ -51,7 +54,7 @@ namespace Tour_Planner.ViewModels.Tours
 
                 if (hasError)
                 {
-                    MessageBox.Show("Please fill out the form before submitting", "Error");
+                    _dialogService.ShowMessageBox("Please fill out the form before submitting", "Error");
                     return;
                 }
 
@@ -61,7 +64,7 @@ namespace Tour_Planner.ViewModels.Tours
                 if (result == null)
                 {
                     mediator.Publish(ViewModelMessage.UpdateTourList, false);
-                    MessageBox.Show($"Cannot find a route for {newTour.Title} from {newTour.Origin} to {newTour.Destination}.", "Check your inputs");
+                    _dialogService.ShowMessageBox($"Cannot find a route for {newTour.Title} from {newTour.Origin} to {newTour.Destination}.", "Check your inputs");
                 }
                 else
                 {

@@ -37,16 +37,15 @@ namespace Tour_Planner.ViewModels.Tours
         private List<Tour> _allTours = new();
 
 
-        public ListToursViewModel(IDialogService dialogService, IRestService service, IMediator mediator, Configuration config)
+        public ListToursViewModel(IDialogService dialogService, IRestService service, IMediator mediator, string appImagePath)
         {
             _mediator = mediator;
-            string? tmp = config.PathsCollection.Get("AppImagePath");
-            if (tmp == null)
+            if (appImagePath == null)
             {
                 Log.Fatal("Key: AppImagePath not found for displaying Refresh icon.");
                 throw new KeyNotFoundException("Key: AppImagePath not found for displaying Refresh icon.");
             }
-            _refreshIconPath = tmp;
+            _refreshIconPath = appImagePath;
             _service = service;
             _loadingImage = null;
             _loadedImage = new Tuple<ImageSource, ImageSource>(GetBitmapImage("\\refresh.gif"), GetBitmapImage("\\refresh.png"));
@@ -91,7 +90,7 @@ namespace Tour_Planner.ViewModels.Tours
         }
         private void DisplayAddTour(object? obj = null)
         {
-            var viewModel = new AddTourViewModel(_service, _mediator);
+            var viewModel = new AddTourViewModel(_dialogService, _service, _mediator);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (!result.Value) return;
@@ -102,11 +101,11 @@ namespace Tour_Planner.ViewModels.Tours
         {
             if (SelectedTour is null)
             {
-                MessageBox.Show("Select tour before editing a tour", "Error");
+                _dialogService.ShowMessageBox("Select tour before editing a tour", "Error");
                 Log.Error("Select tour before editing a tour");
                 return;
             }
-            var viewModel = new EditTourViewModel(_service, _mediator, SelectedTour!);
+            var viewModel = new EditTourViewModel(_dialogService, _service, _mediator, SelectedTour!);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
@@ -138,7 +137,7 @@ namespace Tour_Planner.ViewModels.Tours
             if (SelectedTour is null)
             {
                 Log.Info("Delete unknown Tour");
-                MessageBox.Show("Please select a tour to delete!", "Error");
+                _dialogService.ShowMessageBox("Please select a tour to delete!", "Error");
             }
             else
             {

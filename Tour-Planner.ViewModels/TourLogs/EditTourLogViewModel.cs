@@ -18,6 +18,7 @@ namespace Tour_Planner.ViewModels.TourLogs
 {
     public class EditTourLogViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
+        private readonly IDialogService _dialogService;
         private Difficulty _selectedDifficulty;
         private Rating _ratingItem;
         private string _comment;
@@ -34,8 +35,9 @@ namespace Tour_Planner.ViewModels.TourLogs
         private bool _dateAndTimeHasBeenTouched;
         private bool _commentHasBeenTouched;
 
-        public EditTourLogViewModel(IRestService service, IMediator mediator, TourLog selectedTourLog)
+        public EditTourLogViewModel(IDialogService dialogService, IRestService service, IMediator mediator, TourLog selectedTourLog)
         {
+            _dialogService = dialogService;
 
             _selectedDifficulty = selectedTourLog.Difficulty;
             _ratingItem = selectedTourLog.Rating;
@@ -56,7 +58,7 @@ namespace Tour_Planner.ViewModels.TourLogs
 
                 if (hasError)
                 {
-                    MessageBox.Show("Please fill out the form before submitting");
+                    _dialogService.ShowMessageBox("Please fill out the form before submitting");
                     Log.Error("Please fill out the form before submitting");
 
                     return;

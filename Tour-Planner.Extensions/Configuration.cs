@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using log4net;
 
 namespace Tour_Planner.Extensions
@@ -14,12 +11,13 @@ namespace Tour_Planner.Extensions
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
-        public NameValueCollection PathsCollection { get; }
-        public Configuration()
+        static Configuration()
         {
             try
             {
-                PathsCollection = ConfigurationManager.GetSection("path") as NameValueCollection ?? throw new KeyNotFoundException("Missing section 'path'");
+                NameValueCollection pathsCollection = ConfigurationManager.GetSection("path") as NameValueCollection ?? throw new KeyNotFoundException("Missing section 'path'");
+                RouteImagePath = pathsCollection.Get("RouteImagePath") ?? throw new KeyNotFoundException(nameof(RouteImagePath));
+                AppImagePath = pathsCollection.Get("AppImagePath") ?? throw new KeyNotFoundException(nameof(AppImagePath));
             }
             catch (Exception e)
             {
@@ -27,5 +25,7 @@ namespace Tour_Planner.Extensions
                 throw;
             }
         }
+        public static string RouteImagePath { get; }
+        public static string AppImagePath { get; }
     }
 }

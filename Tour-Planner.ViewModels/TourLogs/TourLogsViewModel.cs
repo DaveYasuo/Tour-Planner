@@ -19,7 +19,7 @@ namespace Tour_Planner.ViewModels.TourLogs
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
 
-        private Tour? _tour;
+        public Tour? Tour;
         private TourLog? _selectedTourLog;
         private readonly IMediator _mediator;
         private readonly IRestService _service;
@@ -35,7 +35,7 @@ namespace Tour_Planner.ViewModels.TourLogs
             mediator.Subscribe(UpdateTourLogsFromNewTour, ViewModelMessage.SelectTour);
             mediator.Subscribe(UpdateTourLogsFromNewTour, ViewModelMessage.UpdateTourLogList);
             mediator.Subscribe(DisplayEditTourLog, ViewModelMessage.EditTourLog);
-            _tour = null;
+            Tour = null;
             DisplayAddTourLogCommand = new RelayCommand(_ => DisplayAddTourLog());
             DeleteTourLogCommand = new RelayCommand(ExecuteDeleteTourLog);
             DisplayEditTourLogCommand = new RelayCommand(_ => DisplayEditTourLog());
@@ -48,14 +48,14 @@ namespace Tour_Planner.ViewModels.TourLogs
 
         private void DisplayAddTourLog()
         {
-            if (_tour == null)
+            if (Tour == null)
             {
-                MessageBox.Show("Select tour before adding a tour log", "Error"); 
+                _dialogService.ShowMessageBox("Select tour before adding a tour log", "Error");
                 Log.Error("Select tour before adding a tour log");
 
                 return;
             }
-            var viewModel = new AddTourLogViewModel(_service, _mediator, _tour);
+            var viewModel = new AddTourLogViewModel(_dialogService, _service, _mediator, Tour);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
@@ -67,11 +67,11 @@ namespace Tour_Planner.ViewModels.TourLogs
         {
             if (SelectedTourLog == null)
             {
-                MessageBox.Show("Select tour log before editing a tour log", "Error");
+                _dialogService.ShowMessageBox("Select tour log before editing a tour log", "Error");
                 Log.Error("Select tour log before editing a tour log");
                 return;
             }
-            var viewModel = new EditTourLogViewModel(_service, _mediator, SelectedTourLog);
+            var viewModel = new EditTourLogViewModel(_dialogService, _service, _mediator, SelectedTourLog);
             bool? result = _dialogService.ShowDialog(viewModel);
             if (!result.HasValue) return;
             if (result.Value)
@@ -84,14 +84,14 @@ namespace Tour_Planner.ViewModels.TourLogs
         {
             if (obj != null)
             {
-                _tour = (Tour)obj!;
+                Tour = (Tour)obj!;
             }
             _ = UpdateTourLogs();
         }
         private async Task UpdateTourLogs()
         {
-            if (_tour is null) return;
-            List<TourLog>? tourLogs = await _service.GetAllTourLogsFromTour(_tour);
+            if (Tour is null) return;
+            List<TourLog>? tourLogs = await _service.GetAllTourLogsFromTour(Tour);
             if (tourLogs is not null)
             {
                 ListToursLogs.Clear();
@@ -109,7 +109,7 @@ namespace Tour_Planner.ViewModels.TourLogs
         {
             if (SelectedTourLog == null)
             {
-                MessageBox.Show("Please select a tour log to delete!", "Error");
+                _dialogService.ShowMessageBox("Please select a tour log to delete!", "Error");
                 Log.Error("Please select a tour log to delete!");
                 return;
             }

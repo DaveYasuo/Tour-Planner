@@ -18,6 +18,7 @@ namespace Tour_Planner.ViewModels
     public class NavigationViewModel
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+        private readonly IDialogService _dialogService;
         private readonly IMediator _mediator;
         private Tour? _selectedTour;
         private readonly ExportTour _exporter = new();
@@ -25,15 +26,15 @@ namespace Tour_Planner.ViewModels
         private readonly TourReport _tr ;
         private readonly IRestService _service;
 
-        public NavigationViewModel(IMediator mediator, IRestService service, Configuration config)
+        public NavigationViewModel(IDialogService dialogService, IMediator mediator, IRestService service, string? routeImagePath)
         {
-            string? routeImagePath = config.PathsCollection.Get("RouteImagePath");
             if (routeImagePath == null)
             {
                 Log.Fatal("Key: RouteImagePath not found for displaying Route Images.");
                 throw new KeyNotFoundException("Key: RouteImagePath not found for displaying Route Images.");
             }
             _tr = new TourReport(routeImagePath);
+            _dialogService = dialogService;
             _mediator = mediator;
             _service = service;
             _importer = new ImportTour(service);
@@ -83,7 +84,7 @@ namespace Tour_Planner.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not open browser for the help page.\n" + $"Please visit '{url}' manually.", "Tour-Planner - Help");
+                _dialogService.ShowMessageBox("Could not open browser for the help page.\n" + $"Please visit '{url}' manually.", "Tour-Planner - Help");
                 Log.Error("Could not open browser for the help page: " + ex.Message);
             }
         }
@@ -98,7 +99,7 @@ namespace Tour_Planner.ViewModels
                 _exporter.ExportSingleTour(_selectedTour);
                 return;
             }
-            MessageBox.Show("Please select a tour to export!");
+            _dialogService.ShowMessageBox("Please select a tour to export!");
             Log.Error("Please select a tour to export!");
         }
 
@@ -117,7 +118,7 @@ namespace Tour_Planner.ViewModels
             }
             else
             {
-                MessageBox.Show("Select a tour to report");
+                _dialogService.ShowMessageBox("Select a tour to report");
                 Log.Error("Select a tour to report");
             }
         }

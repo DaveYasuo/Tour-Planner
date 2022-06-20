@@ -26,11 +26,22 @@ namespace Tour_Planner
             services.AddSingleton<IMediator>(new Mediator());
             services.AddSingleton<IDialogService>(_ => new DialogService());
 
-
             services.AddSingleton<Configuration>();
             services.AddSingleton<TourDataViewModel>();
-            services.AddSingleton<ListToursViewModel>();
-            services.AddSingleton<NavigationViewModel>();
+            services.AddSingleton(x => new TourDataViewModel(
+                x.GetService<IRestService>()!,
+                x.GetService<IMediator>()!,
+                Configuration.AppImagePath));
+            services.AddSingleton(x => new ListToursViewModel(
+                x.GetService<IDialogService>()!,
+                x.GetService<IRestService>()!,
+                x.GetService<IMediator>()!,
+                Configuration.AppImagePath));
+            services.AddSingleton(x => new NavigationViewModel(
+                x.GetService<IDialogService>()!,
+                x.GetService<IMediator>()!,
+                x.GetService<IRestService>()!,
+                Configuration.RouteImagePath));
             services.AddSingleton<TourLogsViewModel>();
 
             Log.Debug("Build ServiceProvider");

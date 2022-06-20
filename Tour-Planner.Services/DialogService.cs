@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using Tour_Planner.Services.Interfaces;
 
 namespace Tour_Planner.Services
@@ -46,6 +47,15 @@ namespace Tour_Planner.Services
             viewModel.CloseRequested += Handler;
             dialog.DataContext = viewModel;
             return dialog.ShowDialog();
+        }
+
+        public void ShowMessageBox(string messageBoxText, string caption)
+        {
+            MessageBox.Show(messageBoxText, caption);
+        }
+        public void ShowMessageBox(string messageBoxText)
+        {
+            MessageBox.Show(messageBoxText);
         }
     }
 

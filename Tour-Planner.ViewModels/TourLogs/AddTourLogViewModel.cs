@@ -17,6 +17,7 @@ namespace Tour_Planner.ViewModels.TourLogs
 {
     public class AddTourLogViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
+        private readonly IDialogService _dialogService;
         private Difficulty? _selectedDifficulty; private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private Rating? _ratingItem;
         private string _comment;
@@ -32,8 +33,9 @@ namespace Tour_Planner.ViewModels.TourLogs
         private bool _commentHasBeenTouched;
         private bool _selectedItemHasBeenTouched;
 
-        public AddTourLogViewModel(IRestService service, IMediator mediator, Tour tour)
+        public AddTourLogViewModel(IDialogService dialogService, IRestService service, IMediator mediator, Tour tour)
         {
+            _dialogService = dialogService;
             _selectedDifficulty = null;
             _ratingItem = null;
             _comment = "";
@@ -61,7 +63,7 @@ namespace Tour_Planner.ViewModels.TourLogs
                 if (hasError)
                 {
                     Log.Info("Execute Save Tour Log Button has form error");
-                    MessageBox.Show("Please fill out the form before submitting");
+                    _dialogService.ShowMessageBox("Please fill out the form before submitting");
                     return;
                 }
 
@@ -150,7 +152,7 @@ namespace Tour_Planner.ViewModels.TourLogs
                         {
                             RaisePropertyChangedEvent(nameof(SelectedRating));
                         }
-                        Error = "Rating cannot be empty!"; 
+                        Error = "Rating cannot be empty!";
                         Log.Info(Error);
                         return Error;
                     }

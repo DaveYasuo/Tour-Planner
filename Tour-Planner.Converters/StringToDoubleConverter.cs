@@ -19,15 +19,12 @@ namespace Tour_Planner.Converters
                 int length = tmp.Length - 1;
                 int ind = tmp.IndexOf('.');
                 var isDigit = IsDigitsOnly(tmp);
-
                 if (!isDigit.Item1 || !isDigit.Item2) return double.Parse(tmp.Remove(length));
                 if (ind == -1) return double.Parse(tmp);
 
-                if (ind != 0 && ind != length)
-                {
-                    int dec = length - ind;
-                    if (dec <= 3) return value;
-                }
+                if (ind == 0 || ind == length) return ind == length ? value : double.Parse(tmp.Remove(length));
+                int dec = length - ind;
+                if (dec <= 3) return double.Parse(tmp.Remove(length));
                 return ind == length ? value : double.Parse(tmp.Remove(length));
             }
             catch

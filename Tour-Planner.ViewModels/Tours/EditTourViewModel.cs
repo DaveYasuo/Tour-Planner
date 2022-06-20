@@ -18,10 +18,12 @@ namespace Tour_Planner.ViewModels.Tours
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public string Error { get; set; } = "";
+        private readonly IDialogService _dialogService;
         private readonly Tour _selectedTour;
 
-        public EditTourViewModel(IRestService service, IMediator mediator, Tour tour)
+        public EditTourViewModel(IDialogService dialogService, IRestService service, IMediator mediator, Tour tour)
         {
+            _dialogService = dialogService;
             _selectedTour = tour;
             string? title = tour.Title;
             string? description = tour.Description;
@@ -38,7 +40,7 @@ namespace Tour_Planner.ViewModels.Tours
 
                 if (hasError)
                 {
-                    MessageBox.Show("Please fill out the form before submitting");
+                    _dialogService.ShowMessageBox("Please fill out the form before submitting");
                     Log.Error("Please fill out the form before submitting");
                     return;
                 }

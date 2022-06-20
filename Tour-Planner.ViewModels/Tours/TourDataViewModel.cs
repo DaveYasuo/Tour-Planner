@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,7 +10,6 @@ using Tour_Planner.Extensions;
 using Tour_Planner.Models;
 using Tour_Planner.Services;
 using Tour_Planner.Services.Interfaces;
-using Configuration = Tour_Planner.Extensions.Configuration;
 
 namespace Tour_Planner.ViewModels.Tours
 {
@@ -32,9 +30,8 @@ namespace Tour_Planner.ViewModels.Tours
         private readonly string _folderLocation;
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
-        public TourDataViewModel(IRestService service, IMediator mediator, Configuration config)
+        public TourDataViewModel(IRestService service, IMediator mediator, string? tmp)
         {
-            string? tmp = config.PathsCollection.Get("RouteImagePath");
             if (tmp == null)
             {
                 Log.Fatal("Key: RouteImagePath not found for displaying Route Images.");
