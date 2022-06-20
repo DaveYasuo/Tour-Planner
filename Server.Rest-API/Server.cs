@@ -26,7 +26,7 @@ namespace Server.Rest_API
         {
             if (!HttpListener.IsSupported)
             {
-                Console.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
+                Log.Error("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
                 return;
             }
             // URI prefixes are required,
@@ -48,10 +48,10 @@ namespace Server.Rest_API
             if (_listening) return;
             _listening = true;
             _listener.Start();
-            Console.WriteLine("Listening...");
+            Log.Info("Listening...");
             Console.CancelKeyPress += (_, e) =>
             {
-                Console.WriteLine($"Main Server closed by: {e.SpecialKey}.");
+                Log.Info($"Main Server closed by: {e.SpecialKey}.");
                 Stop();
                 Environment.Exit(0);
             };
@@ -92,8 +92,7 @@ namespace Server.Rest_API
                 using StreamReader readStream = new(receiveStream, Encoding.UTF8);
                 documentContents = await readStream.ReadToEndAsync();
             }
-            Console.WriteLine($"Received request for {request.Url}");
-            Console.WriteLine($"Received request for {request.HttpMethod}"); // post
+            Log.Info($"Received request for {request.Url}");
             Console.WriteLine($"Received request for {request.RawUrl}"); //api/Tour
 
             Tuple<List<string>, Dictionary<string, string>> urlParams = _handler.ParseUrl(request.RawUrl);

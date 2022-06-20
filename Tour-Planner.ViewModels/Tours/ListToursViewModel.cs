@@ -5,11 +5,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using log4net;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
@@ -21,8 +23,10 @@ namespace Tour_Planner.ViewModels.Tours
     public class ListToursViewModel : BaseViewModel
     {
         public ObservableCollection<Tour> ListTours { get; set; }
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         private readonly IMediator _mediator;
+        private readonly string _refreshIconPath;
         private readonly IRestService _service;
         private readonly IDialogService _dialogService;
         private ImageSource? _loadingImage;
@@ -33,9 +37,16 @@ namespace Tour_Planner.ViewModels.Tours
         private List<Tour> _allTours = new();
 
 
-        public ListToursViewModel(IDialogService dialogService, IRestService service, IMediator mediator)
+        public ListToursViewModel(IDialogService dialogService, IRestService service, IMediator mediator, Configuration config)
         {
             _mediator = mediator;
+            string? tmp = config.PathsCollection.Get("AppImagePath");
+            if (tmp == null)
+            {
+                Log.Fatal("Key: AppImagePath not found for displaying Refresh icon.");
+                throw new KeyNotFoundException("Key: AppImagePath not found for displaying Refresh icon.");
+            }
+            _refreshIconPath = tmp;
             _service = service;
             _loadingImage = null;
             _loadedImage = new Tuple<ImageSource, ImageSource>(GetBitmapImage("\\refresh.gif"), GetBitmapImage("\\refresh.png"));
@@ -44,6 +55,7 @@ namespace Tour_Planner.ViewModels.Tours
 
             async void ExecuteRefresh(object _)
             {
+                Log.Debug("Refresh button clicked");
                 await UpdateTours();
                 mediator.Publish(ViewModelMessage.UpdateTourLogList, null);
             }
@@ -115,6 +127,7 @@ namespace Tour_Planner.ViewModels.Tours
                     ListTours.Add(item);
                 }
             }
+            Log.Info("Updated all tours");
             await Task.Delay(1000);
             LoadingImage = _loadedImage.Item2;
         }
@@ -123,6 +136,7 @@ namespace Tour_Planner.ViewModels.Tours
         {
             if (SelectedTour is null)
             {
+                Log.Info("Delete unknown Tour");
                 MessageBox.Show("Please select a tour to delete!", "Error");
             }
             else
@@ -131,13 +145,13 @@ namespace Tour_Planner.ViewModels.Tours
                 if (result)
                 {
                     await UpdateTours();
-                    //File.Delete(".\\..\\..\\..\\..\\RouteImages/" + SelectedTour.ImagePath);
                     SelectedTour = null;
                 }
             }
         }
         private async Task FilterByText()
         {
+            Log.Debug("Filter By Text in logs and tours");
             ListTours.Clear();
             List<TourLog>? tourLogs = await _service.GetAllTourLogs();
             string smallSearchBarContent = SearchBarContent.ToLower();
@@ -169,25 +183,20 @@ namespace Tour_Planner.ViewModels.Tours
         }
         private bool SearchAllLogs(List<TourLog> tourLogs)
         {
+            Log.Debug("Search through all logs");
             string smallSearchBarContent = SearchBarContent.ToLower();
-            foreach (TourLog tourLog in tourLogs)
-            {
-                if (tourLog.TotalTime.ToString().ToLower().Contains(smallSearchBarContent) ||
-                    tourLog.Rating.ToString().ToLower().Contains(smallSearchBarContent) ||
-                    tourLog.Difficulty.ToString().ToLower().Contains(smallSearchBarContent) ||
-                    tourLog.DateTime.ToString(CultureInfo.InvariantCulture).ToLower().Contains(smallSearchBarContent) ||
-                    tourLog.Comment.ToLower().Contains(smallSearchBarContent))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return tourLogs.Any(tourLog => tourLog.TotalTime.ToString().ToLower().Contains(smallSearchBarContent) || 
+                                           tourLog.Rating.ToString().ToLower().Contains(smallSearchBarContent) ||
+                                           tourLog.Difficulty.ToString().ToLower().Contains(smallSearchBarContent) ||
+                                           tourLog.DateTime.ToString(CultureInfo.InvariantCulture).ToLower()
+                                               .Contains(smallSearchBarContent) ||
+                                           tourLog.Comment.ToLower().Contains(smallSearchBarContent));
         }
         public BitmapImage GetBitmapImage(string location)
         {
             try
             {
-                var image = new BitmapImage(new Uri(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\..\\..\\..\\Images" + location), UriKind.RelativeOrAbsolute));
+                var image = new BitmapImage(new Uri(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _refreshIconPath + location), UriKind.RelativeOrAbsolute));
                 return image;
             }
             catch (Exception ex)

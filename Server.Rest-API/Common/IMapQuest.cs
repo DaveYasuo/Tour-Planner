@@ -7,6 +7,6 @@ namespace Server.Rest_API.Common
     public interface IMapQuest
     {
         Task<MapQuestResponse> GetRoute(Tour tour);
-        Task<string> GetRouteImagePath(string boundingBox, string sessionID);
+        Task<string> GetRouteImagePath(string boundingBox, string sessionId);
     }
 }
