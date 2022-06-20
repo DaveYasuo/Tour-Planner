@@ -18,6 +18,7 @@ namespace Server.Rest_API.SqlServer
         public TourSqlDAO()
         {
             _db = DALFactory.GetDatabase();
+            Log.Debug("Created TourSqlDAO");
         }
         private NpgsqlConnection Connection()
         {

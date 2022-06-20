@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using log4net;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
 using Tour_Planner.Services;
 using Tour_Planner.Services.Interfaces;
+using Configuration = Tour_Planner.Extensions.Configuration;
 
 namespace Tour_Planner.ViewModels.Tours
 {
@@ -25,9 +29,18 @@ namespace Tour_Planner.ViewModels.Tours
         private TimeSpan _duration;
         private readonly IRestService _service;
         private Tour? _tour;
+        private readonly string _folderLocation;
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
-        public TourDataViewModel(IRestService service, IMediator mediator)
+        public TourDataViewModel(IRestService service, IMediator mediator, Configuration config)
         {
+            string? tmp = config.PathsCollection.Get("RouteImagePath");
+            if (tmp == null)
+            {
+                Log.Fatal("Key: RouteImagePath not found for displaying Route Images.");
+                throw new KeyNotFoundException("Key: RouteImagePath not found for displaying Route Images.");
+            }
+            _folderLocation = tmp;
             _service = service;
             _tour = null;
             _duration = default;
@@ -53,7 +66,7 @@ namespace Tour_Planner.ViewModels.Tours
             }
             catch (Exception)
             {
-                // ignored
+                Log.Error("Cannot get List of tour logs. Check if tour logs are present.");
             }
         }
 
@@ -95,7 +108,7 @@ namespace Tour_Planner.ViewModels.Tours
             RouteType = _tour.RouteType;
             Distance = _tour.Distance;
             Duration = _tour.Duration;
-            RouteImagePath = string.IsNullOrEmpty(_tour.ImagePath) ? null : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\..\\..\\..\\..\\RouteImages\\" + _tour.ImagePath);
+            RouteImagePath = _tour.ImagePath;
         }
         public string Title
         {
@@ -173,7 +186,20 @@ namespace Tour_Planner.ViewModels.Tours
             set
             {
                 if (_routeImagePath == value) return;
-                _routeImagePath = value;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _folderLocation + value);
+                    _routeImagePath = File.Exists(imagePath) ? imagePath : null;
+                }
+                else
+                {
+                    _routeImagePath = null;
+                }
+
+                if (_routeImagePath == null)
+                {
+                    Log.Info("Image " + value + " does not exists.");
+                }
                 RaisePropertyChangedEvent();
             }
         }

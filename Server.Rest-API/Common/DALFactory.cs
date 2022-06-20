@@ -18,7 +18,7 @@ namespace Server.Rest_API.Common
         {
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("properties\\appsettings.json", optional: false, reloadOnChange: true)
                 .AddUserSecrets<Program>()
                 .Build();
             Log.Debug("Build configuration from appsettings.json and secret file");
@@ -42,27 +42,28 @@ namespace Server.Rest_API.Common
             string databaseClassName = Configuration.GetSection("DALSqlName").Value;
             Type dbClass = Type.GetType(databaseClassName);
 
-            if (dbClass == null)
-            {
-                //logger.Log(LogLevel.Error, "Could not setup database:");
-                throw new InvalidOperationException("DB class not found");
-            }
+            if (dbClass != null) return Activator.CreateInstance(dbClass, connectionString) as IDatabase;
+            Log.Error("Could not setup database: DB class not found");
+            throw new InvalidOperationException("DB class not found");
 
-            return Activator.CreateInstance(dbClass, connectionString) as IDatabase;
         }
 
-        public static IMapQuest GetMapQuestAPI()
+        public static IMapQuest GetMapQuestApi()
         {
-            return _mapQuest ??= CreateMapQuestAPI();
+            return _mapQuest ??= CreateMapQuestApi();
         }
 
-        private static IMapQuest CreateMapQuestAPI()
+        private static IMapQuest CreateMapQuestApi()
         {
             IConfigurationSection mapQuest = Configuration.GetSection("MapQuest");
+            string imagePath = Configuration.GetSection("ImagePath").Value;
             string key = mapQuest.GetSection("Key").Value;
             string mapQuestClassName = mapQuest.GetSection("DALMapQuestName").Value;
             Type mapQuestClass = Type.GetType(mapQuestClassName);
-            return Activator.CreateInstance(mapQuestClass, key) as IMapQuest;
+            if (mapQuestClass != null) return Activator.CreateInstance(mapQuestClass, key, imagePath) as IMapQuest;
+            Log.Error("Could not setup MapAPI: MapAPI class not found");
+            throw new InvalidOperationException("MapAPI class not found");
+
         }
     }
 }

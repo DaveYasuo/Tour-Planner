@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using log4net;
+using Microsoft.Extensions.DependencyInjection;
 using Tour_Planner.Extensions;
 using Tour_Planner.Services;
 using Tour_Planner.Services.Interfaces;
@@ -11,10 +13,13 @@ namespace Tour_Planner
 {
     public class Container
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+
         private readonly ServiceProvider _serviceProvider;
 
         public Container()
         {
+            Log.Debug("INIT Container with all used SingleTonObjects");
             var services = new ServiceCollection();
 
             services.AddSingleton<IRestService>(new RestService());
@@ -22,11 +27,13 @@ namespace Tour_Planner
             services.AddSingleton<IDialogService>(_ => new DialogService());
 
 
+            services.AddSingleton<Configuration>();
             services.AddSingleton<TourDataViewModel>();
             services.AddSingleton<ListToursViewModel>();
             services.AddSingleton<NavigationViewModel>();
             services.AddSingleton<TourLogsViewModel>();
 
+            Log.Debug("Build ServiceProvider");
             _serviceProvider = services.BuildServiceProvider();
             _serviceProvider.GetService<IDialogService>()!.Register<AddTourViewModel, AddTourDialogWindow>();
             _serviceProvider.GetService<IDialogService>()!.Register<AddTourLogViewModel, AddTourLogDialogWindow>();

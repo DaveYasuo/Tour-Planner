@@ -19,10 +19,12 @@ namespace Server.Rest_API.API
         public readonly string RouteImageUrl = "http://www.mapquestapi.com/staticmap/v5/map";
         private static readonly HttpClient Client = new();
         private readonly string _mapQuestKey;
+        private readonly string _imagePath;
 
-        public MapQuest(string key)
+        public MapQuest(string key, string imagePath)
         {
             _mapQuestKey = key;
+            _imagePath = imagePath;
         }
 
 
@@ -59,7 +61,7 @@ namespace Server.Rest_API.API
                             + tmpBoundingBox["lr"]!["lat"]!.ToString().Replace(",", ".") + ","
                             + tmpBoundingBox["lr"]!["lng"]!.ToString().Replace(",", ".");
                         string sessionId = tmpSessionId.GetValue<string>();
-                        Log.Info("Get route from Mapquest successfully");
+                        Log.Info("Get route from MapQuest successfully");
                         return new MapQuestResponse(time, distance, boundingBox, sessionId);
                     }
                 }
@@ -88,7 +90,7 @@ namespace Server.Rest_API.API
 
                 if (response.IsSuccessStatusCode)
                 {
-                    string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".\\..\\..\\..\\..\\RouteImages");
+                    string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _imagePath);
                     Directory.CreateDirectory(folderPath);
                     string imageName = Guid.NewGuid() + ".jpeg";
                     await using (var fs = new FileStream(Path.Combine(folderPath, imageName), FileMode.OpenOrCreate))
