@@ -14,77 +14,123 @@ namespace Test.Tour_Planner.Services
     {
 
         [Test]
-        //[TestCase("TestCase1","Wien","Linz","ASDF",RouteType.fastest)]
-        [TestCase("TestCase1","Graz","Salzburg","ASDF",RouteType.shortest)]
-        public async Task AddTourToDatabase(string title, string origin,string destination,string description , RouteType type)
+        [TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
+        [TestCase("TestCase1", "Graz", "Salzburg", "ASDF", RouteType.shortest)]
+        public async Task AddTourToDatabase(string title, string origin, string destination, string description, RouteType type)
         {
             Tour tour = new Tour(title, origin, destination, description, type); ;
             IRestService service = new RestService();
             Tour result = await service.AddTour(tour);
-            Assert.IsNotNull(result.Distance);
-            Assert.IsNotNull(result.ImagePath);
-            Assert.AreEqual(result.Title, title);
-            Assert.AreEqual(result.Origin, origin);
-            Assert.AreEqual(result.Destination, destination);
-            Assert.AreEqual(result.Description, description);
-            Assert.AreEqual(result.RouteType, type);
-            await service.DeleteTour(result.Id);
+            if (result != null)
+            {
+                Assert.IsNotNull(result.Distance);
+                Assert.IsNotNull(result.ImagePath);
+                Assert.AreEqual(result.Title, title);
+                Assert.AreEqual(result.Origin, origin);
+                Assert.AreEqual(result.Destination, destination);
+                Assert.AreEqual(result.Description, description);
+                Assert.AreEqual(result.RouteType, type);
+                await service.DeleteTour(result.Id);
+                List<Tour> tours = await service.GetTours();
+                if (tours != null)
+                {
+                    foreach (var tour1 in tours.Where(tour1 => tour1.Id == result.Id))
+                    {
+                        Assert.Fail("Tour still here after deletion");
+                    }
+                    Assert.Pass("add tour success");
+                }
+            }
         }
 
         [Test]
-        //[TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
+        [TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
         [TestCase("TestCase1", "Graz", "Salzburg", "ASDF", RouteType.shortest)]
         public async Task DeleteTourData(string title, string origin, string destination, string comment, RouteType type)
         {
             Tour tour = new Tour(title, origin, destination, comment, type);
             IRestService service = new RestService();
             Tour result = await service.AddTour(tour);
-            await service.DeleteTour(result.Id);
-            List<Tour> tourLists = await service.GetTours();
-            Assert.AreNotEqual(tourLists.Last().Id, tour.Id);
+            if (result != null)
+            {
+                await service.DeleteTour(result.Id);
+                List<Tour> tourLists = await service.GetTours();
+                if (tourLists != null)
+                {
+                    if (tourLists.Any(tLog => tLog.Id == result.Id))
+                    {
+                        Assert.Fail();
+                        return;
+                    }
+                }
+                Assert.Pass("Tour deleted");
+            }
         }
 
         [Test]
-        //[TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
+        [TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
         [TestCase("TestCase1", "Graz", "Salzburg", "ASDF", RouteType.shortest)]
         public async Task UpdateTour(string title, string origin, string destination, string description, RouteType type)
         {
             Tour tour = new Tour(title, origin, destination, description, type);
             IRestService service = new RestService();
             Tour result = await service.AddTour(tour);
-            result.Description = "Hiii";
-            result.Title = "Aloha";
-            await service.UpdateTour(result);
-            List <Tour> tourList = await service.GetTours();
-            await service.DeleteTour(result.Id);
-            foreach (Tour to in tourList)
+            if (result != null)
             {
-                if(to.Id == result.Id)
+                result.Description = "Hiii";
+                result.Title = "Aloha";
+                await service.UpdateTour(result);
+                List<Tour> tourList = await service.GetTours();
+                await service.DeleteTour(result.Id);
+                if (tourList != null)
                 {
-                    Assert.AreEqual(to.Description, result.Description);
-                    Assert.AreEqual(to.Title, result.Title);
-                    return;
+
+                    foreach (Tour to in tourList)
+                    {
+                        if (to.Id == result.Id)
+                        {
+                            Assert.AreEqual(to.Description, result.Description);
+                            Assert.AreEqual(to.Title, result.Title);
+                            return;
+                        }
+                    }
+                    Assert.Fail("Tour did not update");
                 }
             }
-            Assert.Fail();
         }
 
         [Test]
-        //[TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
+        [TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
         [TestCase("TestCase1", "Graz", "Salzburg", "ASDF", RouteType.shortest)]
         public async Task GetTours(string title, string origin, string destination, string description, RouteType type)
         {
             Tour tour = new Tour(title, origin, destination, description, type);
             IRestService service = new RestService();
-            List<Tour> oldList =await service.GetTours();
+            List<Tour> oldList = await service.GetTours();
+
             Tour result = await service.AddTour(tour);
-            List<Tour> newList = await service.GetTours();
-            await service.DeleteTour(result.Id);
-            Assert.AreNotEqual(oldList, newList);    
+
+            if (oldList != null)
+            {
+                foreach (Tour to in oldList)
+                {
+                    if (result != null && to.Id == result.Id)
+                    {
+                        Assert.AreEqual(to.Description, result.Description);
+                        Assert.AreEqual(to.Title, result.Title);
+                        return;
+                    }
+                }
+
+                List<Tour> newList = await service.GetTours();
+
+                if (result != null) await service.DeleteTour(result.Id);
+                Assert.AreNotEqual(oldList, newList);
+            }
         }
 
         [Test]
-        //[TestCase("TestCase1","Wien","Linz","ASDF",RouteType.fastest)]
+        [TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
         [TestCase("TestCase1", "Graz", "Salzburg", "ASDF", RouteType.shortest)]
         public async Task AddTourLogToDatabase(string title, string origin, string destination, string description, RouteType type)
         {
@@ -92,7 +138,7 @@ namespace Test.Tour_Planner.Services
             IRestService service = new RestService();
             Tour result = await service.AddTour(tour);
             TimeSpan time = new TimeSpan(10000000);
-            TourLog tourLog = new TourLog(result.Id,DateTime.Now,time,Rating.medium,Difficulty.medium,123456,"Comment");
+            TourLog tourLog = new TourLog(result.Id, DateTime.Now, time, Rating.medium, Difficulty.medium, 123456, "Comment");
             tourLog = await service.AddTourLog(tourLog);
             List<TourLog> tourLogs = await service.GetAllTourLogsFromTour(result);
             await service.DeleteTour(result.Id);
@@ -103,11 +149,11 @@ namespace Test.Tour_Planner.Services
             Assert.AreEqual(tourLogs[0].TourId, tourLog.TourId);
             Assert.AreEqual(tourLogs[0].Distance, tourLog.Distance);
             Assert.AreEqual(tourLogs[0].Id, tourLog.Id);
-            
+
         }
 
         [Test]
-        //[TestCase("TestCase1","Wien","Linz","ASDF",RouteType.fastest)]
+        [TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
         [TestCase("TestCase1", "Graz", "Salzburg", "ASDF", RouteType.shortest)]
         public async Task DeleteTourLogFromDatabase(string title, string origin, string destination, string description, RouteType type)
         {
@@ -122,12 +168,12 @@ namespace Test.Tour_Planner.Services
             List<TourLog> newTourLogs = await service.GetAllTourLogsFromTour(result);
             await service.DeleteTour(result.Id);
             if (newTourLogs.Last().Id == tourLog.Id) Assert.Fail();
-            if(newTourLogs.Count == 0)
-            Assert.Pass();
+            if (newTourLogs.Count == 0)
+                Assert.Pass();
         }
 
         [Test]
-        //[TestCase("TestCase1","Wien","Linz","ASDF",RouteType.fastest)]
+        [TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
         [TestCase("TestCase1", "Graz", "Salzburg", "ASDF", RouteType.shortest)]
         public async Task UpdateTourLogFromDatabase(string title, string origin, string destination, string description, RouteType type)
         {
@@ -144,15 +190,15 @@ namespace Test.Tour_Planner.Services
             await service.DeleteTour(result.Id);
             if (tourLogs.Last().Id == tourLog.Id)
             {
-                Assert.AreEqual(tourLogs.Last().Comment ,tourLog.Comment);return;
-                
+                Assert.AreEqual(tourLogs.Last().Comment, tourLog.Comment); return;
+
             }
             Assert.Fail();
 
         }
 
         [Test]
-        //[TestCase("TestCase1","Wien","Linz","ASDF",RouteType.fastest)]
+        [TestCase("TestCase1", "Wien", "Linz", "ASDF", RouteType.fastest)]
         [TestCase("TestCase1", "Graz", "Salzburg", "ASDF", RouteType.shortest)]
         public async Task GetTourLogsFromDatabase(string title, string origin, string destination, string description, RouteType type)
         {

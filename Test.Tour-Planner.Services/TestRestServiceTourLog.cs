@@ -87,22 +87,26 @@ namespace Test.Tour_Planner.Services
             {
                 TourLog tourLog = new TourLog(result.Id, DateTime.Now, time, Rating.medium, Difficulty.medium, 123456, "Comment");
                 TourLog resultTourLog = await _restService.AddTourLog(tourLog);
-                Assert.AreEqual(resultTourLog.Comment, tourLog.Comment);
-                tourLog.Comment = "Comment2";
-                await _restService.UpdateTourLog(tourLog);
-                List<TourLog> tourLogs = await _restService.GetAllTourLogsFromTour(result);
-                if (tourLogs != null)
+                if (resultTourLog != null)
                 {
-                    foreach (var log in tourLogs)
+                    Assert.AreEqual(resultTourLog.Comment, tourLog.Comment);
+                    resultTourLog.Comment = "Comment2";
+                    await _restService.UpdateTourLog(resultTourLog);
+                    List<TourLog> tourLogs = await _restService.GetAllTourLogsFromTour(result);
+                    if (tourLogs != null)
                     {
-                        if (log.Id == resultTourLog.Id)
+                        foreach (var log in tourLogs)
                         {
-                            Assert.AreEqual("Comment2", log.Comment);
-                            await _restService.DeleteTour(result.Id);
-                            return;
+                            if (log.Id == resultTourLog.Id)
+                            {
+                                Assert.AreEqual("Comment2", log.Comment);
+                                await _restService.DeleteTour(result.Id);
+                                return;
+                            }
                         }
+
+                        Assert.Fail("TourLog doesn't get updated.");
                     }
-                    Assert.Fail("TourLog doesn't get updated.");
                 }
             }
         }

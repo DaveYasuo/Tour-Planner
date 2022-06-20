@@ -7,7 +7,7 @@ namespace Tour_Planner.Services.Interfaces
     public interface IRestService
     {
         Task<Tour?> AddTour(Tour tour);
-        Task<TourLog> AddTourLog(TourLog tourLog);
+        Task<TourLog?> AddTourLog(TourLog tourLog);
         Task<List<Tour>?> GetTours();
         Task<bool> DeleteTour(int id);
         Task<bool> DeleteTourLog(int id);

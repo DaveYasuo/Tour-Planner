@@ -52,7 +52,7 @@ namespace Server.Rest_API.Controller
         {
             try
             {
-                int tourId = int.Parse(id.ToString());
+                int tourId = int.Parse(id.ToString()!);
                 string json = JsonSerializer.Serialize(GetAllTourLogsFromTour(tourId));
                 Log.Info("Serialize all tour logs");
                 return json;
