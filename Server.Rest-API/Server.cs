@@ -48,7 +48,7 @@ namespace Server.Rest_API
             if (_listening) return;
             _listening = true;
             _listener.Start();
-            Log.Info("Listening...");
+            Log.Info("Server started: Listening...");
             Console.CancelKeyPress += (_, e) =>
             {
                 Log.Info($"Main Server closed by: {e.SpecialKey}.");
@@ -93,7 +93,6 @@ namespace Server.Rest_API
                 documentContents = await readStream.ReadToEndAsync();
             }
             Log.Info($"Received request for {request.Url}");
-            Console.WriteLine($"Received request for {request.RawUrl}"); //api/Tour
 
             Tuple<List<string>, Dictionary<string, string>> urlParams = _handler.ParseUrl(request.RawUrl);
             // Obtain a response object.

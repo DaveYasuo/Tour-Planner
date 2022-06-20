@@ -75,7 +75,7 @@
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Column="0" Source="{Binding RouteImagePath, TargetNullValue={StaticResource DefaultImage}}"></Image>
+                            <Image Grid.Column="0" Source="{Binding RouteImagePath, TargetNullValue={StaticResource DefaultImage}}" MaxHeight="600"></Image>
                             <Grid Grid.Column="1">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"></ColumnDefinition>

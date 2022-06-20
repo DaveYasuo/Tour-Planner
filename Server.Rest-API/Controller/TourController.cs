@@ -89,6 +89,7 @@ namespace Server.Rest_API.Controller
             {
                 Tour tour = JsonSerializer.Deserialize<Tour>(body.ToString()!);
                 UpdateTour(tour);
+                Log.Info("Update tour success");
             }
             catch (Exception e)
             {

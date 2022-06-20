@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using iText.StyledXmlParser.Jsoup.Nodes;
+using log4net;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
@@ -23,6 +26,9 @@ namespace Tour_Planner.ViewModels.TourLogs
         private string _distance;
         public string Error { get; set; } = "";
 
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+
+
         private bool _distanceHasBeenTouched;
         private bool _totalTimeHasBeenTouched;
         private bool _dateAndTimeHasBeenTouched;
@@ -30,6 +36,7 @@ namespace Tour_Planner.ViewModels.TourLogs
 
         public EditTourLogViewModel(IRestService service, IMediator mediator, TourLog selectedTourLog)
         {
+
             _selectedDifficulty = selectedTourLog.Difficulty;
             _ratingItem = selectedTourLog.Rating;
             _comment = selectedTourLog.Comment;
@@ -50,6 +57,8 @@ namespace Tour_Planner.ViewModels.TourLogs
                 if (hasError)
                 {
                     MessageBox.Show("Please fill out the form before submitting");
+                    Log.Error("Please fill out the form before submitting");
+
                     return;
                 }
 
@@ -139,14 +148,17 @@ namespace Tour_Planner.ViewModels.TourLogs
                             RaisePropertyChangedEvent(nameof(TotalTime));
                         }
                         Error = "Total time cannot be zero!";
-                        return Error;
+                        Log.Info(Error);
+                        return Error; 
+
                     }
                     _totalTimeHasBeenTouched = true;
                     break;
                 case "DateTime":
-                    if ((string.IsNullOrEmpty(DateTime.ToString()) || DateTime.ToString().Trim().Length == 0) && (_dateAndTimeHasBeenTouched || onSubmit))
+                    if ((string.IsNullOrEmpty(DateTime.ToString(CultureInfo.InvariantCulture)) || DateTime.ToString(CultureInfo.InvariantCulture).Trim().Length == 0) && (_dateAndTimeHasBeenTouched || onSubmit))
                     {
                         Error = "Date and time cannot be empty!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _dateAndTimeHasBeenTouched = true;
@@ -159,6 +171,7 @@ namespace Tour_Planner.ViewModels.TourLogs
                             RaisePropertyChangedEvent(nameof(Distance));
                         }
                         Error = "Distance cannot be 0!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _distanceHasBeenTouched = true;
@@ -168,6 +181,7 @@ namespace Tour_Planner.ViewModels.TourLogs
                     {
 
                         Error = "Comment cannot be only spaces!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _commentHasBeenTouched = true;

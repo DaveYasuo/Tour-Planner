@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using log4net;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
@@ -14,6 +16,8 @@ namespace Tour_Planner.ViewModels.TourLogs
     public class TourLogsViewModel : BaseViewModel
     {
         public ObservableCollection<TourLog> ListToursLogs { get; set; }
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+
 
         private Tour? _tour;
         private TourLog? _selectedTourLog;
@@ -46,7 +50,9 @@ namespace Tour_Planner.ViewModels.TourLogs
         {
             if (_tour == null)
             {
-                MessageBox.Show("Select tour before adding a tourlog", "Error");
+                MessageBox.Show("Select tour before adding a tour log", "Error"); 
+                Log.Error("Select tour before adding a tour log");
+
                 return;
             }
             var viewModel = new AddTourLogViewModel(_service, _mediator, _tour);
@@ -61,7 +67,8 @@ namespace Tour_Planner.ViewModels.TourLogs
         {
             if (SelectedTourLog == null)
             {
-                MessageBox.Show("Select tourlog before editing a tourlog", "Error");
+                MessageBox.Show("Select tour log before editing a tour log", "Error");
+                Log.Error("Select tour log before editing a tour log");
                 return;
             }
             var viewModel = new EditTourLogViewModel(_service, _mediator, SelectedTourLog);
@@ -95,13 +102,15 @@ namespace Tour_Planner.ViewModels.TourLogs
                 }
                 _mediator.Publish(ViewModelMessage.UpdateComputedTourAttributes, _allTourLogs);
             }
+            Log.Debug("Tour Logs updated");
         }
 
         private async Task DeleteTourLog()
         {
             if (SelectedTourLog == null)
             {
-                MessageBox.Show("Please select a tourlog to delete!", "Error");
+                MessageBox.Show("Please select a tour log to delete!", "Error");
+                Log.Error("Please select a tour log to delete!");
                 return;
             }
 

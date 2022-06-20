@@ -74,12 +74,12 @@ namespace Server.Rest_API.API
                 return null;
             }
         }
-        public async Task<string> GetRouteImagePath(string boundingBox, string sessionID)
+        public async Task<string> GetRouteImagePath(string boundingBox, string sessionId)
         {
             var builder = new UriBuilder(RouteImageUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
             query["key"] = _mapQuestKey;
-            query["session"] = sessionID;
+            query["session"] = sessionId;
             query["size"] = "1920,1440";
             query["boundingBox"] = boundingBox;
             builder.Query = query.ToString()!;

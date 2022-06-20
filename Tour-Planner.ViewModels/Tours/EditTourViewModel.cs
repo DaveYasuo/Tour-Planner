@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using log4net;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
@@ -13,6 +15,7 @@ namespace Tour_Planner.ViewModels.Tours
 {
     public class EditTourViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
 
         public string Error { get; set; } = "";
         private readonly Tour _selectedTour;
@@ -36,6 +39,7 @@ namespace Tour_Planner.ViewModels.Tours
                 if (hasError)
                 {
                     MessageBox.Show("Please fill out the form before submitting");
+                    Log.Error("Please fill out the form before submitting");
                     return;
                 }
 
@@ -88,6 +92,7 @@ namespace Tour_Planner.ViewModels.Tours
                     {
                         Title = "";
                         Error = "Title cannot be empty!";
+                        Log.Info(Error);
                         return Error;
                     }
                     break;
@@ -95,6 +100,7 @@ namespace Tour_Planner.ViewModels.Tours
                     if (!string.IsNullOrEmpty(_selectedTour.Description) && _selectedTour.Description.Trim().Length == 0)
                     {
                         Error = "Description cannot be only spaces!";
+                        Log.Info(Error);
                         return Error;
                     }
                     break;

@@ -8,16 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Files\**" />
+    <EmbeddedResource Remove="Files\**" />
+    <None Remove="Files\**" />
+    <Page Remove="Files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="itext7" Version="7.2.2" />
     <PackageReference Include="log4net" Version="2.0.14" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Tour-Planner.Models\Tour-Planner.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Files\" />
   </ItemGroup>
 
 </Project>

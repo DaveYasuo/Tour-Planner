@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using log4net;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
@@ -14,6 +16,8 @@ namespace Tour_Planner.ViewModels.Tours
 {
     public class AddTourViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+
         private string _title;
         private string _origin;
         private string _destination;
@@ -140,6 +144,7 @@ namespace Tour_Planner.ViewModels.Tours
                     {
                         Title = "";
                         Error = "Title cannot be empty!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _titleHasBeenTouched = true;
@@ -149,6 +154,7 @@ namespace Tour_Planner.ViewModels.Tours
                     {
                         Origin = "";
                         Error = "Origin cannot be empty!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _originHasBeenTouched = true;
@@ -158,6 +164,7 @@ namespace Tour_Planner.ViewModels.Tours
                     {
                         Destination = "";
                         Error = "Destination cannot be empty!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _destinationHasBeenTouched = true;
@@ -166,6 +173,7 @@ namespace Tour_Planner.ViewModels.Tours
                     if (!string.IsNullOrEmpty(Description) && Description.Trim().Length == 0 && _descriptionHasBeenTouched)
                     {
                         Error = "Description cannot be only spaces!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _descriptionHasBeenTouched = true;
@@ -178,6 +186,7 @@ namespace Tour_Planner.ViewModels.Tours
                             RaisePropertyChangedEvent(nameof(SelectedRouteType));
                         }
                         Error = "Route Type cannot be empty!";
+                        Log.Info(Error);
                     }
                     _selectedItemHasBeenTouched = true;
                     return Error;

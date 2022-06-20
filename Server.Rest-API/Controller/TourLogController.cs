@@ -1,10 +1,10 @@
-﻿using log4net;
-using Server.Rest_API.SqlServer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
+using log4net;
+using Server.Rest_API.SqlServer;
 using Tour_Planner.Models;
 
 namespace Server.Rest_API.Controller
@@ -13,9 +13,7 @@ namespace Server.Rest_API.Controller
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private readonly TourLogSqlDAO _tourLogSqlDao = new();
-        public TourLogController()
-        {
-        }
+
         private TourLog AddTourLog(TourLog tourLog)
         {
             return _tourLogSqlDao.AddNewTourLog(tourLog);
@@ -40,12 +38,12 @@ namespace Server.Rest_API.Controller
             try
             {
                 string json = JsonSerializer.Serialize(GetAllTourLogs());
-                Log.Info("Serialize all tourlogs");
+                Log.Info("Serialize all tour logs");
                 return json;
             }
             catch (Exception ex)
             {
-                Log.Warn("Cannot serialize all tourlogs: " + ex.Message);
+                Log.Warn("Cannot serialize all tour logs: " + ex.Message);
                 return null;
             }
         }
@@ -56,12 +54,12 @@ namespace Server.Rest_API.Controller
             {
                 int tourId = int.Parse(id.ToString());
                 string json = JsonSerializer.Serialize(GetAllTourLogsFromTour(tourId));
-                Log.Info("Serialize all tourlogs");
+                Log.Info("Serialize all tour logs");
                 return json;
             }
             catch (Exception ex)
             {
-                Log.Warn("Cannot serialize all tourlogs: " + ex.Message);
+                Log.Warn("Cannot serialize all tour logs: " + ex.Message);
                 return null;
             }
         }

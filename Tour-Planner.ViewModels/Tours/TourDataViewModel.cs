@@ -58,10 +58,11 @@ namespace Tour_Planner.ViewModels.Tours
 
         private void ShowComputedAttributes(object? obj)
         {
-            if (obj == null) return;
             try
             {
+                if (obj == null) return;
                 List<TourLog> logsList = (List<TourLog>)obj;
+                if (logsList.Count == 0) return;
                 _ = CalculateTourAttributes(logsList);
             }
             catch (Exception)
@@ -95,6 +96,7 @@ namespace Tour_Planner.ViewModels.Tours
                 double distanceDif = avrDistance / _tour.Distance;
                 ChildFriendliness = (int)(1 / ((difficulty + timeDif + distanceDif) / 3 / 4) * 100);
             }
+            Log.Debug("Calculated Tour Attributes");
         }
 
         private void ShowTourData(object? o)

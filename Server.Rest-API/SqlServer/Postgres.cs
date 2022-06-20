@@ -18,7 +18,6 @@ namespace Server.Rest_API.SqlServer
             NpgsqlConnection.GlobalTypeMapper.MapEnum<Rating>("ratingtype");
             NpgsqlConnection.GlobalTypeMapper.MapEnum<Difficulty>("difficultytype");
             CreateDatabaseIfNotExists();
-            Console.WriteLine(_connString);
         }
 
         private void CreateTablesIfNotExists()
@@ -39,6 +38,7 @@ namespace Server.Rest_API.SqlServer
                 {
                     cmd.ExecuteNonQuery();
                 }
+                Log.Info("Created routetype in db");
                 using (var cmd = new NpgsqlCommand(@"
                     DROP TYPE IF EXISTS ratingtype;
                     CREATE TYPE ratingtype AS  ENUM(
@@ -52,6 +52,8 @@ namespace Server.Rest_API.SqlServer
                 {
                     cmd.ExecuteNonQuery();
                 }
+                Log.Info("Created ratingtype in db");
+
                 using (var cmd = new NpgsqlCommand(@"
                     DROP TYPE IF EXISTS difficultytype;
                     CREATE TYPE difficultytype AS  ENUM(
@@ -63,7 +65,7 @@ namespace Server.Rest_API.SqlServer
                 {
                     cmd.ExecuteNonQuery();
                 }
-
+                Log.Info("Created difficultytype in db");
                 // Create tables
                 using (var cmd = new NpgsqlCommand(@"
                     Create TABLE IF NOT EXISTS tour(
@@ -109,7 +111,6 @@ namespace Server.Rest_API.SqlServer
             catch (Exception ex)
             {
                 Log.Fatal("Cannot create tables:", ex);
-                Console.WriteLine(ex.Message);
                 throw new ApplicationException("Please check your database configuration & health status");
             }
         }
@@ -132,6 +133,7 @@ namespace Server.Rest_API.SqlServer
                 {
                     // Add databases to connString
                     _connString += "Database=tourplanner;";
+                    Log.Info("Database already exists");
                     return;
                 }
 
@@ -149,12 +151,12 @@ namespace Server.Rest_API.SqlServer
                 conn.Close();
                 _connString += "Database=tourplanner;";
                 // Create tables
+                Log.Info("Created database");
                 CreateTablesIfNotExists();
             }
             catch (Exception ex)
             {
                 Log.Fatal("Cannot create database:", ex);
-                Console.WriteLine(ex.Message);
                 throw new ApplicationException("Please check your database configuration & health status");
             }
         }

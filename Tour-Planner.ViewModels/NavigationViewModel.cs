@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using log4net;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
@@ -15,15 +17,23 @@ namespace Tour_Planner.ViewModels
 {
     public class NavigationViewModel
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private readonly IMediator _mediator;
         private Tour? _selectedTour;
         private readonly ExportTour _exporter = new();
         private readonly ImportTour _importer;
-        private readonly TourReport _tr = new();
+        private readonly TourReport _tr ;
         private readonly IRestService _service;
 
-        public NavigationViewModel(IMediator mediator, IRestService service)
+        public NavigationViewModel(IMediator mediator, IRestService service, Configuration config)
         {
+            string? routeImagePath = config.PathsCollection.Get("RouteImagePath");
+            if (routeImagePath == null)
+            {
+                Log.Fatal("Key: RouteImagePath not found for displaying Route Images.");
+                throw new KeyNotFoundException("Key: RouteImagePath not found for displaying Route Images.");
+            }
+            _tr = new TourReport(routeImagePath);
             _mediator = mediator;
             _service = service;
             _importer = new ImportTour(service);
@@ -71,9 +81,10 @@ namespace Tour_Planner.ViewModels
                 };
                 Process.Start(psi);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 MessageBox.Show("Could not open browser for the help page.\n" + $"Please visit '{url}' manually.", "Tour-Planner - Help");
+                Log.Error("Could not open browser for the help page: " + ex.Message);
             }
         }
         private void SetSelectedTour(object? obj = null)
@@ -88,6 +99,7 @@ namespace Tour_Planner.ViewModels
                 return;
             }
             MessageBox.Show("Please select a tour to export!");
+            Log.Error("Please select a tour to export!");
         }
 
         private async Task ImportTour()
@@ -106,6 +118,7 @@ namespace Tour_Planner.ViewModels
             else
             {
                 MessageBox.Show("Select a tour to report");
+                Log.Error("Select a tour to report");
             }
         }
         private async Task CreateSummaryReport()

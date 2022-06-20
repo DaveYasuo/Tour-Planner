@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Tour_Planner.App">
+    <Position X="19.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tour_Planner.Container">
+    <Position X="14.75" Y="12.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAIAAAAAAIAAAABgAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Container.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tour_Planner.MainWindow" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tour_Planner.Converters.EnumToStringConverter">
+    <Position X="24.75" Y="12.25" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Converters.NullToVisibilityConverter">
+    <Position X="4.25" Y="15.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Converters.StringToDoubleConverter">
+    <Position X="11.25" Y="15.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Extensions.Configuration">
+    <Position X="23.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Extensions.Mediator" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="13" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tour_Planner.Extensions.MultiDictionary&lt;TKey, TList&gt;">
+    <Position X="10" Y="13" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Extensions.TimeSpanConverter">
+    <Position X="24.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Models.Tour">
+    <Position X="26" Y="3.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Models.TourLog">
+    <Position X="31.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Services.Interfaces.DialogCloseRequestedEventArgs">
+    <Position X="17" Y="12.25" Width="2.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Services.DialogService" BaseTypeListCollapsed="true">
+    <Position X="19.75" Y="12.25" Width="2.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tour_Planner.Services.ExportTour">
+    <Position X="2.75" Y="13" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Services.ImportTour">
+    <Position X="4.5" Y="13" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Services.RestService" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="15.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tour_Planner.Services.TourReport">
+    <Position X="24.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.ViewModels.Commands.RelayCommand">
+    <Position X="6" Y="15.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.ViewModels.TourLogs.AddTourLogViewModel">
+    <Position X="7.5" Y="3.75" Width="2" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Tour_Planner.ViewModels.TourLogs.EditTourLogViewModel">
+    <Position X="12.75" Y="3.75" Width="2" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Tour_Planner.ViewModels.TourLogs.TourLogsViewModel">
+    <Position X="18.5" Y="3.75" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.ViewModels.Tours.AddTourViewModel">
+    <Position X="5" Y="3.75" Width="1.75" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Tour_Planner.ViewModels.Tours.EditTourViewModel">
+    <Position X="10.25" Y="3.75" Width="1.75" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Tour_Planner.ViewModels.Tours.ListToursViewModel">
+    <Position X="15.5" Y="3.75" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.ViewModels.Tours.TourDataViewModel">
+    <Position X="21.5" Y="3.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.ViewModels.BaseViewModel">
+    <Position X="13" Y="1" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.ViewModels.NavigationViewModel">
+    <Position X="2.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Views.Attached.AnimatedProgressBar">
+    <Position X="17.25" Y="9.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Views.Attached.ClippingBorder">
+    <Position X="21.5" Y="9.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Views.Controls.NavigationBar">
+    <Position X="12.5" Y="13" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Views.Controls.SearchBar">
+    <Position X="9.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Views.Controls.TourData">
+    <Position X="27.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Views.Controls.TourLists">
+    <Position X="29.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Views.Controls.TourLogs">
+    <Position X="33" Y="3.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Tour_Planner.Views.AddTourDialogWindow" BaseTypeListCollapsed="true">
+    <Position X="15" Y="9.75" Width="2" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tour_Planner.Views.AddTourLogDialogWindow" BaseTypeListCollapsed="true">
+    <Position X="25.75" Y="9.75" Width="2.25" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tour_Planner.Views.EditTourDialogWindow" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="12.25" Width="2" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tour_Planner.Views.EditTourLogDialogWindow" BaseTypeListCollapsed="true">
+    <Position X="27" Y="12.25" Width="2.25" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="Tour_Planner.Extensions.IMediator">
+    <Position X="3.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Tour_Planner.Services.Interfaces.IDialog">
+    <Position X="5" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Tour_Planner.Services.Interfaces.IDialogRequestClose">
+    <Position X="6.75" Y="9.75" Width="1.75" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Tour_Planner.Services.Interfaces.IDialogService">
+    <Position X="8.75" Y="9.75" Width="2.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Tour_Planner.Services.Interfaces.IRestService">
+    <Position X="11.5" Y="9.75" Width="2" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
