@@ -90,7 +90,7 @@ namespace Tour_Planner.ViewModels.Tours
                 if (logsFromTour == null)
                 {
                     logsFromTour = await _service.GetAllTourLogsFromTour(_tour);
-                    if (logsFromTour == null)
+                    if (logsFromTour == null || logsFromTour.Count == 0)
                     {
                         Popularity = 0;
                         ChildFriendliness = 0;
@@ -111,6 +111,7 @@ namespace Tour_Planner.ViewModels.Tours
                 double distanceDif = avrDistance / _tour.Distance;
                 int tmp = (int)(1 / ((difficulty + timeDif + distanceDif) / 3 / 4) * 100);
                 if (tmp >= 100) tmp = 100;
+                if (tmp <= 0) tmp = 0;
                 ChildFriendliness = tmp;
             }
             Log.Debug("Calculated Tour Attributes");
