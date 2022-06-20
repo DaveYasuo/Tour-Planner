@@ -103,6 +103,7 @@ namespace Tour_Planner.ViewModels.Tours
             if (SelectedTour is null)
             {
                 MessageBox.Show("Select tour before editing a tour", "Error");
+                Log.Error("Select tour before editing a tour");
                 return;
             }
             var viewModel = new EditTourViewModel(_service, _mediator, SelectedTour!);

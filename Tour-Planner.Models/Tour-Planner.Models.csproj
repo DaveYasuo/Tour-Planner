@@ -10,10 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataControllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Tour-Planner.DataModels\Tour-Planner.DataModels.csproj" />
     <ProjectReference Include="..\Tour-Planner.Extensions\Tour-Planner.Extensions.csproj" />
   </ItemGroup>

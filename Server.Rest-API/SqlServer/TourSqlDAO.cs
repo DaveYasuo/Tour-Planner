@@ -36,7 +36,7 @@ namespace Server.Rest_API.SqlServer
             using var transaction = conn.BeginTransaction();
             try
             {
-                using var cmd = new NpgsqlCommand("INSERT INTO public.tour (id, title, origin, destination, distance, description, duration, imagepath, type) VALUES (DEFAULT, @title, @origin, @destination, @distance, @description, @duration, @imagepath, @type);", conn);
+                using var cmd = new NpgsqlCommand("INSERT INTO public.tour (id, title, origin, destination, distance, description, duration, imagepath, type) VALUES (DEFAULT, @title, @origin, @destination, @distance, @description, @duration, @imagepath, @type) RETURNING id;", conn);
                 cmd.Parameters.AddWithValue("title", tour.Title);
                 cmd.Parameters.AddWithValue("origin", tour.Origin);
                 cmd.Parameters.AddWithValue("destination", tour.Destination);
@@ -46,10 +46,16 @@ namespace Server.Rest_API.SqlServer
                 cmd.Parameters.AddWithValue("imagepath", tour.ImagePath);
                 cmd.Parameters.AddWithValue("type", tour.RouteType);
                 cmd.Prepare();
-                cmd.ExecuteNonQuery();
-                transaction.Commit();
-                Log.Info($"Inserted tour {tour.Title}");
-                return tour;
+                var tourCmdId = cmd.ExecuteScalar();
+                if (tourCmdId is int tourId)
+                {
+                    tour.Id = tourId;
+                    transaction.Commit();
+                    Log.Info($"Inserted tour {tour.Title}");
+                    return tour;
+                }
+                transaction.Rollback();
+                return null;
             }
             catch (Exception ex)
             {

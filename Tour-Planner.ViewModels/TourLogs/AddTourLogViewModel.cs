@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using log4net;
 using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
@@ -15,7 +17,7 @@ namespace Tour_Planner.ViewModels.TourLogs
 {
     public class AddTourLogViewModel : BaseViewModel, IDialogRequestClose, IDataErrorInfo
     {
-        private Difficulty? _selectedDifficulty;
+        private Difficulty? _selectedDifficulty; private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
         private Rating? _ratingItem;
         private string _comment;
         private string _distance;
@@ -32,7 +34,6 @@ namespace Tour_Planner.ViewModels.TourLogs
 
         public AddTourLogViewModel(IRestService service, IMediator mediator, Tour tour)
         {
-            mediator.Subscribe(SetSelectedTour, ViewModelMessage.SelectTour);
             _selectedDifficulty = null;
             _ratingItem = null;
             _comment = "";
@@ -41,6 +42,7 @@ namespace Tour_Planner.ViewModels.TourLogs
 
             async void ExecuteSave(object _)
             {
+                Log.Debug("Execute Save Tour Log Button");
                 List<string> testableProperty = new()
                 {
                     nameof(SelectedDifficulty),
@@ -58,6 +60,7 @@ namespace Tour_Planner.ViewModels.TourLogs
 
                 if (hasError)
                 {
+                    Log.Info("Execute Save Tour Log Button has form error");
                     MessageBox.Show("Please fill out the form before submitting");
                     return;
                 }
@@ -147,7 +150,8 @@ namespace Tour_Planner.ViewModels.TourLogs
                         {
                             RaisePropertyChangedEvent(nameof(SelectedRating));
                         }
-                        Error = "Rating cannot be empty!";
+                        Error = "Rating cannot be empty!"; 
+                        Log.Info(Error);
                         return Error;
                     }
                     _selectedRatingHasBeenTouched = true;
@@ -160,6 +164,7 @@ namespace Tour_Planner.ViewModels.TourLogs
                             RaisePropertyChangedEvent(nameof(TotalTime));
                         }
                         Error = "Total time cannot be zero!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _totalTimeHasBeenTouched = true;
@@ -168,6 +173,7 @@ namespace Tour_Planner.ViewModels.TourLogs
                     if ((string.IsNullOrEmpty(DateTime.ToString(CultureInfo.InvariantCulture)) || DateTime.ToString(CultureInfo.InvariantCulture).Trim().Length == 0) && (_dateAndTimeHasBeenTouched || onSubmit))
                     {
                         Error = "Date and time cannot be empty!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _dateAndTimeHasBeenTouched = true;
@@ -180,6 +186,7 @@ namespace Tour_Planner.ViewModels.TourLogs
                             RaisePropertyChangedEvent(nameof(Distance));
                         }
                         Error = "Distance cannot be 0!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _distanceHasBeenTouched = true;
@@ -189,6 +196,7 @@ namespace Tour_Planner.ViewModels.TourLogs
                     {
 
                         Error = "Comment cannot be only spaces!";
+                        Log.Info(Error);
                         return Error;
                     }
                     _commentHasBeenTouched = true;
@@ -201,16 +209,13 @@ namespace Tour_Planner.ViewModels.TourLogs
                             RaisePropertyChangedEvent(nameof(SelectedDifficulty));
                         }
                         Error = "Difficulty cannot be empty!";
+                        Log.Info(Error);
                     }
                     _selectedItemHasBeenTouched = true;
                     return Error;
             }
             return Error;
         }
-        private void SetSelectedTour(object? obj = null)
-        {
-        }
-
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 

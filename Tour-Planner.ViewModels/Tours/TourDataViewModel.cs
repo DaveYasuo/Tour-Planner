@@ -56,13 +56,20 @@ namespace Tour_Planner.ViewModels.Tours
             mediator.Subscribe(ShowComputedAttributes, ViewModelMessage.UpdateComputedTourAttributes);
         }
 
-        private void ShowComputedAttributes(object? obj)
+        private void ShowComputedAttributes(object? obj = null)
         {
-            if (obj == null) return;
             try
             {
-                List<TourLog> logsList = (List<TourLog>)obj;
-                _ = CalculateTourAttributes(logsList);
+                if (obj != null)
+                {
+                    List<TourLog> logsList = (List<TourLog>)obj;
+                    if (logsList.Count == 0) return;
+                    _ = CalculateTourAttributes(logsList);
+                }
+                else
+                {
+                    _ = CalculateTourAttributes();
+                }
             }
             catch (Exception)
             {
@@ -70,21 +77,30 @@ namespace Tour_Planner.ViewModels.Tours
             }
         }
 
-        private async Task CalculateTourAttributes(List<TourLog> logsFromTour)
+        private async Task CalculateTourAttributes(List<TourLog>? logsFromTour = null)
         {
             if (_tour == null) return;
             List<TourLog>? allTourLogs = await _service.GetAllTourLogs();
-            List<Tour>? allTours = await _service.GetTours();
-            if (allTourLogs == null || _tour == null || allTours == null)
+            if (allTourLogs == null)
             {
                 Popularity = 0;
             }
             else
             {
-                Popularity = (int)Math.Round((double)logsFromTour.Count / allTourLogs.Count) * 100;
+                if (logsFromTour == null)
+                {
+                    logsFromTour = await _service.GetAllTourLogsFromTour(_tour);
+                    if (logsFromTour == null)
+                    {
+                        Popularity = 0;
+                        ChildFriendliness = 0;
+                        return;
+                    }
+                }
+                Popularity = (int)Math.Round((double)logsFromTour.Count / allTourLogs.Count * 100);
             }
             // avr Difficulty / max Difficulty => the greater the harder (max. 4)
-            double difficulty = logsFromTour.Sum(tourLog => (int)tourLog.Difficulty) / (float)logsFromTour.Count;
+            double difficulty = logsFromTour!.Sum(tourLog => (int)tourLog.Difficulty) / (float)logsFromTour!.Count;
             TimeSpan avrTime = TourReport.GetAverageTime(logsFromTour);
             // avr Time / pre-calculated Time => the greater the harder
             if (_tour != null)
@@ -93,8 +109,11 @@ namespace Tour_Planner.ViewModels.Tours
                 double avrDistance = TourReport.GetAverageDistance(logsFromTour);
                 // avr Distance / pre-calculated Distance => the greater the harder
                 double distanceDif = avrDistance / _tour.Distance;
-                ChildFriendliness = (int)(1 / ((difficulty + timeDif + distanceDif) / 3 / 4) * 100);
+                int tmp = (int)(1 / ((difficulty + timeDif + distanceDif) / 3 / 4) * 100);
+                if (tmp >= 100) tmp = 100;
+                ChildFriendliness = tmp;
             }
+            Log.Debug("Calculated Tour Attributes");
         }
 
         private void ShowTourData(object? o)
@@ -109,6 +128,7 @@ namespace Tour_Planner.ViewModels.Tours
             Distance = _tour.Distance;
             Duration = _tour.Duration;
             RouteImagePath = _tour.ImagePath;
+            ShowComputedAttributes();
         }
         public string Title
         {

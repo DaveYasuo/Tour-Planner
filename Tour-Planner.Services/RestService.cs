@@ -30,8 +30,9 @@ namespace Tour_Planner.Services
                 string result = await httpResponseMessage.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<Tour>(result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Warn("Cannot add tour from Server " + ex.Message);
                 return null;
             }
         }
@@ -77,7 +78,7 @@ namespace Tour_Planner.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Warn("Cannot get all tours logs from Server " + ex.Message);
                 return null;
             }
         }
@@ -91,7 +92,7 @@ namespace Tour_Planner.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Warn("Cannot get all tours logs from one tour from Server " + ex.Message);
                 return null;
             }
         }
@@ -109,8 +110,9 @@ namespace Tour_Planner.Services
                 var responseMessage = await Client.PatchAsync($"{BaseUrl}/TourLog", new StringContent(JsonSerializer.Serialize(newTour), Encoding.UTF8, "application/json"));
                 return responseMessage.IsSuccessStatusCode;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Warn("Cannot update a tour log from Server " + ex.Message);
                 return false;
             }
         }
