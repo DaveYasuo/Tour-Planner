@@ -10,14 +10,8 @@ using Tour_Planner.Services.Interfaces;
 
 namespace Test.Tour_Planner.Services
 {
-    public class Tests
+    public class TestRestServiceTour
     {
-        [SetUp]
-        public void Setup()
-        {
-           
-            
-        }
 
         [Test]
         //[TestCase("TestCase1","Wien","Linz","ASDF",RouteType.fastest)]
