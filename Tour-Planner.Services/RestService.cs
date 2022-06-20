@@ -57,10 +57,21 @@ namespace Tour_Planner.Services
             return result.IsSuccessStatusCode;
         }
 
-        public async Task<bool> AddTourLog(TourLog tourLog)
+        public async Task<TourLog?> AddTourLog(TourLog tourLog)
         {
-            var result = await Client.PostAsync($"{BaseUrl}/TourLog", new StringContent(JsonSerializer.Serialize(tourLog), Encoding.UTF8, "application/json"));
-            return result.IsSuccessStatusCode;
+            try
+            {
+                var httpResponseMessage = await Client.PostAsync($"{BaseUrl}/TourLog", new StringContent(JsonSerializer.Serialize(tourLog), Encoding.UTF8, "application/json"));
+                if (!httpResponseMessage.IsSuccessStatusCode) return null;
+                string result = await httpResponseMessage.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<TourLog>(result);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn("Cannot add tour from Server " + ex.Message);
+                return null;
+            }
+
         }
 
         public async Task<bool> UpdateTour(Tour tour)

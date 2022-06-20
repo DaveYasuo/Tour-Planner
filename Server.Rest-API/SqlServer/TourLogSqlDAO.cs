@@ -29,7 +29,7 @@ namespace Server.Rest_API.SqlServer
             using var transaction = conn.BeginTransaction();
             try
             {
-                using var cmd = new NpgsqlCommand("INSERT INTO public.tourlog (id, tour, date_time, total_time, rating, difficulty, distance, comment) VALUES (DEFAULT, @tour, @date_time, @total_time, @rating, @difficulty, @distance, @comment);", conn);
+                using var cmd = new NpgsqlCommand("INSERT INTO public.tourlog (id, tour, date_time, total_time, rating, difficulty, distance, comment) VALUES (DEFAULT, @tour, @date_time, @total_time, @rating, @difficulty, @distance, @comment) RETURNING id;", conn);
                 cmd.Parameters.AddWithValue("tour", tourLog.TourId);
                 cmd.Parameters.AddWithValue("date_time", tourLog.DateTime);
                 cmd.Parameters.AddWithValue("total_time", tourLog.TotalTime);
@@ -38,10 +38,16 @@ namespace Server.Rest_API.SqlServer
                 cmd.Parameters.AddWithValue("distance", tourLog.Distance);
                 cmd.Parameters.AddWithValue("comment", tourLog.Comment);
                 cmd.Prepare();
-                cmd.ExecuteNonQuery();
-                transaction.Commit();
-                Log.Info($"Inserted tourLog ");
-                return tourLog;
+                var tourCmdId = cmd.ExecuteScalar();
+                if (tourCmdId is int tourLogId)
+                {
+                    tourLog.Id = tourLogId;
+                    transaction.Commit();
+                    Log.Info($"Inserted tourLog");
+                    return tourLog;
+                }
+                transaction.Rollback();
+                return null;
             }
             catch (Exception ex)
             {
