@@ -34,7 +34,6 @@ namespace Tour_Planner
         }
 
         public ListToursViewModel ListToursViewModel => _serviceProvider.GetService<ListToursViewModel>()!;
-        //public HomeViewModel HomeViewModel => serviceProvider.GetService<HomeViewModel>()!;
         public TourDataViewModel TourDataViewModel => _serviceProvider.GetService<TourDataViewModel>()!;
         public NavigationViewModel NavigationViewModel => _serviceProvider.GetService<NavigationViewModel>()!;
         public TourLogsViewModel TourLogsViewModel => _serviceProvider.GetService<TourLogsViewModel>()!;

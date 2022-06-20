@@ -145,23 +145,18 @@ namespace Tour_Planner.Services
             document.Close();
         }
 
-        private TimeSpan GetAverageTime(List<TourLog> tourLogs)
+        public static TimeSpan GetAverageTime(List<TourLog> tourLogs)
         {
-            TimeSpan addedTime = TimeSpan.Zero;
-            foreach (TourLog tourLog in tourLogs)
-            {
-                addedTime = addedTime.Add(tourLog.TotalTime);
-            }
+            TimeSpan addedTime = tourLogs.Aggregate(TimeSpan.Zero, (current, tourLog) => current.Add(tourLog.TotalTime));
             var averageTime = addedTime.Divide(tourLogs.Count);
             return averageTime;
         }
         private Rating GetAverageRating(List<TourLog> tourLogs)
         {
-            Rating rating;
             int addedRating = tourLogs.Sum(tourLog => (int)tourLog.Rating);
             float averageRating = addedRating / (float)tourLogs.Count;
             double roundAverageRating = Math.Round(averageRating);
-            rating = roundAverageRating switch
+            var rating = roundAverageRating switch
             {
                 0 => Rating.very_good,
                 1 => Rating.good,
@@ -173,7 +168,7 @@ namespace Tour_Planner.Services
             return rating;
         }
 
-        private double GetAverageDistance(List<TourLog> tourLogs)
+        public static double GetAverageDistance(List<TourLog> tourLogs)
         {
             double addedDistance = tourLogs.Sum(tourLog => tourLog.Distance);
             double averageDistance = addedDistance / tourLogs.Count();

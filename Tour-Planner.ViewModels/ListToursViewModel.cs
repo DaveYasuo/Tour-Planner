@@ -41,11 +41,14 @@ namespace Tour_Planner.ViewModels
             _loadedImage = new Tuple<ImageSource, ImageSource>(GetBitmapImage("\\refresh.gif"), GetBitmapImage("\\refresh.png"));
             ListTours = new ObservableCollection<Tour>();
             _dialogService = dialogService;
-            RefreshCommand = new RelayCommand(async _ =>
+
+            async void ExecuteRefresh(object _)
             {
                 await UpdateTours();
                 mediator.Publish(ViewModelMessage.UpdateTourLogList, null);
-            });
+            }
+
+            RefreshCommand = new RelayCommand(ExecuteRefresh);
             DisplayAddTourCommand = new RelayCommand(_ => DisplayAddTour());
             DisplayEditTourCommand = new RelayCommand(_ => DisplayEditTour());
             DeleteTourCommand = new RelayCommand(Execute);
@@ -137,7 +140,7 @@ namespace Tour_Planner.ViewModels
         {
             ListTours.Clear();
             List<TourLog>? tourLogs = await _service.GetAllTourLogs();
-            string smallSearchBarContent = _searchBarContent.ToLower();
+            string smallSearchBarContent = SearchBarContent.ToLower();
             bool hasString = false;
             foreach (Tour tour in _allTours)
             {
@@ -166,7 +169,7 @@ namespace Tour_Planner.ViewModels
         }
         private bool SearchAllLogs(List<TourLog> tourLogs)
         {
-            string smallSearchBarContent = _searchBarContent.ToLower();
+            string smallSearchBarContent = SearchBarContent.ToLower();
             foreach (TourLog tourLog in tourLogs)
             {
                 if (tourLog.TotalTime.ToString().ToLower().Contains(smallSearchBarContent) ||

@@ -24,7 +24,7 @@ namespace Server.Rest_API.Controller
                 case "get":
                     {
                         // api/tour
-                        result = urlParams.Item1.Count is 1 ? Get() : Get(urlParams.Item1[1]);;
+                        result = urlParams.Item1.Count is 1 ? Get() : Get(urlParams.Item1[1]);
                         break;
                     }
                 case "post":
