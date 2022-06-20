@@ -10,8 +10,8 @@ namespace Tour_Planner.ConvertersTests
         [DataRow("12341234")]
         [DataRow("123412.34")]
         [DataRow("12.341234")]
-        [DataRow("123412.34")]
-        [DataRow("12341.12e")]
+        [DataRow("123412.343")]
+        [DataRow("12341.123")]
         [DataTestMethod]
         public void ConvertBackTestAlsoValidIfLastIndexIsInvalid(string test)
         {

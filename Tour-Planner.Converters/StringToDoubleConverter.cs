@@ -24,7 +24,7 @@ namespace Tour_Planner.Converters
 
                 if (ind == 0 || ind == length) return ind == length ? value : double.Parse(tmp.Remove(length));
                 int dec = length - ind;
-                if (dec <= 3) return double.Parse(tmp.Remove(length));
+                if (dec <= 3) return double.Parse(tmp);
                 return ind == length ? value : double.Parse(tmp.Remove(length));
             }
             catch
