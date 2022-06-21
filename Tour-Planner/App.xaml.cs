@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using log4net;
+using System.Reflection;
 using System.Windows;
 
 namespace Tour_Planner
@@ -21,5 +17,11 @@ namespace Tour_Planner
          * The Images folder contains the images and icons that are displayed in the UI controls,
          * whereas the Resources folder normally contains any resource files, such as XML schemas or text or data files that are used by the application.
          */
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod()!.DeclaringType);
+
+        public App()
+        {
+            Log.Info("Start WPF application");
+        }
     }
 }

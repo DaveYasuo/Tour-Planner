@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Server.Rest_API.API.MapQuest" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAABIAAgAAIIAAQAAAAAAAAQ=</HashCode>
+      <FileName>API\MapQuest.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Server.Rest_API.API.MapQuestResponse">
+    <Position X="11.5" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIACAAAABAAAAAAAAAAQA=</HashCode>
+      <FileName>API\MapQuestResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Server.Rest_API.Common.DALFactory">
+    <Position X="6.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAEQAAAAEAAgCAAQAgAAAAAAAAAA=</HashCode>
+      <FileName>Common\DALFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Server.Rest_API.Common.DbHelper">
+    <Position X="8" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\DbHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Server.Rest_API.Controller.TourController" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIBABAAAAAgAAACAkCQAABAAAAAAAIAAA=</HashCode>
+      <FileName>Controller\TourController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Server.Rest_API.Controller.TourLogController" BaseTypeListCollapsed="true">
+    <Position X="8" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAABAAQJAAAAAAAAACAkAQAAAAAAAAAAACAA=</HashCode>
+      <FileName>Controller\TourLogController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Server.Rest_API.Mapping.RequestHandler" BaseTypeListCollapsed="true">
+    <Position X="17" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAgCAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\RequestHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Server.Rest_API.SqlServer.Postgres" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAGAAAAAAAAEAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SqlServer\Postgres.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Server.Rest_API.SqlServer.TourLogSqlDAO" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEgAABAABAAAFAAAAAAAAAAAgAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SqlServer\TourLogSqlDAO.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Server.Rest_API.SqlServer.TourSqlDAO" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAACAIAIEAAAAAAAAAAAgBAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SqlServer\TourSqlDAO.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Server.Rest_API.Program">
+    <Position X="15.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Server.Rest_API.Server">
+    <Position X="18.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAgAAAAAAAACAAAQAAEAAAAAAAgAAQAAIQAAAACAAAA=</HashCode>
+      <FileName>Server.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Server.Rest_API.Common.IDatabase">
+    <Position X="15.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\IDatabase.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Server.Rest_API.Common.IMapQuest">
+    <Position X="17" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\IMapQuest.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Server.Rest_API.Controller.IController">
+    <Position X="13.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAACAEAQAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Controller\IController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Server.Rest_API.DAO.ITourDAO">
+    <Position X="13.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAIAIEAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DAO\ITourDAO.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Server.Rest_API.DAO.ITourLogDAO">
+    <Position X="15.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAABAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DAO\ITourLogDAO.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Server.Rest_API.Mapping.IRequestHandler">
+    <Position X="18.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\IRequestHandler.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Server.Rest_API.Mapping.EndPoint">
+    <Position X="1" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\EndPoint.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Server.Rest_API.Mapping.Method">
+    <Position X="2.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAYBAAAAAAAAACAEAQAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Mapping\Method.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -8,8 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Attached\" />
-    <Folder Include="Controls\" />
+    <ProjectReference Include="..\Tour-Planner.Converters\Tour-Planner.Converters.csproj" />
+    <ProjectReference Include="..\Tour-Planner.DataModels\Tour-Planner.DataModels.csproj" />
+    <ProjectReference Include="..\Tour-Planner.Services\Tour-Planner.Services.csproj" />
+    <ProjectReference Include="..\Tour-Planner.ViewModels\Tour-Planner.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
+    <PackageReference Include="log4net" Version="2.0.14" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="EditTourDialogWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="AddTourLogDialogWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
 
 </Project>

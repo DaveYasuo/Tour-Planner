@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
@@ -8,7 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
+    <ProjectReference Include="..\Tour-Planner.Extensions\Tour-Planner.Extensions.csproj" />
+    <ProjectReference Include="..\Tour-Planner.Models\Tour-Planner.Models.csproj" />
+    <ProjectReference Include="..\Tour-Planner.Services\Tour-Planner.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.14" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
 
 </Project>
