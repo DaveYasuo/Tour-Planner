@@ -15,7 +15,7 @@ namespace Tour_Planner.Converters
         {
             try
             {
-                string tmp = (string)value;
+                string tmp = value.ToString()!;
                 int length = tmp.Length - 1;
                 int ind = tmp.IndexOf('.');
                 var isDigit = IsDigitsOnly(tmp);
@@ -24,8 +24,8 @@ namespace Tour_Planner.Converters
 
                 if (ind == 0 || ind == length) return ind == length ? value : double.Parse(tmp.Remove(length));
                 int dec = length - ind;
-                if (dec <= 3) return double.Parse(tmp);
-                return ind == length ? value : double.Parse(tmp.Remove(length));
+                if (dec <= 3) return double.Parse(tmp,CultureInfo.InvariantCulture);
+                return ind == length ? double.Parse(tmp, CultureInfo.InvariantCulture) : double.Parse(tmp.Remove(length),CultureInfo.InvariantCulture);
             }
             catch
             {
