@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using log4net;
+using Tour_Planner.DataModels.Enums;
 using Tour_Planner.Extensions;
 using Tour_Planner.Models;
 using Tour_Planner.Services.Interfaces;
@@ -53,6 +54,7 @@ namespace Tour_Planner.ViewModels.Tours
 
                 CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
                 await service.UpdateTour(_selectedTour);
+                mediator.Publish(ViewModelMessage.SelectTour, _selectedTour);
             }
 
             SaveCommand = new RelayCommand(ExecuteSave);

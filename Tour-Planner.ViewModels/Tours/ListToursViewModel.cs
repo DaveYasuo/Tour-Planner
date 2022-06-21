@@ -185,7 +185,7 @@ namespace Tour_Planner.ViewModels.Tours
         {
             Log.Debug("Search through all logs");
             string smallSearchBarContent = SearchBarContent.ToLower();
-            return tourLogs.Any(tourLog => tourLog.TotalTime.ToString().ToLower().Contains(smallSearchBarContent) || 
+            return tourLogs.Any(tourLog => tourLog.TotalTime.ToString().ToLower().Contains(smallSearchBarContent) ||
                                            tourLog.Rating.ToString().ToLower().Contains(smallSearchBarContent) ||
                                            tourLog.Difficulty.ToString().ToLower().Contains(smallSearchBarContent) ||
                                            tourLog.DateTime.ToString(CultureInfo.InvariantCulture).ToLower()

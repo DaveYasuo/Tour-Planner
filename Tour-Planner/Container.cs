@@ -31,7 +31,7 @@ namespace Tour_Planner
             services.AddSingleton(x => new TourDataViewModel(
                 x.GetService<IRestService>()!,
                 x.GetService<IMediator>()!,
-                Configuration.AppImagePath));
+                Configuration.RouteImagePath));
             services.AddSingleton(x => new ListToursViewModel(
                 x.GetService<IDialogService>()!,
                 x.GetService<IRestService>()!,
